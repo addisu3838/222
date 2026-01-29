@@ -240,18 +240,6 @@
             padding: 40px;
             color: var(--primary);
         }
-        
-        /* Badge for active tab */
-        .tab-badge {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 5px;
-            vertical-align: top;
-        }
     </style>
 </head>
 <body>
@@ -273,7 +261,7 @@
     </div>
 
     <script>
-        // Optimized data for Telegram Mini App - NEW COLUMN ORDER
+        // ONLY 7 SHEETS as requested
         const sheetsData = [
             { name: "ተስፋዉ", rows: generateTesfawuData() },
             { name: "ዳበረ", rows: generateDabereData() },
@@ -281,15 +269,7 @@
             { name: "ብሩክ", rows: generateBrukData() },
             { name: "አያለዉ", rows: generateAyalewuData() },
             { name: "ዘካርያስ", rows: generateZekariyasData() },
-            { name: "ሚካኤል", rows: generateMikaealData() },
-            { name: "ግርማ", rows: generateGirmaData() },
-            { name: "ሰለሞን", rows: generateSalomonData() },
-            { name: "ያሬድ", rows: generateYaredData() },
-            { name: "ሄኖክ", rows: generateHenokData() },
-            { name: "መለሰ", rows: generateMelesseData() },
-            { name: "ተስፋዬ", rows: generateTesfayeData() },
-            { name: "ብርሃኑ", rows: generateBirhanuData() },
-            { name: "አበበ", rows: generateAbebeData() }
+            { name: "ሚካኤል", rows: generateMikaealData() }
         ];
 
         // NEW COLUMN ORDER: Guard, Dl, Time Keeper, Carpenter, Mason, Barbender
@@ -466,126 +446,6 @@
             return data;
         }
 
-        function generateGirmaData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "", "", "2", "5", "3"]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "2", "5", "3"]);
-            }
-            
-            return data;
-        }
-
-        function generateSalomonData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "7", "", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "7", "", "", "", "", ""]);
-            }
-            
-            return data;
-        }
-
-        function generateYaredData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "", "", "", "3", "2"]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "", "3", "2"]);
-            }
-            
-            return data;
-        }
-
-        function generateHenokData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "5", "", "4", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "5", "", "4", "", ""]);
-            }
-            
-            return data;
-        }
-
-        function generateMelesseData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "", "1", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "1", "", "", ""]);
-            }
-            
-            return data;
-        }
-
-        function generateTesfayeData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "", "", "", "", "6"]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "", "", "6"]);
-            }
-            
-            return data;
-        }
-
-        function generateBirhanuData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "", "", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "", "", ""]);
-            }
-            
-            return data;
-        }
-
-        function generateAbebeData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push([i.toString(), "9", "2", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "9", "2", "", "", "", ""]);
-            }
-            
-            return data;
-        }
-
         // Telegram Mini App initialization
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
@@ -610,11 +470,11 @@
             const tabsContainer = document.getElementById('tabsContainer');
             const sheetContent = document.getElementById('sheetContent');
 
-            // Create tabs
+            // Create only 7 tabs
             sheetsData.forEach((sheet, index) => {
                 const button = document.createElement('button');
                 button.className = 'tab-button';
-                button.innerHTML = `${sheet.name} <span class="tab-badge">${index + 1}</span>`;
+                button.textContent = sheet.name;
                 button.addEventListener('click', () => showSheet(index));
                 tabsContainer.appendChild(button);
             });
