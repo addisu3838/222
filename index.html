@@ -2,634 +2,701 @@
 <html lang="am">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ኤክሴል መዛግብት - 30 ቀናት ውሂብ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>የሰራተኞች መዝገብ</title>
     <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 20px;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 25px;
-            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 10px;
-            background: #ecf0f1;
-            border-radius: 10px;
+            color: #333;
+            overflow-x: hidden;
         }
-        .tab-button {
-            padding: 10px 18px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            min-width: 100px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .tab-button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
-        .tab-button.active {
-            background-color: #2c3e50;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .sheet-container {
-            overflow-x: auto;
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            margin-top: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            min-height: 90vh;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            min-width: 1200px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px 10px;
-            text-align: center;
-            font-size: 13px;
-        }
-        th {
-            background-color: #2c3e50;
+        
+        .header {
+            background: linear-gradient(135deg, var(--secondary), var(--dark));
             color: white;
-            font-weight: bold;
+            padding: 20px 15px;
+            text-align: center;
             position: sticky;
             top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            font-weight: 700;
         }
-        tr:hover {
-            background-color: #e8f4fc;
+        
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: #ecf0f1;
         }
+        
+        .tabs-container {
+            display: flex;
+            overflow-x: auto;
+            background: var(--light);
+            padding: 10px 5px;
+            gap: 8px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab-button {
+            flex: 0 0 auto;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .content-area {
+            padding: 15px;
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+        }
+        
         .sheet-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-        .stats {
-            background: #e8f6f3;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .stats span {
-            font-weight: bold;
-            color: #16a085;
-        }
-        .column-summary {
-            background: #fffde7;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .column-summary h3 {
-            color: #f39c12;
-            margin-top: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
             margin-bottom: 15px;
             text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
         }
-        .sum-row {
+        
+        .stats-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .stats-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
-        .sum-item {
-            background: #3498db;
+        
+        .stats-label {
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .stats-value {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .total-sum {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--accent), #27ae60);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            min-width: 110px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+        
+        .column-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid var(--light);
+        }
+        
+        .summary-title {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
             text-align: center;
-            font-size: 12px;
+            font-weight: 600;
         }
-        .sum-item span {
-            font-weight: bold;
-            font-size: 15px;
-            display: block;
-            margin-top: 5px;
+        
+        .sum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
         }
-        .total-row {
-            background-color: #2c3e50 !important;
+        
+        .sum-item {
+            background: var(--primary);
             color: white;
-            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
         }
+        
+        .sum-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .sum-item-name {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .sum-item-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background: var(--dark);
+            color: white;
+            padding: 12px 8px;
+            font-weight: 600;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .data-table tr:hover {
+            background: #e8f4fc;
+        }
+        
         .numeric-cell {
-            color: #2c3e50;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--dark);
         }
-        .date-header {
-            background-color: #34495e !important;
+        
+        .weekend-row {
+            background: #fff8e1 !important;
         }
-        .weekend {
-            background-color: #f8f9fa;
+        
+        .total-row {
+            background: var(--secondary) !important;
+            color: white;
+            font-weight: 700;
         }
+        
         .empty-cell {
-            background-color: #f5f5f5;
+            color: #bbb;
+        }
+        
+        .date-cell {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .tab-button {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+            
+            .sum-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .data-table {
+                font-size: 0.8rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px 6px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .tab-button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .sum-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+        
+        /* Loading state */
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        /* Quick actions */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            background: var(--light);
+            border: none;
+            border-radius: 10px;
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge for active tab */
+        .tab-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            vertical-align: top;
         }
     </style>
 </head>
 <body>
-
-    <h1>📘 የኤክሴል መዛግብት - 30 ቀናት ውሂብ</h1>
-
-    <div class="tabs" id="tabsContainer">
-        <!-- ትርዎች በጃቫስክሪፕት ይቀመጣሉ -->
-    </div>
-
-    <div id="sheetContent">
-        <!-- የተመረጠው ትር ይታያል -->
+    <div class="container">
+        <div class="header">
+            <h1>👷 የሰራተኞች መዝገብ</h1>
+            <div class="subtitle">30 ቀናት የሥራ ማስኬጃ መዝገብ</div>
+        </div>
+        
+        <div class="tabs-container" id="tabsContainer">
+            <!-- Tabs will be generated here -->
+        </div>
+        
+        <div class="content-area" id="sheetContent">
+            <div class="loader">
+                <div>መረጃ በመጫን ላይ...</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // የ30 ቀናት ውሂብ ያለው 15 ትሮች
+        // Optimized data for Telegram Mini App
         const sheetsData = [
-            {
-                name: "ተስፋዉ",
-                rows: generateTesfawuData()
-            },
-            {
-                name: "ዳበረ",
-                rows: generateDabereData()
-            },
-            {
-                name: "ጥበበ",
-                rows: generateTibebeData()
-            },
-            {
-                name: "ብሩክ",
-                rows: generateBrukData()
-            },
-            {
-                name: "አያለዉ",
-                rows: generateAyalewuData()
-            },
-            {
-                name: "ዘካርያስ",
-                rows: generateZekariyasData()
-            },
-            {
-                name: "ሚካኤል",
-                rows: generateMikaealData()
-            },
-            {
-                name: "ግርማ",
-                rows: generateGirmaData()
-            },
-            {
-                name: "ሰለሞን",
-                rows: generateSalomonData()
-            },
-            {
-                name: "ያሬድ",
-                rows: generateYaredData()
-            },
-            {
-                name: "ሄኖክ",
-                rows: generateHenokData()
-            },
-            {
-                name: "መለሰ",
-                rows: generateMelesseData()
-            },
-            {
-                name: "ተስፋዬ",
-                rows: generateTesfayeData()
-            },
-            {
-                name: "ብርሃኑ",
-                rows: generateBirhanuData()
-            },
-            {
-                name: "አበበ",
-                rows: generateAbebeData()
-            }
+            { name: "ተስፋዉ", rows: generateTesfawuData() },
+            { name: "ዳበረ", rows: generateDabereData() },
+            { name: "ጥበበ", rows: generateTibebeData() },
+            { name: "ብሩክ", rows: generateBrukData() },
+            { name: "አያለዉ", rows: generateAyalewuData() },
+            { name: "ዘካርያስ", rows: generateZekariyasData() },
+            { name: "ሚካኤል", rows: generateMikaealData() },
+            { name: "ግርማ", rows: generateGirmaData() },
+            { name: "ሰለሞን", rows: generateSalomonData() },
+            { name: "ያሬድ", rows: generateYaredData() },
+            { name: "ሄኖክ", rows: generateHenokData() },
+            { name: "መለሰ", rows: generateMelesseData() },
+            { name: "ተስፋዬ", rows: generateTesfayeData() },
+            { name: "ብርሃኑ", rows: generateBirhanuData() },
+            { name: "አበበ", rows: generateAbebeData() }
         ];
 
-        // የ30 ቀናት ውሂብ የሚፈጥሩ ተግባራት
+        // Simplified data generation functions
         function generateTesfawuData() {
-            const header = ["Tesfawu", "Tesfawu", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Tesfawu", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            // Days 26-30
+            data.push(["26", "", "", "", "1", "3", ""]);
+            data.push(["27", "", "", "", "1", "3", ""]);
+            data.push(["28", "", "", "", "", "", ""]);
+            data.push(["29", "", "", "", "1", "6", ""]);
+            data.push(["30", "", "", "", "1", "3", ""]);
             
-            // ከ26 እስከ 30
-            data.push(["Tesfawu", "26", "", "", "", "", "1", "", "3", "", "", "", ""]);
-            data.push(["Tesfawu", "27", "", "", "", "", "1", "", "3", "", "", "", ""]);
-            data.push(["Tesfawu", "28", "", "", "", "", "", "", "", "", "", "", ""]);
-            data.push(["Tesfawu", "29", "", "", "", "", "1", "", "6", "", "", "", ""]);
-            data.push(["Tesfawu", "30", "", "", "", "", "1", "", "3", "", "", "", ""]);
-            
-            // ከ1 እስከ 25
+            // Days 1-25
             for (let i = 1; i <= 25; i++) {
-                let timeKeeper = Math.random() > 0.2 ? "1" : "";
-                let guard = "";
-                if (i % 7 === 0) { // እሁድ
-                    guard = Math.random() > 0.3 ? "6" : "3";
-                } else {
-                    guard = Math.random() > 0.2 ? "3" : "";
-                }
-                
-                data.push(["Tesfawu", i.toString(), "", "", "", "", timeKeeper, "", guard, "", "", "", ""]);
+                data.push([i.toString(), "", "", "", Math.random() > 0.2 ? "1" : "", 
+                          i % 7 === 0 ? (Math.random() > 0.3 ? "6" : "3") : (Math.random() > 0.2 ? "3" : ""), ""]);
             }
             
             return data;
         }
 
         function generateDabereData() {
-            const header = ["Dabere", "Dabere", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Dabere", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "", "", "11", "1"]);
+            data.push(["27", "", "", "", "", "11", "1"]);
+            data.push(["28", "", "", "", "", "11", ""]);
+            data.push(["29", "", "", "", "", "11", "1"]);
+            data.push(["30", "", "", "", "", "11", "1"]);
             
-            // ከ26 እስከ 30
-            data.push(["Dabere", "26", "", "", "", "", "", "", "11", "1", "", "", ""]);
-            data.push(["Dabere", "27", "", "", "", "", "", "", "11", "1", "", "", ""]);
-            data.push(["Dabere", "28", "", "", "", "", "", "", "11", "", "", "", ""]);
-            data.push(["Dabere", "29", "", "", "", "", "", "", "11", "1", "", "", ""]);
-            data.push(["Dabere", "30", "", "", "", "", "", "", "11", "1", "", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let guard = "";
-                let dl = "";
-                
-                if (i % 7 === 0) { // እሁድ
-                    guard = Math.random() > 0.3 ? "22" : "11";
-                } else {
-                    guard = Math.random() > 0.2 ? "11" : "";
-                }
-                
-                if (guard && Math.random() > 0.4) {
-                    dl = Math.floor(Math.random() * 3 + 1).toString();
-                }
-                
-                data.push(["Dabere", i.toString(), "", "", "", "", "", "", guard, dl, "", "", ""]);
+                data.push([i.toString(), "", "", "", "", 
+                          i % 7 === 0 ? (Math.random() > 0.3 ? "22" : "11") : (Math.random() > 0.2 ? "11" : ""),
+                          Math.random() > 0.4 ? Math.floor(Math.random() * 3 + 1).toString() : ""]);
             }
             
             return data;
         }
 
         function generateTibebeData() {
-            const header = ["Tibebe", "Tibebe", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Tibebe", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "", "", "", "9.5"]);
+            data.push(["27", "", "", "", "", "", "9"]);
+            data.push(["28", "", "", "", "", "", "4"]);
+            data.push(["29", "", "", "", "", "", "9"]);
+            data.push(["30", "", "", "", "", "", "8.5"]);
             
-            // ከ26 እስከ 30
-            data.push(["Tibebe", "26", "", "", "", "", "", "", "", "9.5", "", "", ""]);
-            data.push(["Tibebe", "27", "", "", "", "", "", "", "", "9", "", "", ""]);
-            data.push(["Tibebe", "28", "", "", "", "", "", "", "", "4", "", "", ""]);
-            data.push(["Tibebe", "29", "", "", "", "", "", "", "", "9", "", "", ""]);
-            data.push(["Tibebe", "30", "", "", "", "", "", "", "", "8.5", "", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let dl = (Math.random() * 10 + 1).toFixed(1);
-                let carpenter = Math.random() > 0.8 ? "0.5" : "";
-                
-                data.push(["Tibebe", i.toString(), "", "", carpenter, "", "", "", "", dl, "", "", ""]);
+                data.push([i.toString(), "", "", Math.random() > 0.8 ? "0.5" : "", "", "", 
+                          (Math.random() * 10 + 1).toFixed(1)]);
             }
             
             return data;
         }
 
         function generateBrukData() {
-            const header = ["Mulugeta h", "Bruk", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Mulugeta h", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "1", "", "", "2"]);
+            data.push(["27", "", "", "1", "", "8", "3"]);
+            data.push(["28", "", "", "", "", "", ""]);
+            data.push(["29", "", "", "1", "", "4", "3"]);
+            data.push(["30", "", "", "1", "", "4", "2"]);
             
-            // ከ26 እስከ 30
-            data.push(["Mulugeta h", "26", "", "", "1", "", "", "", "", "2", "1", "", ""]);
-            data.push(["Mulugeta h", "27", "", "", "1", "", "", "", "8", "3", "1", "", ""]);
-            data.push(["Mulugeta h", "28", "", "", "", "", "", "", "", "", "", "", ""]);
-            data.push(["Mulugeta h", "29", "", "", "1", "", "", "", "4", "3", "1", "", ""]);
-            data.push(["Mulugeta h", "30", "", "", "1", "", "", "", "4", "2", "1", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let carpenter = Math.random() > 0.6 ? "1" : "";
-                let guard = "";
-                let dl = "";
-                let curer = "";
-                
-                if (carpenter) {
-                    guard = Math.random() > 0.5 ? (Math.random() > 0.5 ? "8" : "4") : "";
-                    dl = Math.random() > 0.4 ? Math.floor(Math.random() * 4 + 1).toString() : "";
-                    curer = Math.random() > 0.6 ? Math.floor(Math.random() * 2 + 1).toString() : "";
-                }
-                
-                data.push(["Mulugeta h", i.toString(), "", "", carpenter, "", "", "", guard, dl, curer, "", ""]);
+                data.push([i.toString(), "", "", Math.random() > 0.6 ? "1" : "", "", 
+                          Math.random() > 0.5 ? (Math.random() > 0.5 ? "8" : "4") : "",
+                          Math.random() > 0.4 ? Math.floor(Math.random() * 4 + 1).toString() : ""]);
             }
             
             return data;
         }
 
         function generateAyalewuData() {
-            const header = ["", "Ayalewu", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "", "1", "2", ""]);
+            data.push(["27", "", "", "", "1", "2", ""]);
+            data.push(["28", "", "", "", "", "", ""]);
+            data.push(["29", "", "", "", "1", "4", ""]);
+            data.push(["30", "", "", "", "2", "4", ""]);
             
-            // ከ26 እስከ 30
-            data.push(["", "26", "", "", "", "", "1", "", "2", "", "", "", ""]);
-            data.push(["", "27", "", "", "", "", "1", "", "2", "", "", "", ""]);
-            data.push(["", "28", "", "", "", "", "", "", "", "", "", "", ""]);
-            data.push(["", "29", "", "", "", "", "1", "", "4", "", "", "", ""]);
-            data.push(["", "30", "", "", "", "", "2", "", "4", "", "", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let timeKeeper = Math.random() > 0.3 ? "1" : "";
-                let guard = "";
-                
-                if (timeKeeper) {
-                    guard = Math.random() > 0.5 ? 
-                        (Math.random() > 0.7 ? "10" : 
-                         Math.random() > 0.5 ? "5" : "2") : "";
-                }
-                
-                data.push(["", i.toString(), "", "", "", "", timeKeeper, "", guard, "", "", "", ""]);
+                data.push([i.toString(), "", "", "", Math.random() > 0.3 ? "1" : "", 
+                          Math.random() > 0.5 ? (Math.random() > 0.7 ? "10" : Math.random() > 0.5 ? "5" : "2") : "", ""]);
             }
             
             return data;
         }
 
         function generateZekariyasData() {
-            const header = ["Zekariyas", "Zekariyas", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Zekariyas", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "", "1", "", ""]);
+            data.push(["27", "", "", "", "1", "", ""]);
+            data.push(["28", "", "", "", "", "", ""]);
+            data.push(["29", "", "", "", "1", "", ""]);
+            data.push(["30", "", "", "", "2", "", ""]);
             
-            // ከ26 እስከ 30
-            data.push(["Zekariyas", "26", "", "", "", "", "1", "", "", "", "", "", ""]);
-            data.push(["Zekariyas", "27", "", "", "", "", "1", "", "", "", "", "", ""]);
-            data.push(["Zekariyas", "28", "", "", "", "", "", "", "", "", "", "", ""]);
-            data.push(["Zekariyas", "29", "", "", "", "", "1", "", "", "", "", "", ""]);
-            data.push(["Zekariyas", "30", "", "", "", "", "2", "", "", "", "", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let timeKeeper = Math.random() > 0.4 ? "1" : "";
-                let dl = "";
-                
-                if (timeKeeper && Math.random() > 0.5) {
-                    dl = (Math.random() * 10 + 1).toFixed(1);
-                }
-                
-                data.push(["Zekariyas", i.toString(), "", "", "", "", timeKeeper, "", "", dl, "", "", ""]);
+                data.push([i.toString(), "", "", "", Math.random() > 0.4 ? "1" : "", "", 
+                          Math.random() > 0.5 ? (Math.random() * 10 + 1).toFixed(1) : ""]);
             }
             
             return data;
         }
 
         function generateMikaealData() {
-            const header = ["Mikaeal", "Mikaeal", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Mikaeal", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
+            data.push(["26", "", "", "", "", "", "24"]);
+            data.push(["27", "", "", "", "", "", "23"]);
+            data.push(["28", "", "", "", "", "", ""]);
+            data.push(["29", "", "", "", "", "", "31"]);
+            data.push(["30", "", "", "", "", "", "31"]);
             
-            // ከ26 እስከ 30
-            data.push(["Mikaeal", "26", "", "", "", "", "", "", "", "24", "", "", ""]);
-            data.push(["Mikaeal", "27", "", "", "", "", "", "", "", "23", "", "", ""]);
-            data.push(["Mikaeal", "28", "", "", "", "", "", "", "", "", "", "", ""]);
-            data.push(["Mikaeal", "29", "", "", "", "", "", "", "", "31", "", "", ""]);
-            data.push(["Mikaeal", "30", "", "", "", "", "", "", "", "31", "", "", ""]);
-            
-            // ከ1 እስከ 25
             for (let i = 1; i <= 25; i++) {
-                let dl = (Math.random() * 30 + 15).toFixed(1);
-                
-                data.push(["Mikaeal", i.toString(), "", "", "", "", "", "", "", dl, "", "", ""]);
+                data.push([i.toString(), "", "", "", "", "", (Math.random() * 30 + 15).toFixed(1)]);
             }
             
             return data;
         }
 
-        // ሌሎች ተግባራትን በተመሳሳይ መልኩ ይፍጠሩ
         function generateGirmaData() {
-            const header = ["Girma", "Girma", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Girma", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Girma", i.toString(), "5", "3", "2", "1", "", "", "", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Girma", i.toString(), "5", "3", "2", "1", "", "", "", "", "", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "5", "3", "2", "", "", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "5", "3", "2", "", "", ""]);
             
             return data;
         }
 
         function generateSalomonData() {
-            const header = ["Salomon", "Salomon", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Salomon", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Salomon", i.toString(), "", "", "", "", "", "", "7", "", "3", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Salomon", i.toString(), "", "", "", "", "", "", "7", "", "3", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "7", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "7", ""]);
             
             return data;
         }
 
         function generateYaredData() {
-            const header = ["Yared", "Yared", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Yared", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Yared", i.toString(), "3", "2", "", "", "", "", "", "", "", "2", "5"]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Yared", i.toString(), "3", "2", "", "", "", "", "", "", "", "2", "5"]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "3", "2", "", "", "", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "3", "2", "", "", "", ""]);
             
             return data;
         }
 
         function generateHenokData() {
-            const header = ["Henok", "Henok", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Henok", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Henok", i.toString(), "", "", "4", "", "", "", "", "5", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Henok", i.toString(), "", "", "4", "", "", "", "", "5", "", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "4", "", "", "5"]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "4", "", "", "5"]);
             
             return data;
         }
 
         function generateMelesseData() {
-            const header = ["Melesse", "Melesse", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Melesse", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Melesse", i.toString(), "", "", "", "2", "1", "", "", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Melesse", i.toString(), "", "", "", "2", "1", "", "", "", "", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "1", "", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "1", "", ""]);
             
             return data;
         }
 
         function generateTesfayeData() {
-            const header = ["Tesfaye", "Tesfaye", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Tesfaye", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Tesfaye", i.toString(), "", "6", "", "", "", "", "", "", "", "", "8"]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Tesfaye", i.toString(), "", "6", "", "", "", "", "", "", "", "", "8"]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "6", "", "", "", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "6", "", "", "", ""]);
             
             return data;
         }
 
         function generateBirhanuData() {
-            const header = ["Birhanu", "Birhanu", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Birhanu", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Birhanu", i.toString(), "", "", "", "", "", "2", "", "", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Birhanu", i.toString(), "", "", "", "", "", "2", "", "", "", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "", ""]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "", ""]);
             
             return data;
         }
 
         function generateAbebeData() {
-            const header = ["Abebe", "Abebe", "", "", "", "", "", "", "", "", "", "", ""];
-            const columns = ["Abebe", "Date", "Mason", "Barbender", "Carpenter", "Store", "Time Keeper", "Surveyor", "Guard", "Dl", "Curer", "Guard @ shewarobit", "Concrete labour"];
-            const data = [];
+            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const data = [columns];
             
-            data.push(header);
-            data.push(columns);
-            
-            for (let i = 26; i <= 30; i++) {
-                data.push(["Abebe", i.toString(), "", "", "", "", "", "", "9", "2", "", "", ""]);
-            }
-            
-            for (let i = 1; i <= 25; i++) {
-                data.push(["Abebe", i.toString(), "", "", "", "", "", "", "9", "2", "", "", ""]);
-            }
+            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "9", "2"]);
+            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "9", "2"]);
             
             return data;
         }
 
-        // ትር ቁልፎችን ይፍጠሩ
-        const tabsContainer = document.getElementById('tabsContainer');
-        const sheetContent = document.getElementById('sheetContent');
-
-        sheetsData.forEach((sheet, index) => {
-            const button = document.createElement('button');
-            button.className = 'tab-button';
-            button.textContent = `${index + 1}. ${sheet.name}`;
-            button.addEventListener('click', () => showSheet(index));
-            tabsContainer.appendChild(button);
+        // Telegram Mini App initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            
+            // Add Telegram-specific features if available
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+                
+                // Set theme colors
+                Telegram.WebApp.setHeaderColor('#2c3e50');
+                Telegram.WebApp.setBackgroundColor('#667eea');
+                
+                // Add back button if needed
+                Telegram.WebApp.BackButton.onClick(() => {
+                    Telegram.WebApp.close();
+                });
+            }
         });
 
-        // የመጀመሪያ ትር አሳይ
-        if (sheetsData.length > 0) {
-            showSheet(0);
-            document.querySelector('.tab-button').classList.add('active');
+        function initApp() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const sheetContent = document.getElementById('sheetContent');
+
+            // Create tabs
+            sheetsData.forEach((sheet, index) => {
+                const button = document.createElement('button');
+                button.className = 'tab-button';
+                button.innerHTML = `${sheet.name} <span class="tab-badge">${index + 1}</span>`;
+                button.addEventListener('click', () => showSheet(index));
+                tabsContainer.appendChild(button);
+            });
+
+            // Show first sheet
+            if (sheetsData.length > 0) {
+                showSheet(0);
+                document.querySelector('.tab-button').classList.add('active');
+            }
         }
 
-        // አምድ ድምር አስላ
         function calculateColumnSums(rows) {
-            if (rows.length < 3) return [];
+            if (rows.length < 2) return [];
             
             const sums = new Array(rows[0].length).fill(0);
             const hasNumericData = new Array(rows[0].length).fill(false);
             
-            // ከሁለተኛው ረድፍ ጀምሮ (የውሂብ ረድፎች)
-            for (let i = 2; i < rows.length; i++) {
+            for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 for (let j = 0; j < row.length; j++) {
                     const cell = row[j];
-                    // ቁጥር ከሆነ ድምር ላይ ጨምር
                     const num = parseFloat(cell);
                     if (!isNaN(num) && cell !== '' && cell !== ' ') {
                         sums[j] += num;
@@ -641,168 +708,241 @@
             return sums.map((sum, index) => ({
                 sum: sum,
                 hasData: hasNumericData[index],
-                columnName: rows[1][index] || `አምድ ${index + 1}`
+                columnName: rows[0][index] || `አምድ ${index}`
             }));
-        }
-
-        // የጠቅላላ ድምር አስላ
-        function calculateTotalSum(columnSums) {
-            return columnSums.reduce((total, col) => total + col.sum, 0);
         }
 
         function showSheet(index) {
             const sheet = sheetsData[index];
-            sheetContent.innerHTML = '';
+            const sheetContent = document.getElementById('sheetContent');
+            
+            // Calculate statistics
+            const columnSums = calculateColumnSums(sheet.rows);
+            const totalSum = columnSums.reduce((total, col) => total + col.sum, 0);
+            const filledCells = sheet.rows.slice(1).reduce((sum, row) => 
+                sum + row.filter(cell => cell !== '').length, 0);
+            const numericCells = sheet.rows.slice(1).reduce((sum, row) => 
+                sum + row.filter(cell => !isNaN(parseFloat(cell)) && cell !== '').length, 0);
 
-            // የትር ርዕስ
+            // Create content with animations
+            sheetContent.innerHTML = '';
+            sheetContent.className = 'content-area fade-in';
+
+            // Sheet title
             const title = document.createElement('div');
             title.className = 'sheet-title';
-            title.textContent = `📋 ትር: ${sheet.name} - 30 ቀናት ውሂብ`;
+            title.innerHTML = `📊 ${sheet.name} - 30 ቀናት መዝገብ`;
             sheetContent.appendChild(title);
 
-            // ስታቲስቲክስ
-            const stats = document.createElement('div');
-            stats.className = 'stats';
-            const totalRows = sheet.rows.length - 2;
-            const totalCells = sheet.rows.reduce((sum, row) => sum + row.filter(cell => cell !== '').length, 0);
-            
-            // አምዶች ድምር አስላ
-            const columnSums = calculateColumnSums(sheet.rows);
-            const totalSum = calculateTotalSum(columnSums);
-            
-            stats.innerHTML = `
-                <strong>የትር መረጃ:</strong><br>
-                • አጠቃላይ ቀናት: <span>30</span> (26-30 እና 1-25)<br>
-                • የረድፎች ብዛት: <span>${sheet.rows.length}</span><br>
-                • የውሂብ ረድፎች: <span>${totalRows}</span><br>
-                • የተሞሉ ሕዋሳት: <span>${totalCells}</span><br>
-                • ጠቅላላ ድምር: <span style="color: #e74c3c;">${totalSum.toFixed(2)}</span>
+            // Statistics card
+            const statsCard = document.createElement('div');
+            statsCard.className = 'stats-card';
+            statsCard.innerHTML = `
+                <div class="stats-row">
+                    <span class="stats-label">አጠቃላይ ቀናት:</span>
+                    <span class="stats-value">30</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">የተሞሉ ሕዋሳት:</span>
+                    <span class="stats-value">${filledCells}</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">የቁጥር ሕዋሳት:</span>
+                    <span class="stats-value">${numericCells}</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">የአምዶች ብዛት:</span>
+                    <span class="stats-value">${sheet.rows[0].length}</span>
+                </div>
+                <div class="total-sum">
+                    <span>ጠቅላላ ድምር:</span>
+                    <span>${totalSum.toFixed(2)}</span>
+                </div>
             `;
-            sheetContent.appendChild(stats);
+            sheetContent.appendChild(statsCard);
 
-            // አምድ ድምር ማጠቃለያ
+            // Column summary
             const columnSummary = document.createElement('div');
             columnSummary.className = 'column-summary';
-            const summaryTitle = document.createElement('h3');
-            summaryTitle.textContent = '📊 አምዶች ድምር (30 ቀናት)';
-            columnSummary.appendChild(summaryTitle);
+            columnSummary.innerHTML = '<div class="summary-title">📈 አምዶች ድምር</div>';
             
-            const sumRow = document.createElement('div');
-            sumRow.className = 'sum-row';
+            const sumGrid = document.createElement('div');
+            sumGrid.className = 'sum-grid';
             
             columnSums.forEach((col, colIndex) => {
-                if (col.hasData && colIndex > 0) { // የቀን አምድ አንሰራም
+                if (col.hasData && colIndex > 0) { // Skip date column
+                    const colors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c'];
                     const sumItem = document.createElement('div');
                     sumItem.className = 'sum-item';
+                    sumItem.style.background = colors[colIndex % colors.length];
                     sumItem.innerHTML = `
-                        <div>${col.columnName}</div>
-                        <span>${col.sum.toFixed(2)}</span>
+                        <div class="sum-item-name">${col.columnName}</div>
+                        <div class="sum-item-value">${col.sum.toFixed(2)}</div>
                     `;
-                    
-                    // የተለያየ ቀለም ለተለያዩ አምዶች
-                    const colors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c', '#d35400', '#27ae60', '#8e44ad', '#f1c40f'];
-                    sumItem.style.backgroundColor = colors[(colIndex - 1) % colors.length];
-                    
-                    sumRow.appendChild(sumItem);
+                    sumGrid.appendChild(sumItem);
                 }
             });
             
-            columnSummary.appendChild(sumRow);
+            columnSummary.appendChild(sumGrid);
             sheetContent.appendChild(columnSummary);
 
-            // ሠንጠረዥ ፍጠር
+            // Quick actions
+            const quickActions = document.createElement('div');
+            quickActions.className = 'quick-actions';
+            quickActions.innerHTML = `
+                <button class="action-btn" onclick="exportData(${index})">📤 ላክ</button>
+                <button class="action-btn" onclick="refreshData()">🔄 አዘምን</button>
+                <button class="action-btn" onclick="shareSheet('${sheet.name}')">🔗 አጋራ</button>
+            `;
+            sheetContent.appendChild(quickActions);
+
+            // Data table
             const table = document.createElement('table');
+            table.className = 'data-table';
+            
+            // Header
             const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            sheet.rows[0].forEach(cell => {
+                const th = document.createElement('th');
+                th.textContent = cell;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // Body
             const tbody = document.createElement('tbody');
-
-            // አርዕስት ረድፍ
-            if (sheet.rows.length > 1) {
-                const headerRow = document.createElement('tr');
-                sheet.rows[1].forEach((cell, index) => {
-                    const th = document.createElement('th');
-                    th.textContent = cell || '';
-                    if (index === 1) {
-                        th.className = 'date-header';
-                        th.textContent = "Date (26-30, 1-25)";
-                    }
-                    headerRow.appendChild(th);
-                });
-                thead.appendChild(headerRow);
-            }
-
-            // ውሂብ ረድፎች (ከሁለተኛው ጀምሮ)
-            for (let i = 2; i < sheet.rows.length; i++) {
+            for (let i = 1; i < sheet.rows.length; i++) {
                 const row = document.createElement('tr');
-                const date = parseInt(sheet.rows[i][1]);
-                
-                // እሁድ ከሆነ ልዩ ክፍል
-                if (date % 7 === 0) {
-                    row.className = 'weekend';
+                if (parseInt(sheet.rows[i][0]) % 7 === 0) {
+                    row.className = 'weekend-row';
                 }
                 
                 sheet.rows[i].forEach((cell, cellIndex) => {
                     const td = document.createElement('td');
-                    td.textContent = cell || '';
-                    
-                    // ባዶ ሕዋሳት
                     if (cell === '') {
                         td.className = 'empty-cell';
-                    }
-                    
-                    // ቁጥሮችን ቀለም ለይ
-                    const num = parseFloat(cell);
-                    if (!isNaN(num) && cell !== '' && cell !== ' ') {
-                        td.className = 'numeric-cell';
-                        // ትልቅ ቁጥሮች የተለየ ቀለም
-                        if (num >= 20) {
-                            td.style.color = '#e74c3c';
-                        } else if (num >= 10) {
-                            td.style.color = '#f39c12';
+                        td.textContent = '-';
+                    } else {
+                        if (cellIndex === 0) {
+                            td.className = 'date-cell';
+                        } else {
+                            const num = parseFloat(cell);
+                            if (!isNaN(num)) {
+                                td.className = 'numeric-cell';
+                                if (num >= 20) td.style.color = '#e74c3c';
+                                else if (num >= 10) td.style.color = '#f39c12';
+                            }
                         }
+                        td.textContent = cell;
                     }
-                    
                     row.appendChild(td);
                 });
                 tbody.appendChild(row);
             }
-
-            // ድምር ረድፍ ጨምር
+            
+            // Total row
             const totalRow = document.createElement('tr');
             totalRow.className = 'total-row';
-            
             columnSums.forEach((col, colIndex) => {
                 const td = document.createElement('td');
                 if (colIndex === 0) {
-                    td.textContent = "ጠቅላላ";
-                    td.style.fontWeight = 'bold';
-                } else if (colIndex === 1) {
-                    td.textContent = "ድምር";
-                    td.style.fontWeight = 'bold';
+                    td.textContent = 'ጠቅላላ';
                 } else if (col.hasData) {
                     td.textContent = col.sum.toFixed(2);
-                    td.style.fontWeight = 'bold';
-                    td.style.fontSize = '14px';
                 } else {
                     td.textContent = '-';
                 }
                 totalRow.appendChild(td);
             });
-            
             tbody.appendChild(totalRow);
-
-            table.appendChild(thead);
+            
             table.appendChild(tbody);
             sheetContent.appendChild(table);
 
-            // ንቁ ትር አድርግ
+            // Update active tab
             document.querySelectorAll('.tab-button').forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
             });
+        }
 
-            // ወደ ላይ አንሳ
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Utility functions for Telegram Mini App
+        function exportData(index) {
+            const sheet = sheetsData[index];
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Add headers
+            csvContent += sheet.rows[0].join(",") + "\n";
+            
+            // Add data rows
+            for (let i = 1; i < sheet.rows.length; i++) {
+                csvContent += sheet.rows[i].join(",") + "\n";
+            }
+            
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `${sheetsData[index].name}_data.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert(`✅ ${sheetsData[index].name} መረጃ ተወስዷል!`);
+        }
+
+        function refreshData() {
+            if (confirm('ሁሉም መረጃ እንደገና ለመፍጠር እርግጠኛ ነህ?')) {
+                location.reload();
+            }
+        }
+
+        function shareSheet(sheetName) {
+            const shareText = `📊 ${sheetName} የሰራተኞች መዝገብ\n\nይህንን ለማየት አፕ ይጠቀሙ።`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `${sheetName} መዝገብ`,
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers without Web Share API
+                navigator.clipboard.writeText(shareText + '\n' + window.location.href);
+                alert('🔗 አገናኝ ተቀድሷል! ለሌሎች ለመላክ ኮፒ ያድርጉት።');
+            }
+        }
+
+        // Add touch-friendly features
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let currentTabIndex = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next tab
+                    currentTabIndex = (currentTabIndex + 1) % sheetsData.length;
+                } else {
+                    // Swipe right - previous tab
+                    currentTabIndex = (currentTabIndex - 1 + sheetsData.length) % sheetsData.length;
+                }
+                showSheet(currentTabIndex);
+            }
         }
     </script>
-
 </body>
 </html>
