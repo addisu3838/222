@@ -110,66 +110,9 @@
             max-height: calc(100vh - 180px);
         }
         
-        .sheet-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 20px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light);
-        }
-        
-        .column-summary {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 2px solid var(--light);
-        }
-        
-        .summary-title {
-            font-size: 1.1rem;
-            color: var(--secondary);
-            margin-bottom: 12px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .sum-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-        }
-        
-        .sum-item {
-            background: var(--primary);
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .sum-item:hover {
-            transform: scale(1.05);
-        }
-        
-        .sum-item-name {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        
-        .sum-item-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-        
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
             font-size: 0.85rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             border-radius: 10px;
@@ -236,10 +179,6 @@
                 font-size: 0.85rem;
             }
             
-            .sum-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .data-table {
                 font-size: 0.8rem;
             }
@@ -262,10 +201,6 @@
             .tab-button {
                 padding: 8px 12px;
                 font-size: 0.8rem;
-            }
-            
-            .sum-grid {
-                grid-template-columns: 1fr;
             }
         }
         
@@ -306,37 +241,6 @@
             color: var(--primary);
         }
         
-        /* Quick actions */
-        .quick-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            background: var(--light);
-            border: none;
-            border-radius: 10px;
-            color: var(--dark);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .action-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
         /* Badge for active tab */
         .tab-badge {
             display: inline-block;
@@ -369,7 +273,7 @@
     </div>
 
     <script>
-        // Optimized data for Telegram Mini App
+        // Optimized data for Telegram Mini App - NEW COLUMN ORDER
         const sheetsData = [
             { name: "ተስፋዉ", rows: generateTesfawuData() },
             { name: "ዳበረ", rows: generateDabereData() },
@@ -388,212 +292,296 @@
             { name: "አበበ", rows: generateAbebeData() }
         ];
 
-        // Simplified data generation functions
+        // NEW COLUMN ORDER: Guard, Dl, Time Keeper, Carpenter, Mason, Barbender
         function generateTesfawuData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
             // Days 26-30
-            data.push(["26", "", "", "", "1", "3", ""]);
-            data.push(["27", "", "", "", "1", "3", ""]);
+            data.push(["26", "3", "", "1", "", "", ""]);
+            data.push(["27", "3", "", "1", "", "", ""]);
             data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "", "1", "6", ""]);
-            data.push(["30", "", "", "", "1", "3", ""]);
+            data.push(["29", "6", "", "1", "", "", ""]);
+            data.push(["30", "3", "", "1", "", "", ""]);
             
             // Days 1-25
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", Math.random() > 0.2 ? "1" : "", 
-                          i % 7 === 0 ? (Math.random() > 0.3 ? "6" : "3") : (Math.random() > 0.2 ? "3" : ""), ""]);
+                let guard = "";
+                let timeKeeper = Math.random() > 0.2 ? "1" : "";
+                
+                if (i % 7 === 0) { // እሁድ
+                    guard = Math.random() > 0.3 ? "6" : "3";
+                } else {
+                    guard = Math.random() > 0.2 ? "3" : "";
+                }
+                
+                data.push([i.toString(), guard, "", timeKeeper, "", "", ""]);
             }
             
             return data;
         }
 
         function generateDabereData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "", "", "11", "1"]);
-            data.push(["27", "", "", "", "", "11", "1"]);
-            data.push(["28", "", "", "", "", "11", ""]);
-            data.push(["29", "", "", "", "", "11", "1"]);
-            data.push(["30", "", "", "", "", "11", "1"]);
+            data.push(["26", "11", "1", "", "", "", ""]);
+            data.push(["27", "11", "1", "", "", "", ""]);
+            data.push(["28", "11", "", "", "", "", ""]);
+            data.push(["29", "11", "1", "", "", "", ""]);
+            data.push(["30", "11", "1", "", "", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "", 
-                          i % 7 === 0 ? (Math.random() > 0.3 ? "22" : "11") : (Math.random() > 0.2 ? "11" : ""),
-                          Math.random() > 0.4 ? Math.floor(Math.random() * 3 + 1).toString() : ""]);
+                let guard = "";
+                let dl = "";
+                
+                if (i % 7 === 0) { // እሁድ
+                    guard = Math.random() > 0.3 ? "22" : "11";
+                } else {
+                    guard = Math.random() > 0.2 ? "11" : "";
+                }
+                
+                if (guard && Math.random() > 0.4) {
+                    dl = Math.floor(Math.random() * 3 + 1).toString();
+                }
+                
+                data.push([i.toString(), guard, dl, "", "", "", ""]);
             }
             
             return data;
         }
 
         function generateTibebeData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "", "", "", "9.5"]);
-            data.push(["27", "", "", "", "", "", "9"]);
-            data.push(["28", "", "", "", "", "", "4"]);
-            data.push(["29", "", "", "", "", "", "9"]);
-            data.push(["30", "", "", "", "", "", "8.5"]);
+            data.push(["26", "", "9.5", "", "", "", ""]);
+            data.push(["27", "", "9", "", "", "", ""]);
+            data.push(["28", "", "4", "", "", "", ""]);
+            data.push(["29", "", "9", "", "", "", ""]);
+            data.push(["30", "", "8.5", "", "", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", Math.random() > 0.8 ? "0.5" : "", "", "", 
-                          (Math.random() * 10 + 1).toFixed(1)]);
+                let dl = (Math.random() * 10 + 1).toFixed(1);
+                let carpenter = Math.random() > 0.8 ? "0.5" : "";
+                
+                data.push([i.toString(), "", dl, "", carpenter, "", ""]);
             }
             
             return data;
         }
 
         function generateBrukData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "1", "", "", "2"]);
-            data.push(["27", "", "", "1", "", "8", "3"]);
+            data.push(["26", "", "2", "", "1", "", ""]);
+            data.push(["27", "8", "3", "", "1", "", ""]);
             data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "1", "", "4", "3"]);
-            data.push(["30", "", "", "1", "", "4", "2"]);
+            data.push(["29", "4", "3", "", "1", "", ""]);
+            data.push(["30", "4", "2", "", "1", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", Math.random() > 0.6 ? "1" : "", "", 
-                          Math.random() > 0.5 ? (Math.random() > 0.5 ? "8" : "4") : "",
-                          Math.random() > 0.4 ? Math.floor(Math.random() * 4 + 1).toString() : ""]);
+                let carpenter = Math.random() > 0.6 ? "1" : "";
+                let guard = "";
+                let dl = "";
+                
+                if (carpenter) {
+                    guard = Math.random() > 0.5 ? (Math.random() > 0.5 ? "8" : "4") : "";
+                    dl = Math.random() > 0.4 ? Math.floor(Math.random() * 4 + 1).toString() : "";
+                }
+                
+                data.push([i.toString(), guard, dl, "", carpenter, "", ""]);
             }
             
             return data;
         }
 
         function generateAyalewuData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "", "1", "2", ""]);
-            data.push(["27", "", "", "", "1", "2", ""]);
+            data.push(["26", "2", "", "1", "", "", ""]);
+            data.push(["27", "2", "", "1", "", "", ""]);
             data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "", "1", "4", ""]);
-            data.push(["30", "", "", "", "2", "4", ""]);
+            data.push(["29", "4", "", "1", "", "", ""]);
+            data.push(["30", "4", "", "2", "", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", Math.random() > 0.3 ? "1" : "", 
-                          Math.random() > 0.5 ? (Math.random() > 0.7 ? "10" : Math.random() > 0.5 ? "5" : "2") : "", ""]);
+                let timeKeeper = Math.random() > 0.3 ? "1" : "";
+                let guard = "";
+                
+                if (timeKeeper) {
+                    guard = Math.random() > 0.5 ? 
+                        (Math.random() > 0.7 ? "10" : 
+                         Math.random() > 0.5 ? "5" : "2") : "";
+                }
+                
+                data.push([i.toString(), guard, "", timeKeeper, "", "", ""]);
             }
             
             return data;
         }
 
         function generateZekariyasData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "", "1", "", ""]);
-            data.push(["27", "", "", "", "1", "", ""]);
+            data.push(["26", "", "", "1", "", "", ""]);
+            data.push(["27", "", "", "1", "", "", ""]);
             data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "", "1", "", ""]);
-            data.push(["30", "", "", "", "2", "", ""]);
+            data.push(["29", "", "", "1", "", "", ""]);
+            data.push(["30", "", "", "2", "", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", Math.random() > 0.4 ? "1" : "", "", 
-                          Math.random() > 0.5 ? (Math.random() * 10 + 1).toFixed(1) : ""]);
+                let timeKeeper = Math.random() > 0.4 ? "1" : "";
+                let dl = "";
+                
+                if (timeKeeper && Math.random() > 0.5) {
+                    dl = (Math.random() * 10 + 1).toFixed(1);
+                }
+                
+                data.push([i.toString(), "", dl, timeKeeper, "", "", ""]);
             }
             
             return data;
         }
 
         function generateMikaealData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            data.push(["26", "", "", "", "", "", "24"]);
-            data.push(["27", "", "", "", "", "", "23"]);
+            data.push(["26", "", "24", "", "", "", ""]);
+            data.push(["27", "", "23", "", "", "", ""]);
             data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "", "", "", "31"]);
-            data.push(["30", "", "", "", "", "", "31"]);
+            data.push(["29", "", "31", "", "", "", ""]);
+            data.push(["30", "", "31", "", "", "", ""]);
             
             for (let i = 1; i <= 25; i++) {
-                data.push([i.toString(), "", "", "", "", "", (Math.random() * 30 + 15).toFixed(1)]);
+                let dl = (Math.random() * 30 + 15).toFixed(1);
+                
+                data.push([i.toString(), "", dl, "", "", "", ""]);
             }
             
             return data;
         }
 
         function generateGirmaData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "5", "3", "2", "", "", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "5", "3", "2", "", "", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "", "", "2", "5", "3"]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "", "", "2", "5", "3"]);
+            }
             
             return data;
         }
 
         function generateSalomonData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "7", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "7", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "7", "", "", "", "", ""]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "7", "", "", "", "", ""]);
+            }
             
             return data;
         }
 
         function generateYaredData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "3", "2", "", "", "", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "3", "2", "", "", "", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "", "", "", "3", "2"]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "", "", "", "3", "2"]);
+            }
             
             return data;
         }
 
         function generateHenokData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "4", "", "", "5"]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "4", "", "", "5"]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "5", "", "4", "", ""]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "5", "", "4", "", ""]);
+            }
             
             return data;
         }
 
         function generateMelesseData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "1", "", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "1", "", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "", "1", "", "", ""]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "", "1", "", "", ""]);
+            }
             
             return data;
         }
 
         function generateTesfayeData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "6", "", "", "", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "6", "", "", "", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "", "", "", "", "6"]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "", "", "", "", "6"]);
+            }
             
             return data;
         }
 
         function generateBirhanuData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "", ""]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "", ""]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "", "", "", "", "", ""]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "", "", "", "", "", ""]);
+            }
             
             return data;
         }
 
         function generateAbebeData() {
-            const columns = ["ቀን", "Mason", "Barbender", "Carpenter", "Time Keeper", "Guard", "Dl"];
+            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
             const data = [columns];
             
-            for (let i = 26; i <= 30; i++) data.push([i.toString(), "", "", "", "", "9", "2"]);
-            for (let i = 1; i <= 25; i++) data.push([i.toString(), "", "", "", "", "9", "2"]);
+            for (let i = 26; i <= 30; i++) {
+                data.push([i.toString(), "9", "2", "", "", "", ""]);
+            }
+            
+            for (let i = 1; i <= 25; i++) {
+                data.push([i.toString(), "9", "2", "", "", "", ""]);
+            }
             
             return data;
         }
@@ -674,47 +662,6 @@
             sheetContent.innerHTML = '';
             sheetContent.className = 'content-area fade-in';
 
-            // Sheet title
-            const title = document.createElement('div');
-            title.className = 'sheet-title';
-            title.innerHTML = `📊 ${sheet.name} - 30 ቀናት መዝገብ`;
-            sheetContent.appendChild(title);
-
-            // Quick actions
-            const quickActions = document.createElement('div');
-            quickActions.className = 'quick-actions';
-            quickActions.innerHTML = `
-                <button class="action-btn" onclick="exportData(${index})">📤 ላክ</button>
-                <button class="action-btn" onclick="refreshData()">🔄 አዘምን</button>
-                <button class="action-btn" onclick="shareSheet('${sheet.name}')">🔗 አጋራ</button>
-            `;
-            sheetContent.appendChild(quickActions);
-
-            // Column summary
-            const columnSummary = document.createElement('div');
-            columnSummary.className = 'column-summary';
-            columnSummary.innerHTML = '<div class="summary-title">📈 አምዶች ድምር</div>';
-            
-            const sumGrid = document.createElement('div');
-            sumGrid.className = 'sum-grid';
-            
-            columnSums.forEach((col, colIndex) => {
-                if (col.hasData && colIndex > 0) { // Skip date column
-                    const colors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c'];
-                    const sumItem = document.createElement('div');
-                    sumItem.className = 'sum-item';
-                    sumItem.style.background = colors[colIndex % colors.length];
-                    sumItem.innerHTML = `
-                        <div class="sum-item-name">${col.columnName}</div>
-                        <div class="sum-item-value">${col.sum.toFixed(2)}</div>
-                    `;
-                    sumGrid.appendChild(sumItem);
-                }
-            });
-            
-            columnSummary.appendChild(sumGrid);
-            sheetContent.appendChild(columnSummary);
-
             // Data table
             const table = document.createElement('table');
             table.className = 'data-table';
@@ -784,53 +731,6 @@
             document.querySelectorAll('.tab-button').forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
             });
-        }
-
-        // Utility functions for Telegram Mini App
-        function exportData(index) {
-            const sheet = sheetsData[index];
-            let csvContent = "data:text/csv;charset=utf-8,";
-            
-            // Add headers
-            csvContent += sheet.rows[0].join(",") + "\n";
-            
-            // Add data rows
-            for (let i = 1; i < sheet.rows.length; i++) {
-                csvContent += sheet.rows[i].join(",") + "\n";
-            }
-            
-            // Create download link
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `${sheetsData[index].name}_data.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert(`✅ ${sheetsData[index].name} መረጃ ተወስዷል!`);
-        }
-
-        function refreshData() {
-            if (confirm('ሁሉም መረጃ እንደገና ለመፍጠር እርግጠኛ ነህ?')) {
-                location.reload();
-            }
-        }
-
-        function shareSheet(sheetName) {
-            const shareText = `📊 ${sheetName} የሰራተኞች መዝገብ\n\nይህንን ለማየት አፕ ይጠቀሙ።`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: `${sheetName} መዝገብ`,
-                    text: shareText,
-                    url: window.location.href
-                });
-            } else {
-                // Fallback for browsers without Web Share API
-                navigator.clipboard.writeText(shareText + '\n' + window.location.href);
-                alert('🔗 አገናኝ ተቀድሷል! ለሌሎች ለመላክ ኮፒ ያድርጉት።');
-            }
         }
 
         // Add touch-friendly features
