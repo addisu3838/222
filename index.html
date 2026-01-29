@@ -114,47 +114,10 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--secondary);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--light);
-        }
-        
-        .stats-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .stats-label {
-            color: var(--dark);
-            font-weight: 500;
-        }
-        
-        .stats-value {
-            color: var(--primary);
-            font-weight: 700;
-        }
-        
-        .total-sum {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, var(--accent), #27ae60);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-top: 10px;
-            font-weight: 700;
         }
         
         .column-summary {
@@ -304,11 +267,6 @@
             .sum-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .stats-row {
-                flex-direction: column;
-                gap: 2px;
-            }
         }
         
         /* Animation */
@@ -348,18 +306,11 @@
             color: var(--primary);
         }
         
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #7f8c8d;
-        }
-        
         /* Quick actions */
         .quick-actions {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         
@@ -716,13 +667,8 @@
             const sheet = sheetsData[index];
             const sheetContent = document.getElementById('sheetContent');
             
-            // Calculate statistics
+            // Calculate column sums
             const columnSums = calculateColumnSums(sheet.rows);
-            const totalSum = columnSums.reduce((total, col) => total + col.sum, 0);
-            const filledCells = sheet.rows.slice(1).reduce((sum, row) => 
-                sum + row.filter(cell => cell !== '').length, 0);
-            const numericCells = sheet.rows.slice(1).reduce((sum, row) => 
-                sum + row.filter(cell => !isNaN(parseFloat(cell)) && cell !== '').length, 0);
 
             // Create content with animations
             sheetContent.innerHTML = '';
@@ -734,32 +680,15 @@
             title.innerHTML = `📊 ${sheet.name} - 30 ቀናት መዝገብ`;
             sheetContent.appendChild(title);
 
-            // Statistics card
-            const statsCard = document.createElement('div');
-            statsCard.className = 'stats-card';
-            statsCard.innerHTML = `
-                <div class="stats-row">
-                    <span class="stats-label">አጠቃላይ ቀናት:</span>
-                    <span class="stats-value">30</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">የተሞሉ ሕዋሳት:</span>
-                    <span class="stats-value">${filledCells}</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">የቁጥር ሕዋሳት:</span>
-                    <span class="stats-value">${numericCells}</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">የአምዶች ብዛት:</span>
-                    <span class="stats-value">${sheet.rows[0].length}</span>
-                </div>
-                <div class="total-sum">
-                    <span>ጠቅላላ ድምር:</span>
-                    <span>${totalSum.toFixed(2)}</span>
-                </div>
+            // Quick actions
+            const quickActions = document.createElement('div');
+            quickActions.className = 'quick-actions';
+            quickActions.innerHTML = `
+                <button class="action-btn" onclick="exportData(${index})">📤 ላክ</button>
+                <button class="action-btn" onclick="refreshData()">🔄 አዘምን</button>
+                <button class="action-btn" onclick="shareSheet('${sheet.name}')">🔗 አጋራ</button>
             `;
-            sheetContent.appendChild(statsCard);
+            sheetContent.appendChild(quickActions);
 
             // Column summary
             const columnSummary = document.createElement('div');
@@ -785,16 +714,6 @@
             
             columnSummary.appendChild(sumGrid);
             sheetContent.appendChild(columnSummary);
-
-            // Quick actions
-            const quickActions = document.createElement('div');
-            quickActions.className = 'quick-actions';
-            quickActions.innerHTML = `
-                <button class="action-btn" onclick="exportData(${index})">📤 ላክ</button>
-                <button class="action-btn" onclick="refreshData()">🔄 አዘምን</button>
-                <button class="action-btn" onclick="shareSheet('${sheet.name}')">🔗 አጋራ</button>
-            `;
-            sheetContent.appendChild(quickActions);
 
             // Data table
             const table = document.createElement('table');
