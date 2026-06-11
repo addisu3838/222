@@ -1,627 +1,763 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>የሰራተኞች መዝገብ</title>
-    <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #34495e;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 10px;
-            color: #333;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-            min-height: 90vh;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, var(--secondary), var(--dark));
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-        
-        .header .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            color: #ecf0f1;
-        }
-        
-        .tabs-container {
-            display: flex;
-            overflow-x: auto;
-            background: var(--light);
-            padding: 10px 5px;
-            gap: 8px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .tabs-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .tab-button {
-            flex: 0 0 auto;
-            padding: 12px 16px;
-            background: white;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            color: var(--dark);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .tab-button:hover {
-            transform: translateY(-2px);
-        }
-        
-        .tab-button.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-        }
-        
-        .content-area {
-            padding: 15px;
-            overflow-y: auto;
-            max-height: calc(100vh - 180px);
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .data-table th {
-            background: var(--dark);
-            color: white;
-            padding: 12px 8px;
-            font-weight: 600;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .data-table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .data-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        
-        .data-table tr:hover {
-            background: #e8f4fc;
-        }
-        
-        .numeric-cell {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .weekend-row {
-            background: #fff8e1 !important;
-        }
-        
-        .total-row {
-            background: var(--secondary) !important;
-            color: white;
-            font-weight: 700;
-        }
-        
-        .empty-cell {
-            color: #bbb;
-        }
-        
-        .date-cell {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-            
-            .tab-button {
-                padding: 10px 14px;
-                font-size: 0.85rem;
-            }
-            
-            .data-table {
-                font-size: 0.8rem;
-            }
-            
-            .data-table th,
-            .data-table td {
-                padding: 8px 6px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header {
-                padding: 15px 10px;
-            }
-            
-            .header h1 {
-                font-size: 1.1rem;
-            }
-            
-            .tab-button {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
-        }
-        
-        /* Loading state */
-        .loader {
-            text-align: center;
-            padding: 40px;
-            color: var(--primary);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Chacha Dam · Income, Cost, Photos & Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --tg-blue: #2AABEE;
+      --tg-dark: #000000;
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f4f5f7;
+      --color-background-tertiary: #f0f2f5;
+      --color-text-primary: #1f2a3a;
+      --color-text-secondary: #07317a;
+      --color-text-tertiary: #8e9db2;
+      --color-border-tertiary: #e2e6ec;
+      --border-radius-lg: 16px;
+      --border-radius-md: 10px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-background-primary: #1e1e2a;
+        --color-background-secondary: #2c2c38;
+        --color-background-tertiary: #000000;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #b0b8c5;
+        --color-text-tertiary: #7a8496;
+        --color-border-tertiary: #2f3542;
+      }
+      .header { background: #000000;}
+      .total-card { background: #0a0e14; }
+      .bill-icon { background: rgba(42,171,238,0.18) !important; }
+      .item-pill { background: #2a2e3c; border-color: #454b5e; }
+      .clickable-card { background: #252836;}
+      .breakdown-list { background: #1a1c26;}
+      .chat-message-bot { background: #2c2c3e; }
+      .chat-message-user { background: #0f3b5c; }
+    }
+
+    body {
+      background: var(--color-background-tertiary);
+      color: var(--color-text-primary);
+      line-height: 1.1;
+      padding-bottom: 90px;
+    }
+
+    .wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--color-background-tertiary);
+      min-height: 100vh;
+    }
+    .header{text-align: center; padding: 14px 20px 6px;}
+    .header-title { font-size: 18px; font-weight: 600; }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px 16px 8px;
+    }
+    .stat-card {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-lg);
+      padding: 10px 16px;
+      border: 0.5px solid var(--color-border-tertiary);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stat-val {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .stat-val.green { color: #1a9e5c; }
+    .stat-val.red { color: #e06c5e; }
+
+    .floating-tabs {
+      position: fixed;
+      bottom: 21px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 999;
+    }
+    .tabs-inner {
+      display: flex;
+      gap: 4px;
+      background: var(--color-background-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 80px;
+      padding: 6px 8px;
+      backdrop-filter: blur(12px);
+    }
+    .tab-btn {
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--tg-blue);
+      color: #fff;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Bill Cards (Accordion) */
+    .bill-card {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-lg);
+      border: 0.5px solid var(--color-border-tertiary);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .bill-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .bill-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bill-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: rgba(42,171,238,0.12);
+      color: var(--tg-blue);
+    }
+    .bill-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .bill-total {
+      font-size: 15px;
+      color: #1a9e5c;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .bill-chevron {
+      font-size: 18px;
+      color: var(--color-text-tertiary);
+      transition: transform 0.2s;
+    }
+    .bill-chevron.open {
+      transform: rotate(180deg);
+    }
+    .bill-items {
+      border-top: 0.5px solid var(--color-border-tertiary);
+      display: none;
+    }
+    .bill-items.open {
+      display: block;
+    }
+    .item-row {
+      padding: 10px 16px;
+      border-bottom: 0.5px solid var(--color-border-tertiary);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-pill {
+      background: var(--color-background-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 30px;
+      color: var(--color-text-secondary);
+      flex-shrink: 0;
+      border: 0.3px solid var(--color-border-tertiary);
+      font-family: monospace;
+    }
+    .item-desc {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+    .item-right {
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 85px;
+    }
+    .item-ach {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+    }
+    .item-inc {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a9e5c;
+    }
+
+    /* Cost Panel */
+    .cost-wrap { padding: 8px 16px 16px; }
+    .sec-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin: 8px 4px 12px;
+    }
+    .clickable-card {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-lg);
+      border: 0.5px solid var(--color-border-tertiary);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .card-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--tg-blue);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .card-text h3 { font-size: 15px; font-weight: 600; }
+    .card-text p { font-size: 13px; color: #1a9e5c; margin-top: 2px; font-weight: 500; }
+    .card-chevron { font-size: 20px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+    .card-chevron.open { transform: rotate(180deg); }
+    .breakdown-list {
+      display: none;
+      border-top: 0.5px solid var(--color-border-tertiary);
+      background: var(--color-background-secondary);
+      max-height: 350px;
+      overflow-y: auto;
+    }
+    .breakdown-list.open { display: block; }
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 0.5px solid var(--color-border-tertiary);
+      font-size: 13px;
+    }
+    .item-name { color: var(--color-text-secondary); flex: 1; }
+    .item-amount { font-weight: 600; color: #1a9e5c; white-space: nowrap; }
+
+    /* Photos Panel */
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 16px;
+    }
+    .photo-card {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-lg);
+      border: 0.5px solid var(--color-border-tertiary);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-caption {
+      padding: 6px 8px;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      text-align: center;
+      border-top: 0.5px solid var(--color-border-tertiary);
+    }
+    .photos-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 16px 16px 0;
+    }
+    .photos-subtitle {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      padding: 4px 16px;
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 12px; }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Chat Panel */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 200px);
+      min-height: 400px;
+      padding: 16px;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .chat-message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .chat-message-user {
+      align-self: flex-end;
+      background: var(--tg-blue);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-message-bot {
+      align-self: flex-start;
+      background: var(--color-background-secondary);
+      color: var(--color-text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-input-area {
+      display: flex;
+      gap: 10px;
+      background: var(--color-background-primary);
+      padding: 10px;
+      border-radius: 30px;
+      border: 0.5px solid var(--color-border-tertiary);
+    }
+    .chat-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px;
+      font-size: 14px;
+      outline: none;
+      color: var(--color-text-primary);
+    }
+    .chat-send-btn {
+      background: var(--tg-blue);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chat-send-btn:active { opacity: 0.8; }
+    .chat-note {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .total-card {
+      background: var(--tg-dark);
+      border-radius: var(--border-radius-lg);
+      padding: 16px 20px;
+      margin: 16px 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .total-lbl { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); }
+    .total-val { font-size: 18px; font-weight: 700; color: white; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>👷 የሰራተኞች መዝገብ</h1>
-            <div class="subtitle">30 ቀናት የሥራ ማስኬጃ መዝገብ</div>
-        </div>
-        
-        <div class="tabs-container" id="tabsContainer">
-            <!-- Tabs will be generated here -->
-        </div>
-        
-        <div class="content-area" id="sheetContent">
-            <div class="loader">
-                <div>መረጃ በመጫን ላይ...</div>
-            </div>
-        </div>
+<h2 class="sr-only">CHACHA EARTHEN DAM PROJECT</h2>
+<div class="wrap">
+  <div class="header">
+    <div class="header-title">🏆 CHACHA EARTHEN DAM PROJECT</div>
+  </div>
+
+  <div class="summary-row">
+    <div class="stat-card">
+      <div class="stat-label">📈 Total Income</div>
+      <div class="stat-val green" id="totalIncome">—</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-label">📉 Total Cost</div>
+      <div class="stat-val red">404,850,157.00 ETB</div>
+    </div>
+  </div>
 
-    <script>
-        // ONLY 7 SHEETS as requested
-        const sheetsData = [
-            { name: "ተስፋዉ", rows: generateTesfawuData() },
-            { name: "ዳበረ", rows: generateDabereData() },
-            { name: "ጥበበ", rows: generateTibebeData() },
-            { name: "ብሩክ", rows: generateBrukData() },
-            { name: "አያለዉ", rows: generateAyalewuData() },
-            { name: "ዘካርያስ", rows: generateZekariyasData() },
-            { name: "ሚካኤል", rows: generateMikaealData() }
-        ];
+  <!-- Income Panel -->
+  <div id="panel-income" class="tab-panel active">
+    <div class="section" style="padding: 6px 16px 0;">
+      <div id="billsContainer"></div>
+    </div>
+  </div>
 
-        // NEW COLUMN ORDER: Guard, Dl, Time Keeper, Carpenter, Mason, Barbender
-        function generateTesfawuData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            // Days 26-30
-            data.push(["26", "3", "", "1", "", "", ""]);
-            data.push(["27", "3", "", "1", "", "", ""]);
-            data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "6", "", "1", "", "", ""]);
-            data.push(["30", "3", "", "1", "", "", ""]);
-            
-            // Days 1-25
-            for (let i = 1; i <= 25; i++) {
-                let guard = "";
-                let timeKeeper = Math.random() > 0.2 ? "1" : "";
-                
-                if (i % 7 === 0) { // እሁድ
-                    guard = Math.random() > 0.3 ? "6" : "3";
-                } else {
-                    guard = Math.random() > 0.2 ? "3" : "";
-                }
-                
-                data.push([i.toString(), guard, "", timeKeeper, "", "", ""]);
-            }
-            
-            return data;
-        }
+  <!-- Cost Panel -->
+  <div id="panel-cost" class="tab-panel">
+    <div class="cost-wrap">
+      <div class="sec-title">💰 Cost Breakdown (ETB)</div>
+      <div class="clickable-card" id="labourCard"><div class="card-header" id="labourHeader"><div class="card-title"><div class="card-icon">👥</div><div class="card-text"><h3>Labour Cost</h3><p>8,273,500.81 ETB</p></div></div><span class="card-chevron" id="labourChevron">▼</span></div><div class="breakdown-list" id="labourBreakdown"></div></div>
+      <div class="clickable-card" id="adminCard"><div class="card-header" id="adminHeader"><div class="card-title"><div class="card-icon">🏢</div><div class="card-text"><h3>Admin Cost</h3><p>16,379,582.38 ETB</p></div></div><span class="card-chevron" id="adminChevron">▼</span></div><div class="breakdown-list" id="adminBreakdown"></div></div>
+      <div class="clickable-card" id="staffCard"><div class="card-header" id="staffHeader"><div class="card-title"><div class="card-icon">🆔</div><div class="card-text"><h3>Staff Cost</h3><p>15,568,391.57 ETB</p></div></div><span class="card-chevron" id="staffChevron">▼</span></div><div class="breakdown-list" id="staffBreakdown"></div></div>
+      <div class="clickable-card" id="materialCard"><div class="card-header" id="materialHeader"><div class="card-title"><div class="card-icon">📦</div><div class="card-text"><h3>Material Cost</h3><p>191,306,563.41 ETB</p></div></div><span class="card-chevron" id="materialChevron">▼</span></div><div class="breakdown-list" id="materialBreakdown"></div></div>
+      <div class="clickable-card" id="machineryCard"><div class="card-header" id="machineryHeader"><div class="card-title"><div class="card-icon">🏗️</div><div class="card-text"><h3>Machinery Cost</h3><p>138,868,071.96 ETB</p></div></div><span class="card-chevron" id="machineryChevron">▼</span></div><div class="breakdown-list" id="machineryBreakdown"></div></div>
+      <div class="clickable-card" id="overheadCard"><div class="card-header" id="overheadHeader"><div class="card-title"><div class="card-icon">📊</div><div class="card-text"><h3>Overhead Cost</h3><p>34,454,047.00 ETB</p></div></div><span class="card-chevron" id="overheadChevron">▼</span></div><div class="breakdown-list" id="overheadBreakdown"></div></div>
+    </div>
+  </div>
 
-        function generateDabereData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "11", "1", "", "", "", ""]);
-            data.push(["27", "11", "1", "", "", "", ""]);
-            data.push(["28", "11", "", "", "", "", ""]);
-            data.push(["29", "11", "1", "", "", "", ""]);
-            data.push(["30", "11", "1", "", "", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let guard = "";
-                let dl = "";
-                
-                if (i % 7 === 0) { // እሁድ
-                    guard = Math.random() > 0.3 ? "22" : "11";
-                } else {
-                    guard = Math.random() > 0.2 ? "11" : "";
-                }
-                
-                if (guard && Math.random() > 0.4) {
-                    dl = Math.floor(Math.random() * 3 + 1).toString();
-                }
-                
-                data.push([i.toString(), guard, dl, "", "", "", ""]);
-            }
-            
-            return data;
-        }
+  <!-- Photos Panel -->
+  <div id="panel-photos" class="tab-panel">
+    <div class="photos-section-title">📸 Project Photos</div>
+    <div class="photos-subtitle">Click photo to enlarge</div>
+    <div class="photos-grid" id="photosGrid"></div>
+  </div>
 
-        function generateTibebeData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "", "9.5", "", "", "", ""]);
-            data.push(["27", "", "9", "", "", "", ""]);
-            data.push(["28", "", "4", "", "", "", ""]);
-            data.push(["29", "", "9", "", "", "", ""]);
-            data.push(["30", "", "8.5", "", "", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let dl = (Math.random() * 10 + 1).toFixed(1);
-                let carpenter = Math.random() > 0.8 ? "0.5" : "";
-                
-                data.push([i.toString(), "", dl, "", carpenter, "", ""]);
-            }
-            
-            return data;
-        }
+  <!-- Chat Panel -->
+  <div id="panel-chat" class="tab-panel">
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message chat-message-bot">👋 Hello! Welcome to Chacha Dam Project support. Ask me anything about the project!</div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button class="chat-send-btn" onclick="sendMessage()">Send</button>
+      </div>
+      <div class="chat-note">💡 Messages are stored locally. Contact project team for official inquiries.</div>
+    </div>
+  </div>
 
-        function generateBrukData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "", "2", "", "1", "", ""]);
-            data.push(["27", "8", "3", "", "1", "", ""]);
-            data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "4", "3", "", "1", "", ""]);
-            data.push(["30", "4", "2", "", "1", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let carpenter = Math.random() > 0.6 ? "1" : "";
-                let guard = "";
-                let dl = "";
-                
-                if (carpenter) {
-                    guard = Math.random() > 0.5 ? (Math.random() > 0.5 ? "8" : "4") : "";
-                    dl = Math.random() > 0.4 ? Math.floor(Math.random() * 4 + 1).toString() : "";
-                }
-                
-                data.push([i.toString(), guard, dl, "", carpenter, "", ""]);
-            }
-            
-            return data;
-        }
+</div>
 
-        function generateAyalewuData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "2", "", "1", "", "", ""]);
-            data.push(["27", "2", "", "1", "", "", ""]);
-            data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "4", "", "1", "", "", ""]);
-            data.push(["30", "4", "", "2", "", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let timeKeeper = Math.random() > 0.3 ? "1" : "";
-                let guard = "";
-                
-                if (timeKeeper) {
-                    guard = Math.random() > 0.5 ? 
-                        (Math.random() > 0.7 ? "10" : 
-                         Math.random() > 0.5 ? "5" : "2") : "";
-                }
-                
-                data.push([i.toString(), guard, "", timeKeeper, "", "", ""]);
-            }
-            
-            return data;
-        }
+<div class="floating-tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" id="nav-income" onclick="switchTab('income')">💰 Income</button>
+    <button class="tab-btn" id="nav-cost" onclick="switchTab('cost')">📊 Cost</button>
+    <button class="tab-btn" id="nav-photos" onclick="switchTab('photos')">📸 Photos</button>
+    <button class="tab-btn" id="nav-chat" onclick="switchTab('chat')">💬 Chat</button>
+  </div>
+</div>
 
-        function generateZekariyasData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "", "", "1", "", "", ""]);
-            data.push(["27", "", "", "1", "", "", ""]);
-            data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "", "1", "", "", ""]);
-            data.push(["30", "", "", "2", "", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let timeKeeper = Math.random() > 0.4 ? "1" : "";
-                let dl = "";
-                
-                if (timeKeeper && Math.random() > 0.5) {
-                    dl = (Math.random() * 10 + 1).toFixed(1);
-                }
-                
-                data.push([i.toString(), "", dl, timeKeeper, "", "", ""]);
-            }
-            
-            return data;
-        }
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightboxImg" src="" alt="">
+</div>
 
-        function generateMikaealData() {
-            const columns = ["ቀን", "Guard", "Dl", "Time Keeper", "Carpenter", "Mason", "Barbender"];
-            const data = [columns];
-            
-            data.push(["26", "", "24", "", "", "", ""]);
-            data.push(["27", "", "23", "", "", "", ""]);
-            data.push(["28", "", "", "", "", "", ""]);
-            data.push(["29", "", "31", "", "", "", ""]);
-            data.push(["30", "", "31", "", "", "", ""]);
-            
-            for (let i = 1; i <= 25; i++) {
-                let dl = (Math.random() * 30 + 15).toFixed(1);
-                
-                data.push([i.toString(), "", dl, "", "", "", ""]);
-            }
-            
-            return data;
-        }
+<script>
+  // ======================== INCOME DATA ========================
+  const bills = [
+    { id: 'A', name: 'GENERAL ITEMS', icon: '🔧', color: '#2AABEE', items: [
+      { no: '1.30', d: 'Provision of safety clothing for staff and visitors', ach: 1.20, inc: 1375777.99 },
+      { no: '1.12.5', d: 'Office furniture and equipment', ach: 1.04, inc: 615820.05 },
+      { no: '1.12.8', d: 'Temporary utilities (electricity, water, telephone)', ach: 0.72, inc: 9141575.07 },
+      { no: '1.13.3', d: 'Security provisions', ach: 0.72, inc: 1425815.46 },
+      { no: '1.14', d: 'Compensation payment estimation expenses', ach: 0.76, inc: 1140234.71 },
+      { no: '1.16', d: 'Provisional sum for miscellaneous work', ach: 0.07, inc: 124470.14 }
+    ] },
+    { id: 'B', name: 'MAIN DAM', icon: '🌊', color: '#1a9e5c', items: [
+      { no: '2.3.1', d: 'Core zone fill & compaction with clay (max 5 km)', ach: 42102.17, inc: 12186894.13 },
+      { no: '2.4.1', d: 'Shell zone fill & compaction with selected material', ach: 65994.70, inc: 17220657.02 },
+      { no: '2.5.1', d: 'Filter material (Finer) zone 2A', ach: 10050.93, inc: 12390786.50 },
+      { no: '2.5.2', d: 'Filter material (coarser) zone 2B', ach: 5043.00, inc: 6228357.15 },
+      { no: '2.5.4', d: 'Riprap zone 5', ach: 5547.59, inc: 4502368.57 },
+      { no: '2.6.1', d: 'Rock zone 4 fill & compaction', ach: 103018.56, inc: 87547233.68 },
+      { no: '2.9.4', d: 'Vibrating Wire Piezometer', ach: 3.00, inc: 561600.00 },
+      { no: '2.9.5', d: 'Vibrating Wire settlement sensor', ach: 1.00, inc: 117000.00 },
+      { no: '2.9.8', d: 'Vibrating wire cable', ach: 307.94, inc: 288231.84 }
+    ] },
+    { id: 'C', name: 'GROUTING AND FAULT TREATMENT', icon: '💧', color: '#9b59b6', items: [
+      { no: '3.A.1', d: 'Mobilization and Demobilization', ach: 0.50, inc: 292789.65 }
+    ] },
+    { id: 'D', name: 'INTAKE TOWER STRUCTURE', icon: '🗼', color: '#e67e22', items: [
+      { no: '4.2.4', d: 'Base slab', ach: 3.17, inc: 16324.64 },
+      { no: '4.2.5', d: 'Shaft work', ach: 17.44, inc: 106271.53 },
+      { no: '4.2.7', d: 'C-15 mass concrete', ach: 69.11, inc: 265855.80 },
+      { no: '4.3.5', d: 'φ16mm bar', ach: 2538.11, inc: 173454.10 },
+      { no: '4.3.6', d: 'φ14mm bar', ach: 13.33, inc: 911.18 },
+      { no: '4.3.7', d: 'φ10mm bar', ach: 203.07, inc: 32063.76 },
+      { no: '4.3.9', d: '10mm thick steel conduit', ach: 4.00, inc: 343639.40 }
+    ] },
+    { id: 'E', name: 'ACCESS BRIDGE', icon: '🛣️', color: '#16a085', items: [
+      { no: '5.2.4', d: 'Safety Hand Rail (50mm GS Pipe)', ach: 60.00, inc: 88090.20 }
+    ] },
+    { id: 'F', name: 'IRRIGATION OUTLET WORKS', icon: '💧', color: '#3498db', items: [
+      { no: '6.2.1', d: 'C-10 lean concrete', ach: 8.10, inc: 1003.75 },
+      { no: '6.3.3', d: 'φ16mm bar', ach: 631.60, inc: 43163.54 },
+      { no: '6.3.6', d: 'φ10mm bar', ach: 183.52, inc: 12541.76 }
+    ] },
+    { id: 'G', name: 'LOW LEVEL OUTLET WORKS', icon: '⚙️', color: '#e67e22', items: [
+      { no: '7.7.6', d: 'Howell-Bunger Regulating valve', ach: 1.00, inc: 39710720.00 },
+      { no: '7.7.7', d: 'DN1500mm DCI bend', ach: 1.00, inc: 13441280.00 },
+      { no: '7.7.8', d: 'DN2000mm Butterfly valve', ach: 1.00, inc: 19557120.00 },
+      { no: '7.7.9', d: 'Material production inspection', ach: 1.00, inc: 2800000.00 }
+    ] },
+    { id: 'H', name: 'EMERGENCY CANAL', icon: '🏞️', color: '#c0392b', items: [
+      { no: '8.5.1', d: 'C-25 concrete work', ach: 8.50, inc: 45602.50 },
+      { no: '8.5.3', d: 'Reinforcement bars', ach: 278.70, inc: 19046.36 }
+    ] },
+    { id: 'K', name: 'PERMANENT ACCESS ROAD', icon: '🛣️', color: '#27ae60', items: [
+      { no: '11.7.1', d: 'Ordinary Soil Excavation', ach: 156.60, inc: 12935.16 },
+      { no: '11.7.2', d: 'Stone masonry work', ach: 404.81, inc: 932097.57 },
+      { no: '11.7.3', d: 'C-25 concrete slab', ach: 32.80, inc: 194254.72 },
+      { no: '11.7.5', d: 'Reinforcement bars ø14mm', ach: 5182.52, inc: 354173.42 },
+      { no: '11.7.6', d: 'Cart away excavated material', ach: 96.00, inc: 4304.64 },
+      { no: '11.7.8', d: 'Back fill with shell material', ach: 240.00, inc: 42801.60 }
+    ] },
+    { id: 'N', name: 'VALVE HOUSE STRUCTURE', icon: '🏠', color: '#8e44ad', items: [
+      { no: '2.10', d: 'C-10 lean concrete', ach: 82.56, inc: 10230.84 },
+      { no: '2.30', d: 'C-30 Reinforced concrete', ach: 92.59, inc: 477114.42 },
+      { no: '3.10', d: 'φ24mm bar', ach: 15009.95, inc: 1051146.59 },
+      { no: '3.20', d: 'φ20mm bar', ach: 728.34, inc: 51005.93 },
+      { no: '3.30', d: 'φ16mm bar', ach: 4918.99, inc: 336163.78 }
+    ] }
+  ];
 
-        // Telegram Mini App initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            initApp();
-            
-            // Add Telegram-specific features if available
-            if (window.Telegram && window.Telegram.WebApp) {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-                
-                // Set theme colors
-                Telegram.WebApp.setHeaderColor('#2c3e50');
-                Telegram.WebApp.setBackgroundColor('#667eea');
-                
-                // Add back button if needed
-                Telegram.WebApp.BackButton.onClick(() => {
-                    Telegram.WebApp.close();
-                });
-            }
-        });
+  // Cost breakdown data
+  const labourItems = [
+    { name: 'Mason', amount: 337587.97 },{ name: 'Barbender', amount: 168023.27 },{ name: 'Carpenter', amount: 209881.82 },
+    { name: 'Time Keeper', amount: 108195.00 },{ name: 'Surveyor', amount: 41850.00 },{ name: 'Guard', amount: 1419665.00 },
+    { name: 'Dl', amount: 1370721.24 },{ name: 'Curer', amount: 9750.00 },{ name: 'Labor cost For Camp & minsbet', amount: 1807826.00 },
+    { name: 'Material inspection team', amount: 2800000.00 }
+  ];
+  const adminItems = [
+    { name: 'INTERTEMENTS', amount: 1200826.14 },{ name: 'Travel Expense and Other', amount: 3625072.28 },
+    { name: 'Spare part for pump, generator & cons.mater', amount: 16957.01 },{ name: 'Other Construction material', amount: 6897.39 },
+    { name: 'Small Construction tools', amount: 1265.22 },{ name: 'Camping Item', amount: 119636.76 },
+    { name: 'Cleaning & Sanitation Item Expense', amount: 162575.46 },{ name: 'Supplies & Stationary Expense', amount: 1395837.09 },
+    { name: 'Uniform and Clothing Expense', amount: 1682799.51 },{ name: 'Receipt & Voucher Expense', amount: 109819.08 },
+    { name: 'Pharmaceutical, Treatment item & lab', amount: 79196.76 },{ name: 'Spare Part Expense', amount: 36211711.56 },
+    { name: 'Tyer & Inner tube Maintenance', amount: 1862757.00 },{ name: 'Fuel & Lubricants Expense', amount: 800.00 },
+    { name: 'Mobile Card Expense', amount: 252823.16 },{ name: 'Car Guard', amount: 57700.00 },
+    { name: 'Local Construction material', amount: 192036.43 },{ name: 'Camping Generator Fuel & Lubricants', amount: 5736053.99 },
+    { name: 'Calibration of total station', amount: 100096.63 },{ name: 'For Medical Expense', amount: 65396.26 },
+    { name: 'Other Cost (Qret)', amount: 27955.00 },{ name: 'TEST COST', amount: 82317.90 },
+    { name: 'fuel for welding', amount: 28713.10 },{ name: 'For Mestengdo', amount: 75806.40 },
+    { name: 'Travel Expense and Other (2nd)', amount: 3132854.85 },{ name: 'DL for Green Legacy', amount: 4200.00 },
+    { name: 'Uniform and Clothing Expense (2nd)', amount: 16973.00 },{ name: 'For Medical Expense (2nd)', amount: 132339.30 },
+    { name: 'Rent cost of house, storage area etc.', amount: 308500.00 },{ name: 'Transport cost for machinery (low-bed)', amount: 120000.00 },
+    { name: 'Other Costs - Irrigation project', amount: 312222.38 },{ name: 'Gris', amount: 6990.00 },
+    { name: 'camp Maintenance', amount: 121541.44 },{ name: 'Office Desktop and Laptop', amount: 305798.17 },
+    { name: 'Benzine, Flasher, Break fluid, etc', amount: 5726696.73 },{ name: 'Car Guard (2nd)', amount: 35950.00 },
+    { name: 'Machinery Maintenance', amount: 60940.00 }
+  ];
+  const staffItems = [{ name: 'Construction staff', amount: 15568391.57 },{ name: 'Equipment staff', amount: 47378425.54 }];
+  const materialItems = [
+    { name: 'Cement', amount: 841975.86 },{ name: 'Sand', amount: 1577454.61 },{ name: 'Gravel', amount: 308796.30 },
+    { name: 'cutter disk', amount: 14953.38 },{ name: 'Timber', amount: 14000.00 },{ name: 'Poles', amount: 249500.00 },
+    { name: 'Nail', amount: 67008.52 },{ name: 'Chipwood', amount: 3300.00 },{ name: 'Reinf.', amount: 4693066.23 },
+    { name: 'Black wire', amount: 18090.00 },{ name: 'Purlin', amount: 34239.65 },{ name: 'Electrode', amount: 91061.10 },
+    { name: 'GI PIPE 2.5"', amount: 59853.94 },{ name: 'Fuel', amount: 97963930.91 },{ name: 'Benzine', amount: 4413.09 },
+    { name: 'Playwood', amount: 200480.00 },{ name: 'Sieve Screen', amount: 420000.00 },{ name: '10mm thick sheet metal', amount: 122666.68 },
+    { name: 'Jeso', amount: 8300.00 },{ name: 'Pizometer', amount: 864000.00 },{ name: 'Plate', amount: 20856.00 },
+    { name: 'Bolt With Nut', amount: 7600.00 },{ name: 'Sand With Rental D.Truck', amount: 10738897.14 },
+    { name: 'Vibrating wire cable', amount: 256000.00 },{ name: 'DN2000mm Flanged butterfly valve', amount: 19557120.00 },
+    { name: 'Howell-Bunger Regulating valve', amount: 39710720.00 },{ name: 'DN1500mm DCI bend', amount: 13441280.00 },
+    { name: 'HCB', amount: 2000.00 }
+  ];
+  const machineryItems = [
+    { name: 'Dozer', amount: 8722732.48 },{ name: 'Excavator', amount: 31238561.23 },{ name: 'Loader', amount: 5767979.23 },
+    { name: 'Grader', amount: 915668.27 },{ name: 'Crane', amount: 1894000.07 },{ name: 'Smooth Foot Compacter', amount: 1276089.66 },
+    { name: 'Sheep foot compactor', amount: 1601296.59 },{ name: 'Mixer', amount: 65379.89 },{ name: 'Light Vehicle', amount: 2496639.94 },
+    { name: 'Dump truck', amount: 77781197.15 },{ name: 'Fuel Track', amount: 2798061.23 },{ name: 'Shower truck', amount: 2837275.12 },
+    { name: 'Low Bed', amount: 44154.74 },{ name: 'Bus', amount: 789070.16 },{ name: 'Dump track for sand', amount: 639966.05 }
+  ];
+  const overheadItems = [{ name: 'Overhead 20%', amount: 34454047.00 }];
 
-        function initApp() {
-            const tabsContainer = document.getElementById('tabsContainer');
-            const sheetContent = document.getElementById('sheetContent');
+  function fmt(v) { return v == null ? '—' : parseFloat(v).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtA(v) { if (v == null) return '—'; let n = parseFloat(v); return isNaN(n) ? v : (n % 1 === 0 ? n.toString() : n.toFixed(2)); }
+  function fmtM(v) { let n = parseFloat(v); if (isNaN(n)) return '—'; if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B'; if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M'; if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K'; return n.toFixed(0); }
 
-            // Create only 7 tabs
-            sheetsData.forEach((sheet, index) => {
-                const button = document.createElement('button');
-                button.className = 'tab-button';
-                button.textContent = sheet.name;
-                button.addEventListener('click', () => showSheet(index));
-                tabsContainer.appendChild(button);
-            });
+  // Total Income
+  let totalIncome = 0;
+  bills.forEach(bill => { bill.items.forEach(item => { if (item.inc) totalIncome += item.inc; }); });
+  document.getElementById('totalIncome').innerHTML = fmt(totalIncome) + ' ETB';
 
-            // Show first sheet
-            if (sheetsData.length > 0) {
-                showSheet(0);
-                document.querySelector('.tab-button').classList.add('active');
-            }
-        }
+  // Render Income Bills
+  const container = document.getElementById('billsContainer');
+  container.innerHTML = '';
+  bills.forEach((bill, idx) => {
+    let billTotal = 0;
+    bill.items.forEach(it => { if (it.inc) billTotal += it.inc; });
+    const card = document.createElement('div'); card.className = 'bill-card';
+    const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-ach">${fmtA(it.ach)}</div><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
+    card.innerHTML = `<div class="bill-header" data-bill-idx="${idx}"><div class="bill-header-left"><div class="bill-icon" style="background:${bill.color}20; color:${bill.color};">${bill.icon}</div><div><div class="bill-name">Bill ${bill.id} — ${bill.name}</div><div class="bill-total">${fmtM(billTotal)} ETB</div></div></div><span class="bill-chevron" id="chev-${idx}">▼</span></div><div class="bill-items" id="items-${idx}">${itemsHtml}</div>`;
+    container.appendChild(card);
+    const header = card.querySelector('.bill-header');
+    const itemsDiv = card.querySelector(`#items-${idx}`);
+    const chevron = card.querySelector(`#chev-${idx}`);
+    header.addEventListener('click', () => { itemsDiv.classList.toggle('open'); chevron.classList.toggle('open'); });
+  });
 
-        function calculateColumnSums(rows) {
-            if (rows.length < 2) return [];
-            
-            const sums = new Array(rows[0].length).fill(0);
-            const hasNumericData = new Array(rows[0].length).fill(false);
-            
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                for (let j = 0; j < row.length; j++) {
-                    const cell = row[j];
-                    const num = parseFloat(cell);
-                    if (!isNaN(num) && cell !== '' && cell !== ' ') {
-                        sums[j] += num;
-                        hasNumericData[j] = true;
-                    }
-                }
-            }
-            
-            return sums.map((sum, index) => ({
-                sum: sum,
-                hasData: hasNumericData[index],
-                columnName: rows[0][index] || `አምድ ${index}`
-            }));
-        }
+  // Render Cost Breakdowns
+  const renderBreakdown = (id, items) => {
+    const div = document.getElementById(id);
+    if(div) div.innerHTML = items.map(i => `<div class="breakdown-item"><span class="item-name">${i.name}</span><span class="item-amount">${fmt(i.amount)} ETB</span></div>`).join('');
+  };
+  renderBreakdown('labourBreakdown', labourItems);
+  renderBreakdown('adminBreakdown', adminItems);
+  renderBreakdown('staffBreakdown', staffItems);
+  renderBreakdown('materialBreakdown', materialItems);
+  renderBreakdown('machineryBreakdown', machineryItems);
+  renderBreakdown('overheadBreakdown', overheadItems);
 
-        function showSheet(index) {
-            const sheet = sheetsData[index];
-            const sheetContent = document.getElementById('sheetContent');
-            
-            // Calculate column sums
-            const columnSums = calculateColumnSums(sheet.rows);
+  // Setup clickable cards
+  const setupCard = (headerId, breakdownId, chevronId) => {
+    const header = document.getElementById(headerId);
+    const breakdown = document.getElementById(breakdownId);
+    const chevron = document.getElementById(chevronId);
+    if(header && breakdown && chevron) header.addEventListener('click', () => { breakdown.classList.toggle('open'); chevron.classList.toggle('open'); });
+  };
+  setupCard('labourHeader', 'labourBreakdown', 'labourChevron');
+  setupCard('adminHeader', 'adminBreakdown', 'adminChevron');
+  setupCard('staffHeader', 'staffBreakdown', 'staffChevron');
+  setupCard('materialHeader', 'materialBreakdown', 'materialChevron');
+  setupCard('machineryHeader', 'machineryBreakdown', 'machineryChevron');
+  setupCard('overheadHeader', 'overheadBreakdown', 'overheadChevron');
 
-            // Create content with animations
-            sheetContent.innerHTML = '';
-            sheetContent.className = 'content-area fade-in';
+  // Photos (placeholder images - replace with your actual GitHub raw URLs)
+  const projectPhotos = [
+   
+    { url: "https://github.com/addisu3838/test/blob/main/index.png", caption: "Core zone clay filling" },
+    { url: "https://placehold.co/600x400/e67e22/white?text=Intake+Tower", caption: "Intake tower structure" },
+    { url: "https://placehold.co/600x400/3498db/white?text=Valve+House", caption: "Valve house installation" },
+    { url: "https://placehold.co/600x400/9b59b6/white?text=Outlet+Works", caption: "Low level outlet works" },
+    { url: "https://placehold.co/600x400/c0392b/white?text=Emergency+Canal", caption: "Emergency canal" }
+  ];
 
-            // Data table
-            const table = document.createElement('table');
-            table.className = 'data-table';
-            
-            // Header
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            sheet.rows[0].forEach(cell => {
-                const th = document.createElement('th');
-                th.textContent = cell;
-                headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            
-            // Body
-            const tbody = document.createElement('tbody');
-            for (let i = 1; i < sheet.rows.length; i++) {
-                const row = document.createElement('tr');
-                if (parseInt(sheet.rows[i][0]) % 7 === 0) {
-                    row.className = 'weekend-row';
-                }
-                
-                sheet.rows[i].forEach((cell, cellIndex) => {
-                    const td = document.createElement('td');
-                    if (cell === '') {
-                        td.className = 'empty-cell';
-                        td.textContent = '-';
-                    } else {
-                        if (cellIndex === 0) {
-                            td.className = 'date-cell';
-                        } else {
-                            const num = parseFloat(cell);
-                            if (!isNaN(num)) {
-                                td.className = 'numeric-cell';
-                                if (num >= 20) td.style.color = '#e74c3c';
-                                else if (num >= 10) td.style.color = '#f39c12';
-                            }
-                        }
-                        td.textContent = cell;
-                    }
-                    row.appendChild(td);
-                });
-                tbody.appendChild(row);
-            }
-            
-            // Total row
-            const totalRow = document.createElement('tr');
-            totalRow.className = 'total-row';
-            columnSums.forEach((col, colIndex) => {
-                const td = document.createElement('td');
-                if (colIndex === 0) {
-                    td.textContent = 'ጠቅላላ';
-                } else if (col.hasData) {
-                    td.textContent = col.sum.toFixed(2);
-                } else {
-                    td.textContent = '-';
-                }
-                totalRow.appendChild(td);
-            });
-            tbody.appendChild(totalRow);
-            
-            table.appendChild(tbody);
-            sheetContent.appendChild(table);
+  const photosGrid = document.getElementById('photosGrid');
+  if(photosGrid) {
+    photosGrid.innerHTML = '';
+    projectPhotos.forEach(photo => {
+      const card = document.createElement('div'); card.className = 'photo-card';
+      card.onclick = () => openLightbox(photo.url);
+      card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='https://placehold.co/600x400/ff6b6b/white?text=Image+Not+Found'"><div class="photo-caption">${photo.caption}</div>`;
+      photosGrid.appendChild(card);
+    });
+  }
 
-            // Update active tab
-            document.querySelectorAll('.tab-button').forEach((btn, i) => {
-                btn.classList.toggle('active', i === index);
-            });
-        }
+  function openLightbox(imgUrl) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    if(lightbox && lightboxImg) { lightboxImg.src = imgUrl; lightbox.classList.add('active'); }
+  }
+  function closeLightbox() { document.getElementById('lightbox')?.classList.remove('active'); }
 
-        // Add touch-friendly features
-        let touchStartX = 0;
-        let touchEndX = 0;
-        let currentTabIndex = 0;
+  // Chat functions
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if(!message) return;
+    const messagesDiv = document.getElementById('chatMessages');
+    const userMsgDiv = document.createElement('div');
+    userMsgDiv.className = 'chat-message chat-message-user';
+    userMsgDiv.textContent = message;
+    messagesDiv.appendChild(userMsgDiv);
+    input.value = '';
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    setTimeout(() => {
+      const botMsgDiv = document.createElement('div');
+      botMsgDiv.className = 'chat-message chat-message-bot';
+      botMsgDiv.textContent = getBotReply(message);
+      messagesDiv.appendChild(botMsgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }, 500);
+  }
 
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, false);
+  function getBotReply(msg) {
+    const lowerMsg = msg.toLowerCase();
+    if(lowerMsg.includes('cost') || lowerMsg.includes('budget')) return "💰 Total project cost is 404,850,157 ETB. For detailed breakdown, check the Cost tab.";
+    if(lowerMsg.includes('income') || lowerMsg.includes('payment')) return "📈 Total contract income is " + fmt(totalIncome) + " ETB. See Income tab for bill details.";
+    if(lowerMsg.includes('schedule') || lowerMsg.includes('timeline')) return "📅 The project follows the approved construction schedule. Contact the project manager for specific dates.";
+    if(lowerMsg.includes('contact') || lowerMsg.includes('support')) return "📞 For official inquiries, please contact the project administration office.";
+    return "✅ Thank you for your message. A project representative will respond shortly. For urgent matters, contact the site office.";
+  }
 
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, false);
+  // Tab switching
+  function switchTab(tab) {
+    const panels = ['income', 'cost', 'photos', 'chat'];
+    panels.forEach(t => {
+      document.getElementById(`panel-${t}`)?.classList.remove('active');
+      document.getElementById(`nav-${t}`)?.classList.remove('active');
+    });
+    document.getElementById(`panel-${tab}`)?.classList.add('active');
+    document.getElementById(`nav-${tab}`)?.classList.add('active');
+  }
 
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swipe left - next tab
-                    currentTabIndex = (currentTabIndex + 1) % sheetsData.length;
-                } else {
-                    // Swipe right - previous tab
-                    currentTabIndex = (currentTabIndex - 1 + sheetsData.length) % sheetsData.length;
-                }
-                showSheet(currentTabIndex);
-            }
-        }
-    </script>
+  if(window.Telegram && Telegram.WebApp) {
+    Telegram.WebApp.expand();
+    Telegram.WebApp.setHeaderColor('bg_color');
+    Telegram.WebApp.setBackgroundColor('bg_color');
+    Telegram.WebApp.ready();
+  }
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+</script>
 </body>
 </html>
