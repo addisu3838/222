@@ -357,7 +357,7 @@
       cursor: pointer;
     }
     .photo-card img {
-      width: 100%;
+      width: 100;
       height: 150px;
       object-fit: cover;
       display: block;
@@ -494,10 +494,10 @@
   </style>
 </head>
 <body>
-<h2 class="sr-only">CHACHA EARTHEN DAM PROJECT</h2>
+<h2 class="sr-only"> </h2>
 <div class="wrap">
   <div class="header">
-    <div class="header-title">🏆 CHACHA EARTHEN DAM PROJECT</div>
+    <div class="header-title"></div>
   </div>
 
   <div class="summary-row">
@@ -564,7 +564,7 @@
 
 <script>
   // ======================== PASSWORD CONFIGURATION ========================
-  const COST_PASSWORD = "chacha2024"; // ፓስወርዱን እዚህ ይቀይሩ
+  const COST_PASSWORD = "2025"; // ፓስወርዱን እዚህ ይቀይሩ
   let isCostUnlocked = false; // ፓስወርድ በአሁኑ ሲሰን ተከፍቷል እንደሆነ ለማወቅ
 
   // ======================== INCOME DATA ========================
@@ -806,12 +806,12 @@
 
   // Photos (placeholder images)
   const projectPhotos = [
-    { url: "https://placehold.co/600x400/2AABEE/white?text=Chacha+Dam+Main+View", caption: "Main dam overview" },
-    { url: "https://placehold.co/600x400/1a9e5c/white?text=Core+Zone+Filling", caption: "Core zone clay filling" },
-    { url: "https://placehold.co/600x400/e67e22/white?text=Intake+Tower", caption: "Intake tower structure" },
-    { url: "https://placehold.co/600x400/3498db/white?text=Valve+House", caption: "Valve house installation" },
-    { url: "https://placehold.co/600x400/9b59b6/white?text=Outlet+Works", caption: "Low level outlet works" },
-    { url: "https://placehold.co/600x400/c0392b/white?text=Emergency+Canal", caption: "Emergency canal" }
+    { url: "index.png", caption: "Main dam overview" },
+    { url: "index1.jpg", caption: "Core zone clay filling" },
+    { url: "index2.jpg", caption: "Intake tower structure" },
+    { url: "index3.jpg", caption: "Valve house installation" },
+    { url: "index4.jpg", caption: "Low level outlet works" },
+    { url: "index5.jpg", caption: "Emergency canal" }
   ];
 
   const photosGrid = document.getElementById('photosGrid');
@@ -820,7 +820,7 @@
     projectPhotos.forEach(photo => {
       const card = document.createElement('div'); card.className = 'photo-card';
       card.onclick = () => openLightbox(photo.url);
-      card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='https://placehold.co/600x400/ff6b6b/white?text=Image+Not+Found'"><div class="photo-caption">${photo.caption}</div>`;
+      card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='index.png'"><div class="photo-caption">${photo.caption}</div>`;
       photosGrid.appendChild(card);
     });
   }
@@ -860,7 +860,7 @@
     if(lowerMsg.includes('schedule') || lowerMsg.includes('timeline')) return "📅 The project follows the approved construction schedule. Contact the project manager for specific dates.";
     if(lowerMsg.includes('contact') || lowerMsg.includes('support')) return "📞 For official inquiries, please contact the project administration office.";
     if(lowerMsg.includes('password') || lowerMsg.includes('unlock')) return "🔒 The Cost tab is password protected. Please ask the project administrator for access.";
-    return "✅ Thank you for your message. A project representative will respond shortly. For urgent matters, contact the site office.";
+    return "✅ Thank you for your message. A project representative will respond shortly. For urgent matters, contact the site.";
   }
 
   // Tab switching with cost panel protection
