@@ -3,137 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Chacha Dam · Income, Cost, Photos & Chat</title>
+  <title>Chacha</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     :root {
-      --tg-blue: #2AABEE;
-      --tg-dark: #000000;
-      --color-background-primary: #ffffff;
-      --color-background-secondary: #f4f5f7;
-      --color-background-tertiary: #f0f2f5;
-      --color-text-primary: #1f2a3a;
-      --color-text-secondary: #07317a;
-      --color-text-tertiary: #8e9db2;
-      --color-border-tertiary: #e2e6ec;
+      --tg-bg: var(--tg-theme-bg-color, #ffffff);
+      --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #f4f5f7);
+      --tg-section-bg: var(--tg-theme-section-bg-color, #f0f2f5);
+      --tg-text: var(--tg-theme-text-color, #1f2a3a);
+      --tg-hint: var(--tg-theme-hint-color, #8e9db2);
+      --tg-link: var(--tg-theme-link-color, #2AABEE);
+      --tg-button: var(--tg-theme-button-color, #3cec2c);
+      --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+      --border-subtle: rgba(0, 0, 0, 0.08);
       --border-radius-lg: 16px;
-      --border-radius-md: 10px;
+      --border-radius-md: 12px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-background-primary: #1e1e2a;
-        --color-background-secondary: #2c2c38;
-        --color-background-tertiary: #000000;
-        --color-text-primary: #ffffff;
-        --color-text-secondary: #b0b8c5;
-        --color-text-tertiary: #7a8496;
-        --color-border-tertiary: #2f3542;
+        --tg-bg: #1c1c1e;
+        --tg-secondary-bg: #2c2c2e;
+        --tg-section-bg: #0e0e10;
+        --tg-text: #ffffff;
+        --tg-hint: #8e8e93;
+        --border-subtle: rgba(255, 255, 255, 0.1);
       }
-      .header { background: #000000;}
-      .total-card { background: #0a0e14; }
-      .bill-icon { background: rgba(42,171,238,0.18) !important; }
-      .item-pill { background: #2a2e3c; border-color: #454b5e; }
-      .clickable-card { background: #252836;}
-      .breakdown-list { background: #1a1c26;}
-      .chat-message-bot { background: #2c2c3e; }
-      .chat-message-user { background: #0f3b5c; }
-      .password-overlay { background: #1e1e2a; }
     }
 
     body {
-      background: var(--color-background-tertiary);
-      color: var(--color-text-primary);
-      line-height: 1.1;
-      padding-bottom: 90px;
+      background: var(--tg-section-bg);
+      color: var(--tg-text);
+      line-height: 1.2;
+      padding-bottom: 88px;
     }
 
     .wrap {
       max-width: 560px;
       margin: 0 auto;
-      background: var(--color-background-tertiary);
+      background: transparent;
       min-height: 100vh;
     }
-    .header{text-align: center; padding: 14px 20px 6px;}
-    .header-title { font-size: 18px; font-weight: 600; }
 
+    .header {
+      padding: 12px 16px 4px;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--tg-text);
+    }
+
+    /* summary cards - now separated per tab context */
     .summary-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 16px 16px 8px;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 8px 8px 8px;
+      
     }
     .stat-card {
-      background: var(--color-background-primary);
-      border-radius: var(--border-radius-lg);
-      padding: 10px 16px;
-      border: 0.5px solid var(--color-border-tertiary);
+      background: var(--tg-bg);
+      /*--border-radius: var(--border-radius-lg);*/
+      padding: 12px 12px;
+      border: 0.5px solid var(--border-subtle);
+      right: 0;
+      display: flex;
+      justify-content: center;
+      background-color: black;
+      border-radius: 555px;   
+      letter-spacing: 0.2px;     
+
     }
     .stat-label {
       font-size: 12px;
-      color: var(--color-text-secondary);
-      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--tg-hint);
+      margin-bottom: 9px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: auto;
+      position: relative;
     }
     .stat-val {
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+     
     }
-    .stat-val.green { color: #1a9e5c; }
-    .stat-val.red { color: #e06c5e; }
+    .stat-val.green { color: #35c759; }
+    .stat-val.red { color: #ff5e5e; }
 
+    /* bottom tab bar */
     .floating-tabs {
       position: fixed;
-      bottom: 21px;
+      bottom: 10px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
-      z-index: 999;
+      z-index: 1000;
     }
     .tabs-inner {
       display: flex;
-      gap: 4px;
-      background: var(--color-background-primary);
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: 80px;
-      padding: 6px 8px;
-      backdrop-filter: blur(12px);
+      gap: 2px;
+      background: black;
+      border: 0.5px solid var(--border-subtle);
+      border-radius: 40px;
+      padding: 6px 11px;
+      backdrop-filter: blur(24px);
+      background-color: black);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .tab-btn {
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 9px 9px;
+      border-radius: 32px;
+      font-size: 12px;
+      font-weight: 590;
       border: none;
       background: transparent;
-      color: var(--color-text-secondary);
+      color: var(--tg-hint);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s;
+      letter-spacing: -0.2px;
     }
     .tab-btn.active {
-      background: var(--tg-blue);
-      color: #fff;
+      background: var(--tg-button);
+      color: var(--tg-button-text);
     }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* Bill Cards (Accordion) */
+    /* Bill Cards */
     .bill-card {
-      background: var(--color-background-primary);
+      background: var(--tg-bg);
       border-radius: var(--border-radius-lg);
-      border: 0.5px solid var(--color-border-tertiary);
-      margin-bottom: 12px;
+      border: 0.5px solid var(--border-subtle);
+      margin-bottom: 10px;
       overflow: hidden;
     }
     .bill-header {
@@ -142,7 +158,6 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      user-select: none;
     }
     .bill-header-left {
       display: flex;
@@ -150,65 +165,58 @@
       gap: 12px;
     }
     .bill-icon {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      background: rgba(42,171,238,0.12);
-      color: var(--tg-blue);
+      font-size: 20px;
+      background: rgba(42, 171, 238, 0.12);
     }
     .bill-name {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      color: var(--color-text-primary);
     }
     .bill-total {
-      font-size: 15px;
-      color: #1a9e5c;
+      font-size: 13px;
+      color: #35c759;
       font-weight: 500;
       margin-top: 2px;
     }
     .bill-chevron {
       font-size: 18px;
-      color: var(--color-text-tertiary);
+      color: var(--tg-hint);
       transition: transform 0.2s;
     }
-    .bill-chevron.open {
-      transform: rotate(180deg);
-    }
+    .bill-chevron.open { transform: rotate(180deg); }
     .bill-items {
-      border-top: 0.5px solid var(--color-border-tertiary);
+      border-top: 0.5px solid var(--border-subtle);
       display: none;
+      background: var(--tg-secondary-bg);
     }
-    .bill-items.open {
-      display: block;
-    }
+    .bill-items.open { display: block; }
     .item-row {
-      padding: 10px 16px;
-      border-bottom: 0.5px solid var(--color-border-tertiary);
+      padding: 12px 16px;
+      border-bottom: 0.5px solid var(--border-subtle);
       display: flex;
       align-items: flex-start;
       gap: 12px;
     }
     .item-row:last-child { border-bottom: none; }
     .item-pill {
-      background: var(--color-background-secondary);
-      font-size: 12px;
+      background: var(--tg-section-bg);
+      font-size: 11px;
       font-weight: 600;
       padding: 3px 8px;
-      border-radius: 30px;
-      color: var(--color-text-secondary);
+      border-radius: 20px;
+      color: var(--tg-hint);
       flex-shrink: 0;
-      border: 0.3px solid var(--color-border-tertiary);
       font-family: monospace;
     }
     .item-desc {
       font-size: 13px;
       line-height: 1.4;
-      color: var(--color-text-primary);
       flex: 1;
     }
     .item-right {
@@ -217,30 +225,31 @@
       min-width: 85px;
     }
     .item-ach {
-      font-size: 12px;
-      color: var(--color-text-tertiary);
+      font-size: 11px;
+      color: var(--tg-hint);
     }
     .item-inc {
       font-size: 14px;
       font-weight: 600;
-      color: #1a9e5c;
+      color: #35c759;
     }
 
     /* Cost Panel */
-    .cost-wrap { padding: 8px 16px 16px; }
+    .cost-wrap { padding: 8px 16px 24px; }
     .sec-title {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
+      letter-spacing: 0.2px;
+      color: var(--tg-hint);
       margin: 8px 4px 12px;
+      text-transform: uppercase;
     }
     .clickable-card {
-      background: var(--color-background-primary);
+      background: var(--tg-bg);
       border-radius: var(--border-radius-lg);
-      border: 0.5px solid var(--color-border-tertiary);
+      border: 0.5px solid var(--border-subtle);
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .card-header {
       padding: 14px 16px;
@@ -252,27 +261,31 @@
     .card-title {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .card-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--tg-blue);
-      border-radius: 30px;
+      width: 44px;
+      height: 44px;
+      background: rgba(42, 171, 238, 0.12);
+      border-radius: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
     }
-    .card-text h3 { font-size: 15px; font-weight: 600; }
-    .card-text p { font-size: 13px; color: #1a9e5c; margin-top: 2px; font-weight: 500; }
-    .card-chevron { font-size: 20px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+    .card-text h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .card-text p { font-size: 13px; color: #35c759; font-weight: 500; }
+    .card-chevron {
+      font-size: 20px;
+      color: var(--tg-hint);
+      transition: transform 0.2s;
+    }
     .card-chevron.open { transform: rotate(180deg); }
     .breakdown-list {
       display: none;
-      border-top: 0.5px solid var(--color-border-tertiary);
-      background: var(--color-background-secondary);
-      max-height: 350px;
+      border-top: 0.5px solid var(--border-subtle);
+      background: var(--tg-secondary-bg);
+      max-height: 320px;
       overflow-y: auto;
     }
     .breakdown-list.open { display: block; }
@@ -280,105 +293,95 @@
       display: flex;
       justify-content: space-between;
       padding: 12px 16px;
-      border-bottom: 0.5px solid var(--color-border-tertiary);
+      border-bottom: 0.5px solid var(--border-subtle);
       font-size: 13px;
     }
-    .item-name { color: var(--color-text-secondary); flex: 1; }
-    .item-amount { font-weight: 600; color: #1a9e5c; white-space: nowrap; }
+    .item-name { color: var(--tg-hint); flex: 1; }
+    .item-amount { font-weight: 600; color: #35c759; white-space: nowrap; }
 
-    /* Password Overlay for Cost Tab */
+    /* Password Overlay (unified) */
     .password-overlay {
-      position: relative;
-      background: var(--color-background-primary);
+      background: var(--tg-bg);
       border-radius: var(--border-radius-lg);
       padding: 32px 20px;
       text-align: center;
       margin: 16px;
+      border: 0.5px solid var(--border-subtle);
     }
     .password-overlay h3 {
-      margin-bottom: 20px;
-      font-size: 18px;
+      margin-bottom: 8px;
+      font-size: 19px;
+      font-weight: 600;
     }
     .password-input {
       width: 100%;
-      padding: 12px 16px;
-      border-radius: 30px;
-      border: 1px solid var(--color-border-tertiary);
-      background: var(--color-background-secondary);
-      color: var(--color-text-primary);
+      padding: 14px 18px;
+      border-radius: 40px;
+      border: 0.5px solid var(--border-subtle);
+      background: var(--tg-secondary-bg);
+      color: var(--tg-text);
       font-size: 16px;
       text-align: center;
-      margin-bottom: 16px;
+      margin: 18px 0 12px;
       outline: none;
     }
-    .password-input:focus {
-      border-color: var(--tg-blue);
-    }
+    .password-input:focus { border-color: var(--tg-link); }
     .password-btn {
-      background: var(--tg-blue);
-      color: white;
+      background: var(--tg-button);
+      color: var(--tg-button-text);
       border: none;
       padding: 12px 24px;
-      border-radius: 30px;
+      border-radius: 40px;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
     }
     .password-error {
-      color: #e06c5e;
+      color: #ff5e5e;
       font-size: 12px;
       margin-top: 12px;
     }
-    .cost-protected-content {
-      display: block;
-    }
-    .cost-protected-content.locked {
-      display: none;
-    }
-    .cost-unlock-message {
-      display: none;
-    }
-    .cost-unlock-message.visible {
-      display: block;
-    }
 
-    /* Photos Panel */
+    /* Photos Grid */
     .photos-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      padding: 16px;
+      padding: 20px;
     }
     .photo-card {
-      background: var(--color-background-primary);
-      border-radius: var(--border-radius-lg);
-      border: 0.5px solid var(--color-border-tertiary);
+      background: var(--tg-bg);
+      border-radius: 18px;
+      border: 0.5px solid var(--border-subtle);
       overflow: hidden;
       cursor: pointer;
     }
     .photo-card img {
-      width: 100;
+      width: 100%;
       height: 150px;
       object-fit: cover;
       display: block;
+      background: #2c2c2e;
     }
     .photo-caption {
-      padding: 6px 8px;
+      padding: 8px 6px;
       font-size: 11px;
-      color: var(--color-text-secondary);
+      color: var(--tg-hint);
       text-align: center;
-      border-top: 0.5px solid var(--color-border-tertiary);
+      border-top: 0.5px solid var(--border-subtle);
     }
     .photos-section-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
-      padding: 16px 16px 0;
+      padding: 18px 20px 0;
     }
     .photos-subtitle {
       font-size: 11px;
-      color: var(--color-text-tertiary);
-      padding: 4px 16px;
+      color: var(--tg-hint);
+      padding: 4px 20px;
     }
+
+    /* Lightbox */
     .lightbox {
       display: none;
       position: fixed;
@@ -386,36 +389,36 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.9);
-      z-index: 1000;
+      background: rgba(0,0,0,0.92);
+      z-index: 1100;
       justify-content: center;
       align-items: center;
       cursor: pointer;
     }
     .lightbox.active { display: flex; }
-    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 12px; }
+    .lightbox img { max-width: 90%; max-height: 85%; border-radius: 24px; }
     .lightbox-close {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 28px;
+      right: 24px;
       color: white;
-      font-size: 28px;
-      width: 40px;
-      height: 40px;
-      background: rgba(0,0,0,0.5);
-      border-radius: 50%;
+      font-size: 32px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
 
-    /* Chat Panel */
+    /* Chat Panel (protected style) */
     .chat-container {
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 200px);
-      min-height: 400px;
+      height: calc(100vh - 210px);
+      min-height: 460px;
       padding: 16px;
     }
     .chat-messages {
@@ -423,129 +426,108 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 16px;
+      padding-right: 4px;
     }
     .chat-message {
       max-width: 80%;
       padding: 10px 14px;
-      border-radius: 18px;
+      border-radius: 20px;
       font-size: 14px;
       line-height: 1.4;
+      word-break: break-word;
     }
     .chat-message-user {
       align-self: flex-end;
-      background: var(--tg-blue);
-      color: white;
+      background: var(--tg-button);
+      color: var(--tg-button-text);
       border-bottom-right-radius: 4px;
     }
     .chat-message-bot {
       align-self: flex-start;
-      background: var(--color-background-secondary);
-      color: var(--color-text-primary);
+      background: var(--tg-bg);
+      color: var(--tg-text);
       border-bottom-left-radius: 4px;
+      border: 0.3px solid var(--border-subtle);
     }
     .chat-input-area {
       display: flex;
       gap: 10px;
-      background: var(--color-background-primary);
-      padding: 10px;
-      border-radius: 30px;
-      border: 0.5px solid var(--color-border-tertiary);
+      background: var(--tg-bg);
+      padding: 8px 12px;
+      border-radius: 34px;
+      border: 0.5px solid var(--border-subtle);
     }
     .chat-input {
       flex: 1;
       border: none;
       background: transparent;
-      padding: 10px;
-      font-size: 14px;
+      padding: 10px 6px;
+      font-size: 15px;
       outline: none;
-      color: var(--color-text-primary);
+      color: var(--tg-text);
     }
     .chat-send-btn {
-      background: var(--tg-blue);
+      background: var(--tg-button);
       border: none;
-      padding: 8px 20px;
-      border-radius: 30px;
-      color: white;
+      padding: 8px 22px;
+      border-radius: 32px;
+      color: var(--tg-button-text);
       font-weight: 600;
       cursor: pointer;
     }
-    .chat-send-btn:active { opacity: 0.8; }
     .chat-note {
       font-size: 10px;
-      color: var(--color-text-tertiary);
+      color: var(--tg-hint);
       text-align: center;
       margin-top: 8px;
     }
-
     .total-card {
-      background: var(--tg-dark);
+      background: var(--tg-bg);
       border-radius: var(--border-radius-lg);
       padding: 16px 20px;
-      margin: 16px 16px 20px;
+      margin: 16px 16px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border: 0.5px solid var(--border-subtle);
     }
-    .total-lbl { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); }
-    .total-val { font-size: 18px; font-weight: 700; color: white; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
   </style>
 </head>
 <body>
-<h2 class="sr-only"> </h2>
 <div class="wrap">
   <div class="header">
     <div class="header-title"></div>
   </div>
 
-  <div class="summary-row">
-    <div class="stat-card">
-      <div class="stat-label">📈 Total Income</div>
-      <div class="stat-val green" id="totalIncome">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">📉 Total Cost</div>
-      <div class="stat-val red">404,850,157.00 ETB</div>
-    </div>
-  </div>
+  <!-- Separate summary row containers: one for Income tab, one for Cost tab -->
+  <div id="incomeSummary" class="summary-row" style="display: none;"></div>
+  <div id="costSummary" class="summary-row" style="display: none;"></div>
 
-  <!-- Income Panel -->
   <div id="panel-income" class="tab-panel active">
-    <div class="section" style="padding: 6px 16px 0;">
+    <div id="incomeSummaryTarget"></div>
+    <div style="padding: 6px 16px 12px;">
       <div id="billsContainer"></div>
     </div>
   </div>
 
-  <!-- Cost Panel (Password Protected) -->
   <div id="panel-cost" class="tab-panel">
-    <div id="costContentWrapper">
-      <!-- Password overlay will be injected here dynamically if needed -->
-    </div>
+    <div id="costSummaryTarget"></div>
+    <div id="costContentWrapper"></div>
+    
   </div>
 
-  <!-- Photos Panel -->
   <div id="panel-photos" class="tab-panel">
-    <div class="photos-section-title">📸 Project Photos</div>
-    <div class="photos-subtitle">Click photo to enlarge</div>
+    <div class="photos-section-title">📸 Project Gallery</div>
+    <div class="photos-subtitle">Tap image to expand</div>
     <div class="photos-grid" id="photosGrid"></div>
   </div>
 
-  <!-- Chat Panel -->
   <div id="panel-chat" class="tab-panel">
-    <div class="chat-container">
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-message chat-message-bot">👋 Hello! Welcome to Chacha Dam Project support. Ask me anything about the project!</div>
-      </div>
-      <div class="chat-input-area">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
-        <button class="chat-send-btn" onclick="sendMessage()">Send</button>
-      </div>
-      <div class="chat-note">💡 Messages are stored locally. Contact project team for official inquiries.</div>
-    </div>
+    <div id="chatProtectedWrapper"></div>
   </div>
-
 </div>
 
 <div class="floating-tabs">
@@ -558,16 +540,26 @@
 </div>
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close" onclick="closeLightbox()">×</span>
+  <span class="lightbox-close" onclick="closeLightbox()"> </span>
   <img id="lightboxImg" src="" alt="">
 </div>
 
 <script>
-  // ======================== PASSWORD CONFIGURATION ========================
-  const COST_PASSWORD = "2025"; // ፓስወርዱን እዚህ ይቀይሩ
-  let isCostUnlocked = false; // ፓስወርድ በአሁኑ ሲሰን ተከፍቷል እንደሆነ ለማወቅ
+  // ========== PASSWORDS CONFIGURATION ==========
+  const COST_PASSWORD = "2025";
+  const CHAT_PASSWORD = "2026";      // same password for chat (can be changed)
+  let isCostUnlocked = false;
+  let isChatUnlocked = false;
 
-  // ======================== INCOME DATA ========================
+  // Helper: store unlock status in session
+  function setUnlockStatus(type, value) {
+    try { sessionStorage.setItem(`chacha_${type}_unlocked`, value ? 'true' : 'false'); } catch(e) {}
+  }
+  function getUnlockStatus(type) {
+    try { return sessionStorage.getItem(`chacha_${type}_unlocked`) === 'true'; } catch(e) { return false; }
+  }
+
+  // ========== INCOME DATA ==========
   const bills = [
     { id: 'A', name: 'GENERAL ITEMS', icon: '🔧', color: '#2AABEE', items: [
       { no: '1.30', d: 'Provision of safety clothing for staff and visitors', ach: 1.20, inc: 1375777.99 },
@@ -577,7 +569,7 @@
       { no: '1.14', d: 'Compensation payment estimation expenses', ach: 0.76, inc: 1140234.71 },
       { no: '1.16', d: 'Provisional sum for miscellaneous work', ach: 0.07, inc: 124470.14 }
     ] },
-    { id: 'B', name: 'MAIN DAM', icon: '🌊', color: '#1a9e5c', items: [
+    { id: 'B', name: 'MAIN DAM', icon: '🌊', color: '#35c759', items: [
       { no: '2.3.1', d: 'Core zone fill & compaction with clay (max 5 km)', ach: 42102.17, inc: 12186894.13 },
       { no: '2.4.1', d: 'Shell zone fill & compaction with selected material', ach: 65994.70, inc: 17220657.02 },
       { no: '2.5.1', d: 'Filter material (Finer) zone 2A', ach: 10050.93, inc: 12390786.50 },
@@ -588,326 +580,240 @@
       { no: '2.9.5', d: 'Vibrating Wire settlement sensor', ach: 1.00, inc: 117000.00 },
       { no: '2.9.8', d: 'Vibrating wire cable', ach: 307.94, inc: 288231.84 }
     ] },
-    { id: 'C', name: 'GROUTING AND FAULT TREATMENT', icon: '💧', color: '#9b59b6', items: [
-      { no: '3.A.1', d: 'Mobilization and Demobilization', ach: 0.50, inc: 292789.65 }
-    ] },
+    { id: 'C', name: 'GROUTING AND FAULT TREATMENT', icon: '💧', color: '#9b59b6', items: [{ no: '3.A.1', d: 'Mobilization and Demobilization', ach: 0.50, inc: 292789.65 }] },
     { id: 'D', name: 'INTAKE TOWER STRUCTURE', icon: '🗼', color: '#e67e22', items: [
-      { no: '4.2.4', d: 'Base slab', ach: 3.17, inc: 16324.64 },
-      { no: '4.2.5', d: 'Shaft work', ach: 17.44, inc: 106271.53 },
-      { no: '4.2.7', d: 'C-15 mass concrete', ach: 69.11, inc: 265855.80 },
-      { no: '4.3.5', d: 'φ16mm bar', ach: 2538.11, inc: 173454.10 },
-      { no: '4.3.6', d: 'φ14mm bar', ach: 13.33, inc: 911.18 },
-      { no: '4.3.7', d: 'φ10mm bar', ach: 203.07, inc: 32063.76 },
+      { no: '4.2.4', d: 'Base slab', ach: 3.17, inc: 16324.64 }, { no: '4.2.5', d: 'Shaft work', ach: 17.44, inc: 106271.53 },
+      { no: '4.2.7', d: 'C-15 mass concrete', ach: 69.11, inc: 265855.80 }, { no: '4.3.5', d: 'φ16mm bar', ach: 2538.11, inc: 173454.10 },
+      { no: '4.3.6', d: 'φ14mm bar', ach: 13.33, inc: 911.18 }, { no: '4.3.7', d: 'φ10mm bar', ach: 203.07, inc: 32063.76 },
       { no: '4.3.9', d: '10mm thick steel conduit', ach: 4.00, inc: 343639.40 }
     ] },
-    { id: 'E', name: 'ACCESS BRIDGE', icon: '🛣️', color: '#16a085', items: [
-      { no: '5.2.4', d: 'Safety Hand Rail (50mm GS Pipe)', ach: 60.00, inc: 88090.20 }
-    ] },
+    { id: 'E', name: 'ACCESS BRIDGE', icon: '🛣️', color: '#16a085', items: [{ no: '5.2.4', d: 'Safety Hand Rail (50mm GS Pipe)', ach: 60.00, inc: 88090.20 }] },
     { id: 'F', name: 'IRRIGATION OUTLET WORKS', icon: '💧', color: '#3498db', items: [
-      { no: '6.2.1', d: 'C-10 lean concrete', ach: 8.10, inc: 1003.75 },
-      { no: '6.3.3', d: 'φ16mm bar', ach: 631.60, inc: 43163.54 },
+      { no: '6.2.1', d: 'C-10 lean concrete', ach: 8.10, inc: 1003.75 }, { no: '6.3.3', d: 'φ16mm bar', ach: 631.60, inc: 43163.54 },
       { no: '6.3.6', d: 'φ10mm bar', ach: 183.52, inc: 12541.76 }
     ] },
-    { id: 'G', name: 'LOW LEVEL OUTLET WORKS', icon: '⚙️', color: '#e67e22', items: [
+    { id: 'G', name: 'LOW LEVEL OUTLET WORKS', icon: '⚙️', color: '#f39c12', items: [
       { no: '7.7.6', d: 'Howell-Bunger Regulating valve', ach: 1.00, inc: 39710720.00 },
       { no: '7.7.7', d: 'DN1500mm DCI bend', ach: 1.00, inc: 13441280.00 },
       { no: '7.7.8', d: 'DN2000mm Butterfly valve', ach: 1.00, inc: 19557120.00 },
       { no: '7.7.9', d: 'Material production inspection', ach: 1.00, inc: 2800000.00 }
     ] },
     { id: 'H', name: 'EMERGENCY CANAL', icon: '🏞️', color: '#c0392b', items: [
-      { no: '8.5.1', d: 'C-25 concrete work', ach: 8.50, inc: 45602.50 },
-      { no: '8.5.3', d: 'Reinforcement bars', ach: 278.70, inc: 19046.36 }
+      { no: '8.5.1', d: 'C-25 concrete work', ach: 8.50, inc: 45602.50 }, { no: '8.5.3', d: 'Reinforcement bars', ach: 278.70, inc: 19046.36 }
     ] },
     { id: 'K', name: 'PERMANENT ACCESS ROAD', icon: '🛣️', color: '#27ae60', items: [
-      { no: '11.7.1', d: 'Ordinary Soil Excavation', ach: 156.60, inc: 12935.16 },
-      { no: '11.7.2', d: 'Stone masonry work', ach: 404.81, inc: 932097.57 },
-      { no: '11.7.3', d: 'C-25 concrete slab', ach: 32.80, inc: 194254.72 },
-      { no: '11.7.5', d: 'Reinforcement bars ø14mm', ach: 5182.52, inc: 354173.42 },
-      { no: '11.7.6', d: 'Cart away excavated material', ach: 96.00, inc: 4304.64 },
-      { no: '11.7.8', d: 'Back fill with shell material', ach: 240.00, inc: 42801.60 }
+      { no: '11.7.1', d: 'Ordinary Soil Excavation', ach: 156.60, inc: 12935.16 }, { no: '11.7.2', d: 'Stone masonry work', ach: 404.81, inc: 932097.57 },
+      { no: '11.7.3', d: 'C-25 concrete slab', ach: 32.80, inc: 194254.72 }, { no: '11.7.5', d: 'Reinforcement bars ø14mm', ach: 5182.52, inc: 354173.42 },
+      { no: '11.7.6', d: 'Cart away excavated material', ach: 96.00, inc: 4304.64 }, { no: '11.7.8', d: 'Back fill with shell material', ach: 240.00, inc: 42801.60 }
     ] },
     { id: 'N', name: 'VALVE HOUSE STRUCTURE', icon: '🏠', color: '#8e44ad', items: [
-      { no: '2.10', d: 'C-10 lean concrete', ach: 82.56, inc: 10230.84 },
-      { no: '2.30', d: 'C-30 Reinforced concrete', ach: 92.59, inc: 477114.42 },
-      { no: '3.10', d: 'φ24mm bar', ach: 15009.95, inc: 1051146.59 },
-      { no: '3.20', d: 'φ20mm bar', ach: 728.34, inc: 51005.93 },
+      { no: '2.10', d: 'C-10 lean concrete', ach: 82.56, inc: 10230.84 }, { no: '2.30', d: 'C-30 Reinforced concrete', ach: 92.59, inc: 477114.42 },
+      { no: '3.10', d: 'φ24mm bar', ach: 15009.95, inc: 1051146.59 }, { no: '3.20', d: 'φ20mm bar', ach: 728.34, inc: 51005.93 },
       { no: '3.30', d: 'φ16mm bar', ach: 4918.99, inc: 336163.78 }
     ] }
   ];
 
-  // Cost breakdown data
-  const labourItems = [
-    { name: 'Mason', amount: 337587.97 },{ name: 'Barbender', amount: 168023.27 },{ name: 'Carpenter', amount: 209881.82 },
-    { name: 'Time Keeper', amount: 108195.00 },{ name: 'Surveyor', amount: 41850.00 },{ name: 'Guard', amount: 1419665.00 },
-    { name: 'Dl', amount: 1370721.24 },{ name: 'Curer', amount: 9750.00 },{ name: 'Labor cost For Camp & minsbet', amount: 1807826.00 },
-    { name: 'Material inspection team', amount: 2800000.00 }
-  ];
-  const adminItems = [
-    { name: 'INTERTEMENTS', amount: 1200826.14 },{ name: 'Travel Expense and Other', amount: 3625072.28 },
-    { name: 'Spare part for pump, generator & cons.mater', amount: 16957.01 },{ name: 'Other Construction material', amount: 6897.39 },
-    { name: 'Small Construction tools', amount: 1265.22 },{ name: 'Camping Item', amount: 119636.76 },
-    { name: 'Cleaning & Sanitation Item Expense', amount: 162575.46 },{ name: 'Supplies & Stationary Expense', amount: 1395837.09 },
-    { name: 'Uniform and Clothing Expense', amount: 1682799.51 },{ name: 'Receipt & Voucher Expense', amount: 109819.08 },
-    { name: 'Pharmaceutical, Treatment item & lab', amount: 79196.76 },{ name: 'Spare Part Expense', amount: 36211711.56 },
-    { name: 'Tyer & Inner tube Maintenance', amount: 1862757.00 },{ name: 'Fuel & Lubricants Expense', amount: 800.00 },
-    { name: 'Mobile Card Expense', amount: 252823.16 },{ name: 'Car Guard', amount: 57700.00 },
-    { name: 'Local Construction material', amount: 192036.43 },{ name: 'Camping Generator Fuel & Lubricants', amount: 5736053.99 },
-    { name: 'Calibration of total station', amount: 100096.63 },{ name: 'For Medical Expense', amount: 65396.26 },
-    { name: 'Other Cost (Qret)', amount: 27955.00 },{ name: 'TEST COST', amount: 82317.90 },
-    { name: 'fuel for welding', amount: 28713.10 },{ name: 'For Mestengdo', amount: 75806.40 },
-    { name: 'Travel Expense and Other (2nd)', amount: 3132854.85 },{ name: 'DL for Green Legacy', amount: 4200.00 },
-    { name: 'Uniform and Clothing Expense (2nd)', amount: 16973.00 },{ name: 'For Medical Expense (2nd)', amount: 132339.30 },
-    { name: 'Rent cost of house, storage area etc.', amount: 308500.00 },{ name: 'Transport cost for machinery (low-bed)', amount: 120000.00 },
-    { name: 'Other Costs - Irrigation project', amount: 312222.38 },{ name: 'Gris', amount: 6990.00 },
-    { name: 'camp Maintenance', amount: 121541.44 },{ name: 'Office Desktop and Laptop', amount: 305798.17 },
-    { name: 'Benzine, Flasher, Break fluid, etc', amount: 5726696.73 },{ name: 'Car Guard (2nd)', amount: 35950.00 },
-    { name: 'Machinery Maintenance', amount: 60940.00 }
-  ];
+  // Cost data (unchanged)
+  const labourItems = [{ name: 'Mason', amount: 337587.97 },{ name: 'Barbender', amount: 168023.27 },{ name: 'Carpenter', amount: 209881.82 },{ name: 'Time Keeper', amount: 108195.00 },{ name: 'Surveyor', amount: 41850.00 },{ name: 'Guard', amount: 1419665.00 },{ name: 'Dl', amount: 1370721.24 },{ name: 'Curer', amount: 9750.00 },{ name: 'Labor cost For Camp & minsbet', amount: 1807826.00 },{ name: 'Material inspection team', amount: 2800000.00 }];
+  const adminItems = [{ name: 'INTERTEMENTS', amount: 1200826.14 },{ name: 'Travel Expense and Other', amount: 3625072.28 },{ name: 'Spare part for pump, generator & cons.mater', amount: 16957.01 },{ name: 'Camping Item', amount: 119636.76 },{ name: 'Supplies & Stationary Expense', amount: 1395837.09 },{ name: 'Uniform and Clothing Expense', amount: 1682799.51 },{ name: 'Spare Part Expense', amount: 36211711.56 },{ name: 'Fuel & Lubricants Expense', amount: 800.00 },{ name: 'Camping Generator Fuel & Lubricants', amount: 5736053.99 },{ name: 'Rent cost of house, storage area etc.', amount: 308500.00 },{ name: 'Machinery Maintenance', amount: 60940.00 }];
   const staffItems = [{ name: 'Construction staff', amount: 15568391.57 },{ name: 'Equipment staff', amount: 47378425.54 }];
-  const materialItems = [
-    { name: 'Cement', amount: 841975.86 },{ name: 'Sand', amount: 1577454.61 },{ name: 'Gravel', amount: 308796.30 },
-    { name: 'cutter disk', amount: 14953.38 },{ name: 'Timber', amount: 14000.00 },{ name: 'Poles', amount: 249500.00 },
-    { name: 'Nail', amount: 67008.52 },{ name: 'Chipwood', amount: 3300.00 },{ name: 'Reinf.', amount: 4693066.23 },
-    { name: 'Black wire', amount: 18090.00 },{ name: 'Purlin', amount: 34239.65 },{ name: 'Electrode', amount: 91061.10 },
-    { name: 'GI PIPE 2.5"', amount: 59853.94 },{ name: 'Fuel', amount: 97963930.91 },{ name: 'Benzine', amount: 4413.09 },
-    { name: 'Playwood', amount: 200480.00 },{ name: 'Sieve Screen', amount: 420000.00 },{ name: '10mm thick sheet metal', amount: 122666.68 },
-    { name: 'Jeso', amount: 8300.00 },{ name: 'Pizometer', amount: 864000.00 },{ name: 'Plate', amount: 20856.00 },
-    { name: 'Bolt With Nut', amount: 7600.00 },{ name: 'Sand With Rental D.Truck', amount: 10738897.14 },
-    { name: 'Vibrating wire cable', amount: 256000.00 },{ name: 'DN2000mm Flanged butterfly valve', amount: 19557120.00 },
-    { name: 'Howell-Bunger Regulating valve', amount: 39710720.00 },{ name: 'DN1500mm DCI bend', amount: 13441280.00 },
-    { name: 'HCB', amount: 2000.00 }
-  ];
-  const machineryItems = [
-    { name: 'Dozer', amount: 8722732.48 },{ name: 'Excavator', amount: 31238561.23 },{ name: 'Loader', amount: 5767979.23 },
-    { name: 'Grader', amount: 915668.27 },{ name: 'Crane', amount: 1894000.07 },{ name: 'Smooth Foot Compacter', amount: 1276089.66 },
-    { name: 'Sheep foot compactor', amount: 1601296.59 },{ name: 'Mixer', amount: 65379.89 },{ name: 'Light Vehicle', amount: 2496639.94 },
-    { name: 'Dump truck', amount: 77781197.15 },{ name: 'Fuel Track', amount: 2798061.23 },{ name: 'Shower truck', amount: 2837275.12 },
-    { name: 'Low Bed', amount: 44154.74 },{ name: 'Bus', amount: 789070.16 },{ name: 'Dump track for sand', amount: 639966.05 }
-  ];
+  const materialItems = [{ name: 'Cement', amount: 841975.86 },{ name: 'Sand', amount: 1577454.61 },{ name: 'Reinf.', amount: 4693066.23 },{ name: 'Fuel', amount: 97963930.91 },{ name: 'Sand With Rental D.Truck', amount: 10738897.14 },{ name: 'DN2000mm Flanged butterfly valve', amount: 19557120.00 },{ name: 'Howell-Bunger Regulating valve', amount: 39710720.00 },{ name: 'DN1500mm DCI bend', amount: 13441280.00 }];
+  const machineryItems = [{ name: 'Dozer', amount: 8722732.48 },{ name: 'Excavator', amount: 31238561.23 },{ name: 'Loader', amount: 5767979.23 },{ name: 'Grader', amount: 915668.27 },{ name: 'Dump truck', amount: 77781197.15 },{ name: 'Fuel Track', amount: 2798061.23 },{ name: 'Shower truck', amount: 2837275.12 }];
   const overheadItems = [{ name: 'Overhead 20%', amount: 34454047.00 }];
+  const totalCostValue = 404850157.00;
 
-  function fmt(v) { return v == null ? '—' : parseFloat(v).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-  function fmtA(v) { if (v == null) return '—'; let n = parseFloat(v); return isNaN(n) ? v : (n % 1 === 0 ? n.toString() : n.toFixed(2)); }
-  function fmtM(v) { let n = parseFloat(v); if (isNaN(n)) return '—'; if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B'; if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M'; if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K'; return n.toFixed(0); }
+  function fmt(v) { return v == null ? '—' : v.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtA(v) { let n = parseFloat(v); return isNaN(n) ? v : (n % 1 === 0 ? n.toString() : n.toFixed(2)); }
+  function fmtM(v) { let n = parseFloat(v); if (n >= 1e6) return (n/1e6).toFixed(1) + 'M'; if (n >= 1e3) return (n/1e3).toFixed(0) + 'K'; return n.toFixed(0); }
 
-  // Total Income
   let totalIncome = 0;
-  bills.forEach(bill => { bill.items.forEach(item => { if (item.inc) totalIncome += item.inc; }); });
-  document.getElementById('totalIncome').innerHTML = fmt(totalIncome) + ' ETB';
+  bills.forEach(b => b.items.forEach(i => { if (i.inc) totalIncome += i.inc; }));
 
-  // Render Income Bills
-  const container = document.getElementById('billsContainer');
-  container.innerHTML = '';
-  bills.forEach((bill, idx) => {
-    let billTotal = 0;
-    bill.items.forEach(it => { if (it.inc) billTotal += it.inc; });
-    const card = document.createElement('div'); card.className = 'bill-card';
-    const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-ach">${fmtA(it.ach)}</div><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
-    card.innerHTML = `<div class="bill-header" data-bill-idx="${idx}"><div class="bill-header-left"><div class="bill-icon" style="background:${bill.color}20; color:${bill.color};">${bill.icon}</div><div><div class="bill-name">Bill ${bill.id} — ${bill.name}</div><div class="bill-total">${fmtM(billTotal)} ETB</div></div></div><span class="bill-chevron" id="chev-${idx}">▼</span></div><div class="bill-items" id="items-${idx}">${itemsHtml}</div>`;
-    container.appendChild(card);
-    const header = card.querySelector('.bill-header');
-    const itemsDiv = card.querySelector(`#items-${idx}`);
-    const chevron = card.querySelector(`#chev-${idx}`);
-    header.addEventListener('click', () => { itemsDiv.classList.toggle('open'); chevron.classList.toggle('open'); });
-  });
+  // Helper: render summary cards for Income & Cost tabs only
+  function renderIncomeSummary() {
+    const target = document.getElementById('incomeSummaryTarget');
+    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label"> Total Income (ETB) </div><div class="stat-val green">${fmt(totalIncome)} ETB</div></div>`;
+  }
+  function renderCostSummary() {
+    const target = document.getElementById('costSummaryTarget');
+    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label"> Total Cost (ETB)</div><div class="stat-val red">${fmt(totalCostValue)} ETB</div></div>`;
+  }
 
-  // Function to render cost content (protected)
+  // Render Income bills
+  function renderIncomePanel() {
+    const container = document.getElementById('billsContainer');
+    if(!container) return;
+    container.innerHTML = '';
+    bills.forEach((bill, idx) => {
+      let billTotal = 0;
+      bill.items.forEach(it => { if (it.inc) billTotal += it.inc; });
+      const card = document.createElement('div'); card.className = 'bill-card';
+      const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-ach">${fmtA(it.ach)}</div><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
+      card.innerHTML = `<div class="bill-header" data-bill-idx="${idx}"><div class="bill-header-left"><div class="bill-icon">${bill.icon}</div><div><div class="bill-name">Bill ${bill.id} — ${bill.name}</div><div class="bill-total">${fmtM(billTotal)} ETB</div></div></div><span class="bill-chevron" id="chev-${idx}">▼</span></div><div class="bill-items" id="items-${idx}">${itemsHtml}</div>`;
+      container.appendChild(card);
+      const header = card.querySelector('.bill-header');
+      const itemsDiv = card.querySelector(`#items-${idx}`);
+      const chevron = card.querySelector(`#chev-${idx}`);
+      header.addEventListener('click', () => { itemsDiv.classList.toggle('open'); chevron.classList.toggle('open'); });
+    });
+  }
+
+  // Cost panel content (unlocked)
   function renderCostContent() {
     const wrapper = document.getElementById('costContentWrapper');
     if (!wrapper) return;
-    
-    const costHtml = `
-      <div class="cost-wrap">
-        <div class="sec-title">💰 Cost Breakdown (ETB)</div>
-        <div class="clickable-card" id="labourCard"><div class="card-header" id="labourHeader"><div class="card-title"><div class="card-icon">👥</div><div class="card-text"><h3>Labour Cost</h3><p>8,273,500.81 ETB</p></div></div><span class="card-chevron" id="labourChevron">▼</span></div><div class="breakdown-list" id="labourBreakdown"></div></div>
-        <div class="clickable-card" id="adminCard"><div class="card-header" id="adminHeader"><div class="card-title"><div class="card-icon">🏢</div><div class="card-text"><h3>Admin Cost</h3><p>16,379,582.38 ETB</p></div></div><span class="card-chevron" id="adminChevron">▼</span></div><div class="breakdown-list" id="adminBreakdown"></div></div>
-        <div class="clickable-card" id="staffCard"><div class="card-header" id="staffHeader"><div class="card-title"><div class="card-icon">🆔</div><div class="card-text"><h3>Staff Cost</h3><p>15,568,391.57 ETB</p></div></div><span class="card-chevron" id="staffChevron">▼</span></div><div class="breakdown-list" id="staffBreakdown"></div></div>
-        <div class="clickable-card" id="materialCard"><div class="card-header" id="materialHeader"><div class="card-title"><div class="card-icon">📦</div><div class="card-text"><h3>Material Cost</h3><p>191,306,563.41 ETB</p></div></div><span class="card-chevron" id="materialChevron">▼</span></div><div class="breakdown-list" id="materialBreakdown"></div></div>
-        <div class="clickable-card" id="machineryCard"><div class="card-header" id="machineryHeader"><div class="card-title"><div class="card-icon">🏗️</div><div class="card-text"><h3>Machinery Cost</h3><p>138,868,071.96 ETB</p></div></div><span class="card-chevron" id="machineryChevron">▼</span></div><div class="breakdown-list" id="machineryBreakdown"></div></div>
-        <div class="clickable-card" id="overheadCard"><div class="card-header" id="overheadHeader"><div class="card-title"><div class="card-icon">📊</div><div class="card-text"><h3>Overhead Cost</h3><p>34,454,047.00 ETB</p></div></div><span class="card-chevron" id="overheadChevron">▼</span></div><div class="breakdown-list" id="overheadBreakdown"></div></div>
-      </div>
-    `;
-    
-    wrapper.innerHTML = costHtml;
-    
-    // Render breakdowns
-    const renderBreakdown = (id, items) => {
-      const div = document.getElementById(id);
-      if(div) div.innerHTML = items.map(i => `<div class="breakdown-item"><span class="item-name">${i.name}</span><span class="item-amount">${fmt(i.amount)} ETB</span></div>`).join('');
-    };
-    renderBreakdown('labourBreakdown', labourItems);
-    renderBreakdown('adminBreakdown', adminItems);
-    renderBreakdown('staffBreakdown', staffItems);
-    renderBreakdown('materialBreakdown', materialItems);
-    renderBreakdown('machineryBreakdown', machineryItems);
-    renderBreakdown('overheadBreakdown', overheadItems);
-
-    // Setup clickable cards
-    const setupCard = (headerId, breakdownId, chevronId) => {
-      const header = document.getElementById(headerId);
-      const breakdown = document.getElementById(breakdownId);
-      const chevron = document.getElementById(chevronId);
-      if(header && breakdown && chevron) header.addEventListener('click', () => { breakdown.classList.toggle('open'); chevron.classList.toggle('open'); });
-    };
-    setupCard('labourHeader', 'labourBreakdown', 'labourChevron');
-    setupCard('adminHeader', 'adminBreakdown', 'adminChevron');
-    setupCard('staffHeader', 'staffBreakdown', 'staffChevron');
-    setupCard('materialHeader', 'materialBreakdown', 'materialChevron');
-    setupCard('machineryHeader', 'machineryBreakdown', 'machineryChevron');
-    setupCard('overheadHeader', 'overheadBreakdown', 'overheadChevron');
-  }
-
-  // Show password prompt
-  function showPasswordPrompt() {
-    const wrapper = document.getElementById('costContentWrapper');
-    if (!wrapper) return;
-    
-    wrapper.innerHTML = `
-      <div class="password-overlay">
-        <h3>🔒 የወጭ መረጃ ተጠብቋል</h3>
-        <p style="margin-bottom: 20px; font-size: 14px; color: var(--color-text-secondary);">እባክዎ ፓስወርድ ያስገቡ</p>
-        <input type="password" id="costPasswordInput" class="password-input" placeholder="Enter password" autocomplete="off">
-        <button id="unlockCostBtn" class="password-btn">🔓 ክፈት</button>
-        <div id="passwordErrorMsg" class="password-error"></div>
-      </div>
-    `;
-    
-    const input = document.getElementById('costPasswordInput');
-    const btn = document.getElementById('unlockCostBtn');
-    const errorDiv = document.getElementById('passwordErrorMsg');
-    
-    const unlock = () => {
-      const enteredPassword = input.value.trim();
-      if (enteredPassword === COST_PASSWORD) {
-        isCostUnlocked = true;
-        renderCostContent();
-      } else {
-        errorDiv.textContent = '❌ የተሳሳተ ፓስወርድ! እንደገና ይሞክሩ.';
-        input.value = '';
-        input.focus();
-      }
-    };
-    
-    btn.addEventListener('click', unlock);
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') unlock();
-    });
-    input.focus();
-  }
-
-  // Initialize or refresh cost panel based on unlock status
-  function refreshCostPanel() {
-    if (isCostUnlocked) {
-      renderCostContent();
-    } else {
-      showPasswordPrompt();
+    wrapper.innerHTML = `<div class="cost-wrap"><div class="sec-title">💰 Detailed Cost Breakdown (ETB)</div>
+      ${['labour','admin','staff','material','machinery','overhead'].map(t => `<div class="clickable-card" id="${t}Card"><div class="card-header" id="${t}Header"><div class="card-title"><div class="card-icon">${t==='labour'?'👥':t==='admin'?'🏢':t==='staff'?'🆔':t==='material'?'📦':t==='machinery'?'🏗️':'📊'}</div><div class="card-text"><h3>${t.charAt(0).toUpperCase()+t.slice(1)} Cost</h3><p id="${t}Total">—</p></div></div><span class="card-chevron" id="${t}Chevron">▼</span></div><div class="breakdown-list" id="${t}Breakdown"></div></div>`).join('')}</div>`;
+    const maps = { labour: labourItems, admin: adminItems, staff: staffItems, material: materialItems, machinery: machineryItems, overhead: overheadItems };
+    for (let key of Object.keys(maps)) {
+      const total = maps[key].reduce((s, i) => s + i.amount, 0);
+      const totalEl = document.getElementById(`${key}Total`);
+      if (totalEl) totalEl.innerText = fmt(total) + ' ETB';
+      const div = document.getElementById(`${key}Breakdown`);
+      if (div) div.innerHTML = maps[key].map(i => `<div class="breakdown-item"><span class="item-name">${i.name}</span><span class="item-amount">${fmt(i.amount)} ETB</span></div>`).join('');
+      const header = document.getElementById(`${key}Header`);
+      const breakdown = document.getElementById(`${key}Breakdown`);
+      const chevron = document.getElementById(`${key}Chevron`);
+      if (header && breakdown && chevron) header.addEventListener('click', () => { breakdown.classList.toggle('open'); chevron.classList.toggle('open'); });
     }
   }
 
-  // Photos (placeholder images)
+  function showCostPasswordPrompt() {
+    const wrapper = document.getElementById('costContentWrapper');
+    if (!wrapper) return;
+    wrapper.innerHTML = `<div class="password-overlay"><h3>🔒 የወጭ መረጃ ተጠብቋል</h3><p style="margin-bottom: 10px; font-size:14px;">Enter password to view cost breakdown</p><input type="password" id="costPasswordInput" class="password-input" placeholder="Password" autocomplete="off"><button id="unlockCostBtn" class="password-btn">🔓 Unlock</button><div id="passwordErrorMsg" class="password-error"></div></div>`;
+    const input = document.getElementById('costPasswordInput');
+    const btn = document.getElementById('unlockCostBtn');
+    const errorDiv = document.getElementById('passwordErrorMsg');
+    const unlock = () => {
+      if (input.value.trim() === COST_PASSWORD) {
+        isCostUnlocked = true;
+        setUnlockStatus('cost', true);
+        renderCostContent();
+      } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; input.focus(); }
+    };
+    btn.addEventListener('click', unlock);
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
+    input.focus();
+  }
+
+  function refreshCostPanel() { isCostUnlocked ? renderCostContent() : showCostPasswordPrompt(); }
+
+  // ========== CHAT PANEL WITH PASSWORD PROTECTION ==========
+  function renderChatUnlocked() {
+    const wrapper = document.getElementById('chatProtectedWrapper');
+    if (!wrapper) return;
+    wrapper.innerHTML = `
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-message chat-message-bot">🔓 Chat unlocked! 👋 Ask me anything about Chacha Dam Project (income, schedule, contacts).</div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+          <button class="chat-send-btn" onclick="sendMessage()">Send</button>
+        </div>
+        <div class="chat-note">💬 Messages are local. For official support contact admin.</div>
+      </div>`;
+    // rebind chat functions
+    window.sendMessage = function() {
+      const input = document.getElementById('chatInput');
+      const message = input?.value.trim();
+      if(!message) return;
+      const messagesDiv = document.getElementById('chatMessages');
+      if(!messagesDiv) return;
+      const userDiv = document.createElement('div'); userDiv.className = 'chat-message chat-message-user'; userDiv.textContent = message;
+      messagesDiv.appendChild(userDiv);
+      if(input) input.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      setTimeout(() => {
+        const botMsg = getBotReply(message);
+        const botDiv = document.createElement('div'); botDiv.className = 'chat-message chat-message-bot'; botDiv.textContent = botMsg;
+        messagesDiv.appendChild(botDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }, 400);
+    };
+  }
+
+  function showChatPasswordPrompt() {
+    const wrapper = document.getElementById('chatProtectedWrapper');
+    if (!wrapper) return;
+    wrapper.innerHTML = `<div class="password-overlay"><h3>🔒 የውይይት ክፍል ተቆል्फል</h3><p style="margin-bottom: 10px; font-size:14px;">Chat tab is locked. Enter password to unlock messaging.</p><input type="password" id="chatPasswordInput" class="password-input" placeholder="Password" autocomplete="off"><button id="unlockChatBtn" class="password-btn">🔓 Unlock Chat</button><div id="chatPasswordError" class="password-error"></div></div>`;
+    const input = document.getElementById('chatPasswordInput');
+    const btn = document.getElementById('unlockChatBtn');
+    const errorDiv = document.getElementById('chatPasswordError');
+    const unlock = () => {
+      if (input.value.trim() === CHAT_PASSWORD) {
+        isChatUnlocked = true;
+        setUnlockStatus('chat', true);
+        renderChatUnlocked();
+      } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; input.focus(); }
+    };
+    btn.addEventListener('click', unlock);
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
+    input.focus();
+  }
+
+  function refreshChatPanel() { isChatUnlocked ? renderChatUnlocked() : showChatPasswordPrompt(); }
+
+  function getBotReply(msg) {
+    const lower = msg.toLowerCase();
+    if(lower.includes('cost') || lower.includes('budget')) return "💰 Total project cost: 404,850,157 ETB. Detailed cost breakdown is in Cost tab (password protected).";
+    if(lower.includes('income') || lower.includes('payment')) return "📈 Total contract income: " + fmt(totalIncome) + " ETB. Check Income tab for bill details.";
+    if(lower.includes('schedule') || lower.includes('timeline')) return "📅 Construction follows approved schedule. Contact project manager for exact dates.";
+    if(lower.includes('contact') || lower.includes('support')) return "📞 Project Coordination Office: +251-XX-XXX-XXXX (official inquiries).";
+    return "✅ Hello! I can assist with project income, cost overview, photos, or contacts. What would you like to know?";
+  }
+
+  // ========== TAB SWITCHING with separated summaries ==========
+  function switchTab(tab) {
+    ['income','cost','photos','chat'].forEach(t => {
+      document.getElementById(`panel-${t}`)?.classList.remove('active');
+      document.getElementById(`nav-${t}`)?.classList.remove('active');
+    });
+    document.getElementById(`panel-${tab}`)?.classList.add('active');
+    document.getElementById(`nav-${tab}`)?.classList.add('active');
+
+    if (tab === 'income') {
+      renderIncomeSummary();
+      renderIncomePanel();
+    } else if (tab === 'cost') {
+      renderCostSummary();
+      refreshCostPanel();
+    } else if (tab === 'chat') {
+      refreshChatPanel();
+    }
+  }
+
+  // Initialize statuses from session
+  isCostUnlocked = getUnlockStatus('cost');
+  isChatUnlocked = getUnlockStatus('chat');
+
+  // Preload photos
   const projectPhotos = [
     { url: "index.png", caption: "Main dam overview" },
-    { url: "index2.jpg", caption: "Main dam overview" },
-    { url: "index3.jpg", caption: "Main dam overview" },
-    { url: "index4.jpg", caption: "Main dam overview" },
+    { url: "index2.jpg", caption: "Spillway construction" },
+    { url: "index3.jpg", caption: "Site excavation" },
+    { url: "index4.jpg", caption: "Valve house progress" }
   ];
-
   const photosGrid = document.getElementById('photosGrid');
   if(photosGrid) {
     photosGrid.innerHTML = '';
     projectPhotos.forEach(photo => {
       const card = document.createElement('div'); card.className = 'photo-card';
       card.onclick = () => openLightbox(photo.url);
-      card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='index.png'"><div class="photo-caption">${photo.caption}</div>`;
+      card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='https://placehold.co/400x200?text=No+Image'"><div class="photo-caption">${photo.caption}</div>`;
       photosGrid.appendChild(card);
     });
   }
 
-  function openLightbox(imgUrl) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    if(lightbox && lightboxImg) { lightboxImg.src = imgUrl; lightbox.classList.add('active'); }
-  }
+  function openLightbox(imgUrl) { const lb = document.getElementById('lightbox'), img = document.getElementById('lightboxImg'); if(lb && img) { img.src = imgUrl; lb.classList.add('active'); } }
   function closeLightbox() { document.getElementById('lightbox')?.classList.remove('active'); }
 
-  // Chat functions
-  function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const message = input.value.trim();
-    if(!message) return;
-    const messagesDiv = document.getElementById('chatMessages');
-    const userMsgDiv = document.createElement('div');
-    userMsgDiv.className = 'chat-message chat-message-user';
-    userMsgDiv.textContent = message;
-    messagesDiv.appendChild(userMsgDiv);
-    input.value = '';
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    setTimeout(() => {
-      const botMsgDiv = document.createElement('div');
-      botMsgDiv.className = 'chat-message chat-message-bot';
-      botMsgDiv.textContent = getBotReply(message);
-      messagesDiv.appendChild(botMsgDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }, 500);
-  }
-
-  function getBotReply(msg) {
-    const lowerMsg = msg.toLowerCase();
-    if(lowerMsg.includes('cost') || lowerMsg.includes('budget')) return "💰 Total project cost is 404,850,157 ETB. For detailed breakdown, check the Cost tab (password protected).";
-    if(lowerMsg.includes('income') || lowerMsg.includes('payment')) return "📈 Total contract income is " + fmt(totalIncome) + " ETB. See Income tab for bill details.";
-    if(lowerMsg.includes('schedule') || lowerMsg.includes('timeline')) return "📅 The project follows the approved construction schedule. Contact the project manager for specific dates.";
-    if(lowerMsg.includes('contact') || lowerMsg.includes('support')) return "📞 For official inquiries, please contact the project administration office.";
-    if(lowerMsg.includes('password') || lowerMsg.includes('unlock')) return "🔒 The Cost tab is password protected. Please ask the project administrator for access.";
-    return "✅ Thank you for your message. A project representative will respond shortly. For urgent matters, contact the site.";
-  }
-
-  // Tab switching with cost panel protection
-  function switchTab(tab) {
-    const panels = ['income', 'cost', 'photos', 'chat'];
-    panels.forEach(t => {
-      document.getElementById(`panel-${t}`)?.classList.remove('active');
-      document.getElementById(`nav-${t}`)?.classList.remove('active');
-    });
-    document.getElementById(`panel-${tab}`)?.classList.add('active');
-    document.getElementById(`nav-${tab}`)?.classList.add('active');
-    
-    // If switching to cost tab, refresh the panel (check lock status)
-    if (tab === 'cost') {
-      refreshCostPanel();
-    }
-  }
-
-  // Initialize cost panel on page load (but not auto-unlocked)
-  // We'll set initial state as locked
-  isCostUnlocked = false;
+  // initial active tab (income)
+  renderIncomeSummary();
+  renderIncomePanel();
   
-  // Store unlock state in sessionStorage to persist during session (optional)
-  // Check if previously unlocked in this session
-  try {
-    if (sessionStorage.getItem('chacha_cost_unlocked') === 'true') {
-      isCostUnlocked = true;
-    }
-  } catch(e) { /* ignore */ }
-  
-  // Override unlock to save to sessionStorage
-  const originalRenderCostContent = renderCostContent;
-  renderCostContent = function() {
-    originalRenderCostContent();
-    try {
-      sessionStorage.setItem('chacha_cost_unlocked', 'true');
-    } catch(e) {}
-  };
-  
-  // Initial cost panel setup (starts locked)
-  refreshCostPanel();
-
-  // Telegram WebApp integration
-  if(window.Telegram && Telegram.WebApp) {
-    Telegram.WebApp.expand();
-    Telegram.WebApp.setHeaderColor('bg_color');
-    Telegram.WebApp.setBackgroundColor('bg_color');
-    Telegram.WebApp.ready();
-  }
+  if(window.Telegram && Telegram.WebApp) { Telegram.WebApp.expand(); Telegram.WebApp.ready(); }
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
