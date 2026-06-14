@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>Chacha</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -79,10 +80,8 @@
       right: 0;
       display: flex;
       justify-content: center;
-      background-color: black;
-      border-radius: 555px;   
-      letter-spacing: 0.2px;     
-
+      border-radius: 555px;
+      letter-spacing: 0.2px;
     }
     .stat-label {
       font-size: 12px;
@@ -106,7 +105,7 @@
     /* bottom tab bar */
     .floating-tabs {
       position: fixed;
-      bottom: 10px;
+      bottom: calc(10px + env(safe-area-inset-bottom));
       left: 0;
       right: 0;
       display: flex;
@@ -120,9 +119,9 @@
       border: 0.5px solid var(--border-subtle);
       border-radius: 40px;
       padding: 6px 11px;
+      padding-bottom: calc(6px + env(safe-area-inset-bottom));
       backdrop-filter: blur(24px);
-      background-color: black);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
     .tab-btn {
       padding: 9px 9px;
@@ -499,7 +498,7 @@
 <body>
 <div class="wrap">
   <div class="header">
-    <div class="header-title"></div>
+    <div class="header-title">🏗️ Chacha Dam Project</div>
   </div>
 
   <!-- Separate summary row containers: one for Income tab, one for Cost tab -->
@@ -545,6 +544,18 @@
 </div>
 
 <script>
+  // ========== TELEGRAM WEBAPP INIT ==========
+  if (window.Telegram && Telegram.WebApp) {
+    const tg = Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    try {
+      tg.setHeaderColor(tg.themeParams.secondary_bg_color || '#0e0e10');
+      tg.setBackgroundColor(tg.themeParams.secondary_bg_color || '#0e0e10');
+    } catch(e) {}
+    try { tg.disableVerticalSwipes(); } catch(e) {}
+  }
+
   // ========== PASSWORDS CONFIGURATION ==========
   const COST_PASSWORD = "2025";
   const CHAT_PASSWORD = "2026";      // same password for chat (can be changed)
@@ -694,7 +705,6 @@
     };
     btn.addEventListener('click', unlock);
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
-    input.focus();
   }
 
   function refreshCostPanel() { isCostUnlocked ? renderCostContent() : showCostPasswordPrompt(); }
@@ -737,7 +747,7 @@
   function showChatPasswordPrompt() {
     const wrapper = document.getElementById('chatProtectedWrapper');
     if (!wrapper) return;
-    wrapper.innerHTML = `<div class="password-overlay"><h3>🔒 የውይይት ክፍል ተቆል्फል</h3><p style="margin-bottom: 10px; font-size:14px;">Chat tab is locked. Enter password to unlock messaging.</p><input type="password" id="chatPasswordInput" class="password-input" placeholder="Password" autocomplete="off"><button id="unlockChatBtn" class="password-btn">🔓 Unlock Chat</button><div id="chatPasswordError" class="password-error"></div></div>`;
+    wrapper.innerHTML = `<div class="password-overlay"><h3>🔒 የውይይት ክፍል ተቆልፏል</h3><p style="margin-bottom: 10px; font-size:14px;">Chat tab is locked. Enter password to unlock messaging.</p><input type="password" id="chatPasswordInput" class="password-input" placeholder="Password" autocomplete="off"><button id="unlockChatBtn" class="password-btn">🔓 Unlock Chat</button><div id="chatPasswordError" class="password-error"></div></div>`;
     const input = document.getElementById('chatPasswordInput');
     const btn = document.getElementById('unlockChatBtn');
     const errorDiv = document.getElementById('chatPasswordError');
@@ -750,7 +760,6 @@
     };
     btn.addEventListener('click', unlock);
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
-    input.focus();
   }
 
   function refreshChatPanel() { isChatUnlocked ? renderChatUnlocked() : showChatPasswordPrompt(); }
@@ -766,6 +775,9 @@
 
   // ========== TAB SWITCHING with separated summaries ==========
   function switchTab(tab) {
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+      Telegram.WebApp.HapticFeedback.selectionChanged();
+    }
     ['income','cost','photos','chat'].forEach(t => {
       document.getElementById(`panel-${t}`)?.classList.remove('active');
       document.getElementById(`nav-${t}`)?.classList.remove('active');
@@ -806,14 +818,25 @@
     });
   }
 
-  function openLightbox(imgUrl) { const lb = document.getElementById('lightbox'), img = document.getElementById('lightboxImg'); if(lb && img) { img.src = imgUrl; lb.classList.add('active'); } }
-  function closeLightbox() { document.getElementById('lightbox')?.classList.remove('active'); }
+  function openLightbox(imgUrl) {
+    const lb = document.getElementById('lightbox'), img = document.getElementById('lightboxImg');
+    if(lb && img) {
+      img.src = imgUrl; lb.classList.add('active');
+      if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.BackButton.show();
+        Telegram.WebApp.BackButton.onClick(closeLightbox);
+      }
+    }
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox')?.classList.remove('active');
+    if (window.Telegram && Telegram.WebApp) Telegram.WebApp.BackButton.hide();
+  }
 
   // initial active tab (income)
   renderIncomeSummary();
   renderIncomePanel();
-  
-  if(window.Telegram && Telegram.WebApp) { Telegram.WebApp.expand(); Telegram.WebApp.ready(); }
+
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
