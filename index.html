@@ -392,10 +392,29 @@
       z-index: 1100;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
+      overflow: hidden;
+      touch-action: none;
     }
     .lightbox.active { display: flex; }
-    .lightbox img { max-width: 90%; max-height: 85%; border-radius: 24px; }
+    .lightbox-img-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 85%;
+      border-radius: 24px;
+      transform-origin: center center;
+      transition: transform 0.15s ease-out;
+      will-change: transform;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .lightbox img.dragging { transition: none; }
     .lightbox-close {
       position: absolute;
       top: 28px;
@@ -410,6 +429,52 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      z-index: 1101;
+    }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      font-size: 28px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1101;
+      user-select: none;
+    }
+    .lightbox-nav.prev { left: 14px; }
+    .lightbox-nav.next { right: 14px; }
+    .lightbox-counter {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 13px;
+      background: rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      z-index: 1101;
+    }
+    .lightbox-caption {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 12px;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 14px;
+      border-radius: 20px;
+      max-width: 80%;
+      text-align: center;
+      z-index: 1101;
     }
 
     /* Chat Panel (protected style) */
@@ -497,9 +562,6 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
-    <div class="header-title">🏗️ Chacha Dam Project</div>
-  </div>
 
   <!-- Separate summary row containers: one for Income tab, one for Cost tab -->
   <div id="incomeSummary" class="summary-row" style="display: none;"></div>
@@ -538,9 +600,15 @@
   </div>
 </div>
 
-<div id="lightbox" class="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close" onclick="closeLightbox()"> </span>
-  <img id="lightboxImg" src="" alt="">
+<div id="lightbox" class="lightbox">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <span class="lightbox-nav prev" id="lightboxPrev" onclick="navLightbox(-1)">‹</span>
+  <span class="lightbox-nav next" id="lightboxNext" onclick="navLightbox(1)">›</span>
+  <div class="lightbox-img-wrap" id="lightboxImgWrap">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
 </div>
 
 <script>
@@ -647,7 +715,8 @@
   }
   function renderCostSummary() {
     const target = document.getElementById('costSummaryTarget');
-    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label"> Total Cost (ETB)</div><div class="stat-val red">${fmt(totalCostValue)} ETB</div></div>`;
+    if(!target) return;
+    target.innerHTML = isCostUnlocked ? `<div class="stat-card"><div class="stat-label"> Total Cost (ETB)</div><div class="stat-val red">${fmt(totalCostValue)} ETB</div></div>` : '';
   }
 
   // Render Income bills
@@ -700,6 +769,7 @@
       if (input.value.trim() === COST_PASSWORD) {
         isCostUnlocked = true;
         setUnlockStatus('cost', true);
+        renderCostSummary();
         renderCostContent();
       } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; input.focus(); }
     };
@@ -810,18 +880,50 @@
   const photosGrid = document.getElementById('photosGrid');
   if(photosGrid) {
     photosGrid.innerHTML = '';
-    projectPhotos.forEach(photo => {
+    projectPhotos.forEach((photo, idx) => {
       const card = document.createElement('div'); card.className = 'photo-card';
-      card.onclick = () => openLightbox(photo.url);
+      card.onclick = () => openLightbox(idx);
       card.innerHTML = `<img src="${photo.url}" alt="${photo.caption}" loading="lazy" onerror="this.src='https://placehold.co/400x200?text=No+Image'"><div class="photo-caption">${photo.caption}</div>`;
       photosGrid.appendChild(card);
     });
   }
 
-  function openLightbox(imgUrl) {
-    const lb = document.getElementById('lightbox'), img = document.getElementById('lightboxImg');
-    if(lb && img) {
-      img.src = imgUrl; lb.classList.add('active');
+  // ========== LIGHTBOX: zoom, pan, swipe ==========
+  let lbIndex = 0;
+  let lbScale = 1, lbTx = 0, lbTy = 0;
+  let lbStartDist = 0, lbStartScale = 1;
+  let lbDragging = false, lbStartX = 0, lbStartY = 0, lbStartTx = 0, lbStartTy = 0;
+  let lbSwipeStartX = 0, lbSwipeStartY = 0, lbIsSwipe = false;
+  let lbLastTap = 0;
+
+  function applyLbTransform() {
+    const img = document.getElementById('lightboxImg');
+    if (img) img.style.transform = `translate(${lbTx}px, ${lbTy}px) scale(${lbScale})`;
+  }
+  function resetLbTransform() { lbScale = 1; lbTx = 0; lbTy = 0; applyLbTransform(); }
+
+  function updateLightboxUI() {
+    const img = document.getElementById('lightboxImg');
+    const caption = document.getElementById('lightboxCaption');
+    const counter = document.getElementById('lightboxCounter');
+    const photo = projectPhotos[lbIndex];
+    if (img) img.src = photo.url;
+    if (caption) caption.textContent = photo.caption || '';
+    if (counter) counter.textContent = `${lbIndex + 1} / ${projectPhotos.length}`;
+    resetLbTransform();
+  }
+
+  function navLightbox(dir) {
+    lbIndex = (lbIndex + dir + projectPhotos.length) % projectPhotos.length;
+    updateLightboxUI();
+  }
+
+  function openLightbox(idx) {
+    lbIndex = idx;
+    const lb = document.getElementById('lightbox');
+    if(lb) {
+      updateLightboxUI();
+      lb.classList.add('active');
       if (window.Telegram && Telegram.WebApp) {
         Telegram.WebApp.BackButton.show();
         Telegram.WebApp.BackButton.onClick(closeLightbox);
@@ -830,14 +932,110 @@
   }
   function closeLightbox() {
     document.getElementById('lightbox')?.classList.remove('active');
+    resetLbTransform();
     if (window.Telegram && Telegram.WebApp) Telegram.WebApp.BackButton.hide();
   }
+
+  // Touch interactions: pinch zoom, double-tap zoom, pan, swipe to navigate
+  (function setupLightboxTouch() {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImg');
+    if (!lb || !img) return;
+
+    function dist(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+
+    lb.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        lbStartDist = dist(e.touches);
+        lbStartScale = lbScale;
+        lbIsSwipe = false;
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
+        if (now - lbLastTap < 300) {
+          // double-tap: toggle zoom
+          if (lbScale > 1) { resetLbTransform(); }
+          else { lbScale = 2; applyLbTransform(); }
+          lbLastTap = 0;
+          return;
+        }
+        lbLastTap = now;
+
+        if (lbScale > 1) {
+          lbDragging = true;
+          lbStartX = e.touches[0].clientX;
+          lbStartY = e.touches[0].clientY;
+          lbStartTx = lbTx;
+          lbStartTy = lbTy;
+          img.classList.add('dragging');
+        } else {
+          lbSwipeStartX = e.touches[0].clientX;
+          lbSwipeStartY = e.touches[0].clientY;
+          lbIsSwipe = true;
+          img.classList.add('dragging');
+        }
+      }
+    }, { passive: true });
+
+    lb.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        const newDist = dist(e.touches);
+        if (lbStartDist > 0) {
+          lbScale = Math.min(Math.max(lbStartScale * (newDist / lbStartDist), 1), 4);
+          applyLbTransform();
+        }
+      } else if (e.touches.length === 1) {
+        if (lbDragging && lbScale > 1) {
+          const dx = e.touches[0].clientX - lbStartX;
+          const dy = e.touches[0].clientY - lbStartY;
+          lbTx = lbStartTx + dx;
+          lbTy = lbStartTy + dy;
+          applyLbTransform();
+        } else if (lbIsSwipe) {
+          const dx = e.touches[0].clientX - lbSwipeStartX;
+          const dy = e.touches[0].clientY - lbSwipeStartY;
+          if (Math.abs(dx) > Math.abs(dy)) {
+            lbTx = dx;
+            applyLbTransform();
+          }
+        }
+      }
+    }, { passive: true });
+
+    lb.addEventListener('touchend', (e) => {
+      img.classList.remove('dragging');
+      if (lbScale <= 1 && lbIsSwipe) {
+        const dx = lbTx;
+        if (dx > 60) { navLightbox(-1); }
+        else if (dx < -60) { navLightbox(1); }
+        else { lbTx = 0; applyLbTransform(); }
+      }
+      if (lbScale <= 1) { lbTx = 0; lbTy = 0; if(!lbIsSwipe) applyLbTransform(); }
+      lbDragging = false;
+      lbIsSwipe = false;
+      lbStartDist = 0;
+    });
+
+    // Tap on background (not image) closes; tap on image with scale 1 does nothing special
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb) closeLightbox();
+    });
+  })();
 
   // initial active tab (income)
   renderIncomeSummary();
   renderIncomePanel();
 
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeLightbox();
+    if(document.getElementById('lightbox')?.classList.contains('active')) {
+      if(e.key === 'ArrowLeft') navLightbox(-1);
+      if(e.key === 'ArrowRight') navLightbox(1);
+    }
+  });
 </script>
 </body>
 </html>
