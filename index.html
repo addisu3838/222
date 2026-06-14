@@ -102,6 +102,89 @@
     .stat-val.green { color: #35c759; }
     .stat-val.red { color: #ff5e5e; }
 
+    /* Income hero card */
+    .income-hero {
+      position: relative;
+      margin: 8px 8px 4px;
+      padding: 22px 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #1f9d55 0%, #16a34a 45%, #0d8a47 100%);
+      color: #ffffff;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.28);
+    }
+    .income-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 50%;
+    }
+    .income-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -50px;
+      right: 30px;
+      width: 110px;
+      height: 110px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .income-hero-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .income-hero-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+    .income-hero-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+    .income-hero-amount {
+      position: relative;
+      z-index: 1;
+      margin-top: 14px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .income-hero-amount .currency {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.75);
+    }
+    .income-hero-sub {
+      position: relative;
+      z-index: 1;
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
     /* bottom tab bar */
     .floating-tabs {
       position: fixed;
@@ -711,7 +794,16 @@
   // Helper: render summary cards for Income & Cost tabs only
   function renderIncomeSummary() {
     const target = document.getElementById('incomeSummaryTarget');
-    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label"> Total Income (ETB) </div><div class="stat-val green">${fmt(totalIncome)} ETB</div></div>`;
+    if(!target) return;
+    const parts = fmt(totalIncome).split('.');
+    target.innerHTML = `<div class="income-hero">
+      <div class="income-hero-top">
+        <div class="income-hero-icon">💰</div>
+        <div class="income-hero-label">Total Income</div>
+      </div>
+      <div class="income-hero-amount">${parts[0]}<span class="currency">.${parts[1]} ETB</span></div>
+      <div class="income-hero-sub">📄 ${bills.length} Bills · Chacha Dam Project</div>
+    </div>`;
   }
   function renderCostSummary() {
     const target = document.getElementById('costSummaryTarget');
