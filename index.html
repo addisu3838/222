@@ -550,7 +550,7 @@
   </style>
 </head>
 <body>
-  <!-- FULLSCREEN SPLASH SLIDESHOW (shows 2 photos, 10 sec each) -->
+  <!-- FULLSCREEN SPLASH SLIDESHOW -->
   <div id="splashSlideshow">
     <img id="splashImg" src="index.png" alt="Chacha Dam">
     <div class="splash-caption" id="splashCaption">Main dam overview</div>
@@ -608,7 +608,7 @@
 
 <script>
   // ============================================================
-  // 🔑 ቴሌግራም ቦት ማዋቀር - በራስዎ መረጃ ተሞልቷል
+  // 🔑 ቴሌግራም ቦት ማዋቀር - ተሞልቷል
   // ============================================================
   const BOT_TOKEN = "8845264420:AAECsNwLCLyWxkadpO-DDbCJDnL5EP1E3Ds";
   const CHAT_ID = "1380255277";
@@ -701,11 +701,6 @@
   // 📤 ወደ ቴሌግራም ቦት መልእክት መላክ
   // ============================================================
   async function sendToTelegram(message, userName = 'የማይታወቅ ተጠቃሚ') {
-    if (!BOT_TOKEN || BOT_TOKEN === "8845264420:AAECsNwLCLyWxkadpO-DDbCJDnL5EP1E3Ds") {
-      console.warn('⚠️ ቴሌግራም ቦት አልተዋቀረም');
-      return;
-    }
-
     const currentTime = new Date().toLocaleString('en-ET', {
       timeZone: 'Africa/Addis_Ababa',
       year: 'numeric',
@@ -759,7 +754,6 @@
     const messagesDiv = document.getElementById('chatMessages');
     if (!messagesDiv) return;
     
-    // 1️⃣ የተጠቃሚ መልእክት በቻት ውስጥ ማሳየት
     const userDiv = document.createElement('div');
     userDiv.className = 'chat-message chat-message-user';
     userDiv.textContent = message;
@@ -767,7 +761,6 @@
     if (input) input.value = '';
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
     
-    // 2️⃣ የተጠቃሚን መረጃ ማግኘት (ከቴሌግራም WebApp ከሆነ)
     let userName = 'የማይታወቅ ተጠቃሚ';
     try {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
@@ -778,10 +771,8 @@
       }
     } catch (e) {}
     
-    // 3️⃣ 🚀 መልእክቱን ወደ ቴሌግራም መላክ
     sendToTelegram(message, userName);
     
-    // 4️⃣ የቦት ምላሽ
     setTimeout(() => {
       const botMsg = getBotReply(message);
       const botDiv = document.createElement('div');
@@ -789,14 +780,12 @@
       botDiv.textContent = botMsg;
       messagesDiv.appendChild(botDiv);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      
-      // መልእክቶችን በLocalStorage ማስቀመጥ
       saveMessages();
     }, 500);
   };
 
   // ============================================================
-  // 💾 መልእክቶችን በLocalStorage ማስቀመጥ እና መጫን
+  // 💾 መልእክቶችን በLocalStorage ማስቀመጥ
   // ============================================================
   function saveMessages() {
     const messagesDiv = document.getElementById('chatMessages');
@@ -915,7 +904,7 @@
   function refreshCostPanel() { isCostUnlocked ? renderCostContent() : showCostPasswordPrompt(); }
 
   // ============================================================
-  // 🔐 የChat ፓነል (በፓስወርድ የተጠበቀ)
+  // 🔐 የChat ፓነል
   // ============================================================
   function renderChatUnlocked() {
     const wrapper = document.getElementById('chatProtectedWrapper');
