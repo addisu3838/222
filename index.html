@@ -3,47 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Chacha Dam · Income, Cost, Photos & Chat</title>
+  <title>Chacha</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     :root {
-      --tg-bg: var(--tg-theme-bg-color, #ffffff);
-      --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #f4f5f7);
-      --tg-section-bg: var(--tg-theme-section-bg-color, #f0f2f5);
-      --tg-text: var(--tg-theme-text-color, #1f2a3a);
-      --tg-hint: var(--tg-theme-hint-color, #8e9db2);
-      --tg-link: var(--tg-theme-link-color, #2AABEE);
-      --tg-button: var(--tg-theme-button-color, #2AABEE);
-      --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
-      --border-subtle: rgba(0, 0, 0, 0.08);
-      --border-radius-lg: 16px;
-      --border-radius-md: 12px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --tg-bg: #1c1c1e;
-        --tg-secondary-bg: #2c2c2e;
-        --tg-section-bg: #0e0e10;
-        --tg-text: #ffffff;
-        --tg-hint: #8e8e93;
-        --border-subtle: rgba(255, 255, 255, 0.1);
-      }
+      /* Premium dark luxury palette */
+      --tg-bg: #14161c;
+      --tg-secondary-bg: #1c1f28;
+      --tg-section-bg: #0c0d11;
+      --tg-card-bg: #1a1d26;
+      --tg-text: #f0eee8;
+      --tg-hint: #8b8a94;
+      --tg-link: #c9a35e;
+      --tg-button: #c9a35e;
+      --tg-button-text: #14161c;
+      --gold: #c9a35e;
+      --gold-soft: rgba(201, 163, 94, 0.14);
+      --gold-border: rgba(201, 163, 94, 0.28);
+      --emerald: #4ecb87;
+      --rose: #e0697a;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-radius-lg: 20px;
+      --border-radius-md: 14px;
+      --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
     }
 
     body {
-      background: var(--tg-section-bg);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(201,163,94,0.06), transparent 45%),
+        radial-gradient(circle at 85% 100%, rgba(201,163,94,0.04), transparent 50%),
+        var(--tg-section-bg);
       color: var(--tg-text);
       line-height: 1.2;
-      padding-bottom: 88px;
+      padding-bottom: 96px;
       margin: 0;
+      min-height: 100vh;
     }
 
     .wrap {
@@ -53,95 +54,110 @@
       min-height: 100vh;
     }
 
-    .header {
-      padding: 12px 16px 4px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      color: var(--tg-text);
-    }
-
+    /* ===== Summary Card ===== */
     .summary-row {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 8px;
-      padding: 12px 16px 8px;
+      gap: 10px;
+      padding: 18px 16px 10px;
     }
     .stat-card {
-      background: var(--tg-bg);
+      background: linear-gradient(155deg, #1f2330 0%, #15171f 100%);
       border-radius: var(--border-radius-lg);
-      padding: 12px 16px;
-      border: 0.5px solid var(--border-subtle);
+      padding: 22px 20px;
+      border: 1px solid var(--gold-border);
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.5;
     }
     .stat-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--tg-hint);
-      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 6px;
     }
     .stat-val {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      font-variant-numeric: tabular-nums;
     }
-    .stat-val.green { color: #35c759; }
-    .stat-val.red { color: #ff5e5e; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
 
+    /* ===== Floating Tabs ===== */
     .floating-tabs {
       position: fixed;
-      bottom: 12px;
+      bottom: 14px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
       z-index: 1000;
+      padding: 0 12px;
     }
     .tabs-inner {
       display: flex;
-      gap: 6px;
-      background: var(--tg-bg);
-      border: 0.5px solid var(--border-subtle);
+      gap: 3px;
+      align-items: center;
+      background: rgba(20, 22, 28, 0.85);
+      border: 1px solid var(--gold-border);
       border-radius: 40px;
-      padding: 6px 8px;
-      backdrop-filter: blur(24px);
-      background-color: rgba(var(--tg-bg-rgb, 255,255,255), 0.92);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 6px;
+      backdrop-filter: blur(28px) saturate(160%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      max-width: 100%;
+      overflow-x: auto;
     }
     .tab-btn {
-      padding: 8px 18px;
+      padding: 9px 13px;
       border-radius: 32px;
-      font-size: 14px;
-      font-weight: 590;
+      font-size: 12.5px;
+      font-weight: 600;
       border: none;
       background: transparent;
       color: var(--tg-hint);
       cursor: pointer;
-      transition: all 0.18s;
-      letter-spacing: -0.2px;
+      transition: all 0.22s cubic-bezier(.4,0,.2,1);
+      letter-spacing: -0.1px;
+      white-space: nowrap;
     }
     .tab-btn.active {
-      background: var(--tg-button);
+      background: linear-gradient(135deg, var(--gold), #b6904f);
       color: var(--tg-button-text);
+      box-shadow: 0 2px 10px rgba(201,163,94,0.35);
     }
 
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
 
+    /* ===== Bill Cards (Income) ===== */
     .bill-card {
-      background: var(--tg-bg);
+      background: var(--tg-card-bg);
       border-radius: var(--border-radius-lg);
-      border: 0.5px solid var(--border-subtle);
-      margin-bottom: 10px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 12px;
       overflow: hidden;
+      transition: border-color 0.2s;
     }
     .bill-header {
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -150,96 +166,99 @@
     .bill-header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .bill-icon {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
-      background: rgba(42, 171, 238, 0.12);
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
     }
     .bill-name {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
+      letter-spacing: -0.1px;
     }
     .bill-total {
       font-size: 13px;
-      color: #35c759;
-      font-weight: 500;
-      margin-top: 2px;
+      color: var(--emerald);
+      font-weight: 600;
+      margin-top: 3px;
+      font-variant-numeric: tabular-nums;
     }
     .bill-chevron {
-      font-size: 18px;
-      color: var(--tg-hint);
-      transition: transform 0.2s;
+      font-size: 16px;
+      color: var(--gold);
+      transition: transform 0.25s;
     }
     .bill-chevron.open { transform: rotate(180deg); }
     .bill-items {
-      border-top: 0.5px solid var(--border-subtle);
+      border-top: 1px solid var(--border-subtle);
       display: none;
       background: var(--tg-secondary-bg);
     }
     .bill-items.open { display: block; }
     .item-row {
-      padding: 12px 16px;
-      border-bottom: 0.5px solid var(--border-subtle);
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: flex-start;
       gap: 12px;
     }
     .item-row:last-child { border-bottom: none; }
     .item-pill {
-      background: var(--tg-section-bg);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 9px;
       border-radius: 20px;
-      color: var(--tg-hint);
+      color: var(--gold);
       flex-shrink: 0;
-      font-family: monospace;
+      font-family: 'SF Mono', monospace;
     }
     .item-desc {
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.45;
       flex: 1;
+      color: #d8d6ce;
     }
     .item-right {
       text-align: right;
       flex-shrink: 0;
-      min-width: 85px;
-    }
-    .item-ach {
-      font-size: 11px;
-      color: var(--tg-hint);
+      min-width: 90px;
     }
     .item-inc {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
-      color: #35c759;
+      color: var(--emerald);
+      font-variant-numeric: tabular-nums;
     }
 
-    .cost-wrap { padding: 8px 16px 24px; }
+    /* ===== Cost Tab ===== */
+    .cost-wrap { padding: 10px 16px 24px; }
     .sec-title {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-      color: var(--tg-hint);
-      margin: 8px 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      color: var(--gold);
+      margin: 10px 4px 14px;
       text-transform: uppercase;
     }
     .clickable-card {
-      background: var(--tg-bg);
+      background: var(--tg-card-bg);
       border-radius: var(--border-radius-lg);
-      border: 0.5px solid var(--border-subtle);
+      border: 1px solid var(--border-subtle);
       overflow: hidden;
       margin-bottom: 12px;
     }
     .card-header {
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -251,26 +270,27 @@
       gap: 14px;
     }
     .card-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(42, 171, 238, 0.12);
+      width: 46px;
+      height: 46px;
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
       border-radius: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 21px;
     }
-    .card-text h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
-    .card-text p { font-size: 13px; color: #35c759; font-weight: 500; }
+    .card-text h3 { font-size: 14.5px; font-weight: 600; margin-bottom: 3px; letter-spacing: -0.1px; }
+    .card-text p { font-size: 13px; color: var(--emerald); font-weight: 600; font-variant-numeric: tabular-nums; }
     .card-chevron {
-      font-size: 20px;
-      color: var(--tg-hint);
-      transition: transform 0.2s;
+      font-size: 17px;
+      color: var(--gold);
+      transition: transform 0.25s;
     }
     .card-chevron.open { transform: rotate(180deg); }
     .breakdown-list {
       display: none;
-      border-top: 0.5px solid var(--border-subtle);
+      border-top: 1px solid var(--border-subtle);
       background: var(--tg-secondary-bg);
       max-height: 320px;
       overflow-y: auto;
@@ -279,101 +299,113 @@
     .breakdown-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 0.5px solid var(--border-subtle);
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-subtle);
       font-size: 13px;
     }
     .item-name { color: var(--tg-hint); flex: 1; }
-    .item-amount { font-weight: 600; color: #35c759; white-space: nowrap; }
+    .item-amount { font-weight: 600; color: var(--emerald); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
     .password-overlay {
-      background: var(--tg-bg);
+      background: linear-gradient(155deg, #1f2330 0%, #15171f 100%);
       border-radius: var(--border-radius-lg);
-      padding: 32px 20px;
+      padding: 38px 24px;
       text-align: center;
       margin: 16px;
-      border: 0.5px solid var(--border-subtle);
+      border: 1px solid var(--gold-border);
+      box-shadow: var(--shadow-soft);
     }
     .password-overlay h3 {
       margin-bottom: 8px;
       font-size: 19px;
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--gold);
     }
+    .password-overlay p { color: var(--tg-hint); }
     .password-input {
       width: 100%;
       padding: 14px 18px;
       border-radius: 40px;
-      border: 0.5px solid var(--border-subtle);
+      border: 1px solid var(--gold-border);
       background: var(--tg-secondary-bg);
       color: var(--tg-text);
       font-size: 16px;
       text-align: center;
-      margin: 18px 0 12px;
+      margin: 20px 0 14px;
       outline: none;
     }
-    .password-input:focus { border-color: var(--tg-link); }
+    .password-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft); }
     .password-btn {
-      background: var(--tg-button);
+      background: linear-gradient(135deg, var(--gold), #b6904f);
       color: var(--tg-button-text);
       border: none;
-      padding: 12px 24px;
+      padding: 13px 24px;
       border-radius: 40px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       width: 100%;
+      font-size: 14.5px;
+      box-shadow: 0 4px 14px rgba(201,163,94,0.3);
     }
     .password-error {
-      color: #ff5e5e;
+      color: var(--rose);
       font-size: 12px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
+    /* ===== Photos ===== */
     .photos-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 14px;
       padding: 20px;
     }
     .photo-card {
-      background: var(--tg-bg);
+      background: var(--tg-card-bg);
       border-radius: 18px;
-      border: 0.5px solid var(--border-subtle);
+      border: 1px solid var(--border-subtle);
       overflow: hidden;
       cursor: pointer;
-      transition: 0.1s;
+      transition: transform 0.15s, border-color 0.15s;
+      box-shadow: var(--shadow-soft);
     }
+    .photo-card:active { transform: scale(0.97); }
     .photo-card img {
       width: 100%;
       height: 150px;
       object-fit: cover;
       display: block;
-      background: #2c2c2e;
+      background: #1a1d26;
     }
     .photo-caption {
-      padding: 8px 6px;
+      padding: 10px 8px;
       font-size: 11px;
       color: var(--tg-hint);
       text-align: center;
-      border-top: 0.5px solid var(--border-subtle);
+      border-top: 1px solid var(--border-subtle);
+      font-weight: 500;
     }
     .photos-section-title {
-      font-size: 15px;
-      font-weight: 600;
-      padding: 18px 20px 0;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 20px 20px 0;
+      color: var(--gold);
+      letter-spacing: -0.1px;
     }
     .photos-subtitle {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--tg-hint);
       padding: 4px 20px;
     }
     .slideshow-overlay {
       position: relative;
-      background: var(--tg-bg);
+      background: var(--tg-card-bg);
       border-radius: var(--border-radius-lg);
-      margin: 12px 16px 8px;
+      margin: 14px 16px 8px;
       overflow: hidden;
-      border: 0.5px solid var(--border-subtle);
-      height: 200px;
+      border: 1px solid var(--gold-border);
+      height: 210px;
+      box-shadow: var(--shadow-soft);
     }
     .slideshow-overlay img {
       width: 100%;
@@ -387,12 +419,12 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(0,0,0,0.5);
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
       color: white;
-      padding: 8px 12px;
+      padding: 18px 14px 12px;
       font-size: 13px;
+      font-weight: 500;
       text-align: center;
-      backdrop-filter: blur(4px);
     }
 
     .lightbox {
@@ -402,23 +434,24 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.92);
+      background: rgba(8,9,12,0.95);
       z-index: 1100;
       justify-content: center;
       align-items: center;
       cursor: pointer;
     }
     .lightbox.active { display: flex; }
-    .lightbox img { max-width: 90%; max-height: 85%; border-radius: 24px; }
+    .lightbox img { max-width: 90%; max-height: 85%; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
     .lightbox-close {
       position: absolute;
       top: 28px;
       right: 24px;
-      color: white;
-      font-size: 32px;
+      color: var(--gold);
+      font-size: 28px;
       width: 44px;
       height: 44px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--gold-border);
       border-radius: 40px;
       display: flex;
       align-items: center;
@@ -426,6 +459,7 @@
       cursor: pointer;
     }
 
+    /* ===== Chat ===== */
     .chat-container {
       display: flex;
       flex-direction: column;
@@ -444,32 +478,44 @@
     }
     .chat-message {
       max-width: 80%;
-      padding: 10px 14px;
+      padding: 11px 15px;
       border-radius: 20px;
       font-size: 14px;
-      line-height: 1.4;
+      line-height: 1.45;
       word-break: break-word;
     }
     .chat-message-user {
       align-self: flex-end;
-      background: var(--tg-button);
+      background: linear-gradient(135deg, var(--gold), #b6904f);
       color: var(--tg-button-text);
       border-bottom-right-radius: 4px;
+      font-weight: 500;
     }
     .chat-message-bot {
       align-self: flex-start;
-      background: var(--tg-bg);
+      background: var(--tg-card-bg);
       color: var(--tg-text);
       border-bottom-left-radius: 4px;
-      border: 0.3px solid var(--border-subtle);
+      border: 1px solid var(--border-subtle);
+    }
+    .chat-message-system {
+      align-self: center;
+      background: var(--tg-secondary-bg);
+      color: var(--tg-hint);
+      font-size: 11.5px;
+      padding: 7px 14px;
+      border-radius: 20px;
+      max-width: 90%;
+      text-align: center;
+      border: 1px solid var(--border-subtle);
     }
     .chat-input-area {
       display: flex;
       gap: 10px;
-      background: var(--tg-bg);
-      padding: 8px 12px;
+      background: var(--tg-card-bg);
+      padding: 8px 8px 8px 18px;
       border-radius: 34px;
-      border: 0.5px solid var(--border-subtle);
+      border: 1px solid var(--gold-border);
     }
     .chat-input {
       flex: 1;
@@ -480,24 +526,27 @@
       outline: none;
       color: var(--tg-text);
     }
+    .chat-input::placeholder { color: var(--tg-hint); }
     .chat-send-btn {
-      background: var(--tg-button);
+      background: linear-gradient(135deg, var(--gold), #b6904f);
       border: none;
-      padding: 8px 22px;
+      padding: 9px 22px;
       border-radius: 32px;
       color: var(--tg-button-text);
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      font-size: 13.5px;
     }
     .chat-note {
       font-size: 10px;
       color: var(--tg-hint);
       text-align: center;
-      margin-top: 8px;
+      margin-top: 10px;
+      letter-spacing: 0.2px;
     }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
 
-    /* Fullscreen splash slideshow */
+    /* ===== Splash ===== */
     #splashSlideshow {
       position: fixed;
       top: 0;
@@ -505,7 +554,7 @@
       width: 100%;
       height: 100%;
       z-index: 9999;
-      background: #000;
+      background: #0c0d11;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -520,33 +569,132 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: brightness(0.85);
     }
     #splashSlideshow .splash-caption {
       position: absolute;
-      bottom: 40px;
+      bottom: 48px;
       left: 0;
       right: 0;
-      color: white;
+      color: var(--gold);
       text-align: center;
       font-size: 18px;
-      font-weight: 500;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
-      padding: 12px;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+      padding: 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
     }
     #splashSlideshow .splash-timer {
       position: absolute;
-      top: 30px;
-      right: 30px;
-      color: rgba(255,255,255,0.7);
-      font-size: 16px;
-      background: rgba(0,0,0,0.4);
-      padding: 6px 14px;
+      top: 32px;
+      right: 28px;
+      color: var(--gold);
+      font-size: 15px;
+      background: rgba(12,13,17,0.6);
+      border: 1px solid var(--gold-border);
+      padding: 6px 16px;
       border-radius: 20px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
+      font-weight: 600;
+    }
+
+    /* ===== Percent Tab ===== */
+    .percent-container {
+      padding: 16px 20px;
+    }
+    .percent-card {
+      background: var(--tg-card-bg);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+    .percent-card h3 {
+      font-size: 15.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.1px;
+    }
+    .percent-card .value {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--emerald);
+      display: block;
+      margin: 8px 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+    }
+    .percent-card .sub {
+      font-size: 12.5px;
+      color: var(--tg-hint);
+      margin-top: 4px;
+    }
+    .percent-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--tg-secondary-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+    .percent-bar-fill {
+      height: 100%;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--emerald), var(--gold));
+      transition: width 0.8s ease;
+    }
+    .percent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .percent-mini {
+      background: var(--tg-card-bg);
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .percent-mini .num {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--tg-text);
+      font-variant-numeric: tabular-nums;
+    }
+    .percent-mini .label {
+      font-size: 11px;
+      color: var(--tg-hint);
+      margin-top: 5px;
       font-weight: 500;
     }
+    .percent-mini .num.green { color: var(--emerald); }
+    .percent-mini .num.red { color: var(--rose); }
+    .percent-mini .num.blue { color: #6fb3e0; }
+    .percent-mini .num.orange { color: var(--gold); }
+
+    .percent-title {
+      font-size: 21px;
+      font-weight: 800;
+      text-align: center;
+      padding: 22px 16px 8px;
+      color: var(--gold);
+      letter-spacing: -0.2px;
+    }
+    .percent-subtitle {
+      font-size: 12.5px;
+      color: var(--tg-hint);
+      text-align: center;
+      padding: 0 16px 18px;
+    }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--gold-border); border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -554,27 +702,136 @@
   <div id="splashSlideshow">
     <img id="splashImg" src="index.png" alt="Chacha Dam">
     <div class="splash-caption" id="splashCaption">Main dam overview</div>
-    <div class="splash-timer" id="splashTimer">10s</div>
+    <div class="splash-timer" id="splashTimer">2s</div>
   </div>
 
 <div class="wrap">
-  <div class="header">
-    <div class="header-title">🌊 Chacha Dam Project</div>
+  <!-- Summary Row: Only Total Income -->
+  <div id="summaryRow" class="summary-row">
+    <div class="stat-card" id="incomeSummaryCard">
+      <div class="stat-label">📈 ጠቅላላ ገቢ</div>
+      <div class="stat-val green" id="totalIncomeDisplay">0 ETB</div>
+    </div>
   </div>
 
-  <div id="incomeSummary" class="summary-row" style="display: none;"></div>
-  <div id="costSummary" class="summary-row" style="display: none;"></div>
-
   <div id="panel-income" class="tab-panel active">
-    <div id="incomeSummaryTarget"></div>
     <div style="padding: 6px 16px 12px;">
       <div id="billsContainer"></div>
     </div>
   </div>
 
   <div id="panel-cost" class="tab-panel">
-    <div id="costSummaryTarget"></div>
     <div id="costContentWrapper"></div>
+  </div>
+
+  <!-- Percent Tab -->
+  <div id="panel-percent" class="tab-panel">
+    <div class="percent-title">📊 የፕሮጀክት መቶኛ መረጃ</div>
+    <div class="percent-subtitle">% የተለያዩ የፕሮጀክት ክፍሎች መቶኛ</div>
+    <div class="percent-container">
+
+      <div class="percent-card">
+        <h3>📈 አጠቃላይ የግንባታ መቶኛ</h3>
+        <span class="value">72.8%</span>
+        <div class="sub">ከጠቅላላው የፕሮጀክት ስራ የተጠናቀቀ</div>
+        <div class="percent-bar">
+          <div class="percent-bar-fill" style="width: 72.8%;"></div>
+        </div>
+      </div>
+
+      <div class="percent-grid">
+        <div class="percent-mini">
+          <div class="num green">85%</div>
+          <div class="label">✅ የግድብ ግንባታ</div>
+        </div>
+        <div class="percent-mini">
+          <div class="num blue">60%</div>
+          <div class="label">🏗️ የቫልቭ ቤት</div>
+        </div>
+        <div class="percent-mini">
+          <div class="num orange">45%</div>
+          <div class="label">🛣️ የመዳረሻ መንገድ</div>
+        </div>
+        <div class="percent-mini">
+          <div class="num red">30%</div>
+          <div class="label">🌊 የውሃ ማፍሰሻ</div>
+        </div>
+      </div>
+
+      <div class="percent-card">
+        <h3>💰 የገቢ እና ወጪ መቶኛ</h3>
+        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">ገቢ</div>
+            <div style="font-size: 22px; font-weight: 700; color: var(--emerald);">100%</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">ወጪ</div>
+            <div style="font-size: 22px; font-weight: 700; color: var(--rose);">85.6%</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">ትርፍ</div>
+            <div style="font-size: 22px; font-weight: 700; color: var(--gold);">14.4%</div>
+          </div>
+        </div>
+        <div class="sub">ከጠቅላላው ገቢ አንጻር ያለው ወጪ እና ትርፍ</div>
+      </div>
+
+      <div class="percent-card">
+        <h3>📋 የተለያዩ የወጪ ክፍሎች መቶኛ</h3>
+        <div style="margin: 8px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+            <span>🔧 ማሽነሪ</span>
+            <span style="font-weight: 600;">38.2%</span>
+          </div>
+          <div class="percent-bar"><div class="percent-bar-fill" style="width: 38.2%; background: var(--gold);"></div></div>
+        </div>
+        <div style="margin: 8px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+            <span>🧱 ቁሳቁስ</span>
+            <span style="font-weight: 600;">32.5%</span>
+          </div>
+          <div class="percent-bar"><div class="percent-bar-fill" style="width: 32.5%; background: #6fb3e0;"></div></div>
+        </div>
+        <div style="margin: 8px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+            <span>👷 ሰራተኛ</span>
+            <span style="font-weight: 600;">18.7%</span>
+          </div>
+          <div class="percent-bar"><div class="percent-bar-fill" style="width: 18.7%; background: var(--emerald);"></div></div>
+        </div>
+        <div style="margin: 8px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+            <span>📋 አስተዳደር</span>
+            <span style="font-weight: 600;">10.6%</span>
+          </div>
+          <div class="percent-bar"><div class="percent-bar-fill" style="width: 10.6%; background: #a37fd1;"></div></div>
+        </div>
+      </div>
+
+      <div class="percent-card">
+        <h3>📅 የፕሮጀክት የጊዜ መቶኛ</h3>
+        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">የታቀደ ጊዜ</div>
+            <div style="font-size: 20px; font-weight: 700;">36 ወራት</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">ያለፈ ጊዜ</div>
+            <div style="font-size: 20px; font-weight: 700; color: #6fb3e0;">26 ወራት</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: var(--tg-hint);">% ጊዜ</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--emerald);">72.2%</div>
+          </div>
+        </div>
+        <div class="percent-bar">
+          <div class="percent-bar-fill" style="width: 72.2%; background: #6fb3e0;"></div>
+        </div>
+        <div class="sub" style="margin-top: 8px;">ከታቀደው የጊዜ ሰሌዳ አንጻር ያለው ሂደት</div>
+      </div>
+
+    </div>
   </div>
 
   <div id="panel-photos" class="tab-panel">
@@ -588,14 +845,16 @@
   </div>
 
   <div id="panel-chat" class="tab-panel">
-    <div id="chatProtectedWrapper"></div>
+    <div id="chatWrapper"></div>
   </div>
 </div>
 
+<!-- Floating Tabs -->
 <div class="floating-tabs">
   <div class="tabs-inner">
     <button class="tab-btn active" id="nav-income" onclick="switchTab('income')">💰 Income</button>
     <button class="tab-btn" id="nav-cost" onclick="switchTab('cost')">📊 Cost</button>
+    <button class="tab-btn" id="nav-percent" onclick="switchTab('percent')">%</button>
     <button class="tab-btn" id="nav-photos" onclick="switchTab('photos')">📸 Photos</button>
     <button class="tab-btn" id="nav-chat" onclick="switchTab('chat')">💬 Chat</button>
   </div>
@@ -608,24 +867,23 @@
 
 <script>
   // ============================================================
-  // 🔑 ቴሌግራም ቦት ማዋቀር - ተሞልቷል
+  // 🔑 ቴሌግራም ቦት ማዋቀር
   // ============================================================
-  const BOT_TOKEN = "8845264420:AAECsNwLCLyWxkadpO-DDbCJDnL5EP1E3Ds";
-  const CHAT_ID = "1380255277";
+  const BOT_TOKEN = "AAEJ584-SvQhaYzdrhc9rHrIg10t_qgRS_A";
+  const CHAT_ID = "8845264420";
 
   // ============================================================
   // ሌሎች ማዋቀሮች
   // ============================================================
-  const COST_PASSWORD = "2025";
-  const CHAT_PASSWORD = "2025";
+  const COST_PASSWORD = "2020";
   let isCostUnlocked = false;
-  let isChatUnlocked = false;
+  let lastUpdateId = 0;
 
-  function setUnlockStatus(type, value) {
-    try { sessionStorage.setItem(`chacha_${type}_unlocked`, value ? 'true' : 'false'); } catch(e) {}
+  function setUnlockStatus(value) {
+    try { sessionStorage.setItem('chacha_cost_unlocked', value ? 'true' : 'false'); } catch(e) {}
   }
-  function getUnlockStatus(type) {
-    try { return sessionStorage.getItem(`chacha_${type}_unlocked`) === 'true'; } catch(e) { return false; }
+  function getUnlockStatus() {
+    try { return sessionStorage.getItem('chacha_cost_unlocked') === 'true'; } catch(e) { return false; }
   }
 
   // ========== DATA ==========
@@ -698,6 +956,13 @@
   bills.forEach(b => b.items.forEach(i => { if (i.inc) totalIncome += i.inc; }));
 
   // ============================================================
+  // 📊 የገቢ ማሳያ ማዘመን
+  // ============================================================
+  function updateSummaryDisplay() {
+    document.getElementById('totalIncomeDisplay').textContent = fmt(totalIncome) + ' ETB';
+  }
+
+  // ============================================================
   // 📤 ወደ ቴሌግራም ቦት መልእክት መላክ
   // ============================================================
   async function sendToTelegram(message, userName = 'የማይታወቅ ተጠቃሚ') {
@@ -733,20 +998,64 @@
       const result = await response.json();
       if (result.ok) {
         console.log('✅ መልእክት ወደ ቴሌግራም ተልኳል');
+        return { success: true, data: result };
       } else {
         console.error('❌ ቴሌግራም ስህተት:', result.description);
+        return { success: false, error: result.description };
       }
-      return result;
     } catch (error) {
       console.error('❌ ወደ ቴሌግራም በመላክ ላይ ስህተት:', error);
-      return null;
+      return { success: false, error: error.message };
     }
   }
 
   // ============================================================
-  // 📝 የተሻሻለ የ sendMessage ተግባር (ከቴሌግራም ጋር)
+  // 📥 ከቴሌግራም ቦት መልእክቶችን መቀበል (Long Polling)
   // ============================================================
-  window.sendMessage = function() {
+  async function getBotUpdates() {
+    try {
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=20`;
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.ok && data.result.length > 0) {
+        for (const update of data.result) {
+          lastUpdateId = update.update_id;
+          
+          if (update.message && update.message.text) {
+            const msgText = update.message.text;
+            const chatId = update.message.chat.id;
+            
+            if (chatId.toString() === CHAT_ID) {
+              addBotMessageToChat(msgText);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error getting updates:', error);
+    }
+  }
+
+  // ============================================================
+  // 💬 የቦት መልእክት ወደ ቻት ማከል
+  // ============================================================
+  function addBotMessageToChat(text) {
+    const messagesDiv = document.getElementById('chatMessages');
+    if (!messagesDiv) return;
+    
+    const botDiv = document.createElement('div');
+    botDiv.className = 'chat-message chat-message-bot';
+    botDiv.textContent = `🤖 ${text}`;
+    messagesDiv.appendChild(botDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    saveMessages();
+  }
+
+  // ============================================================
+  // 📝 sendMessage ተግባር - ለChat ታብ
+  // ============================================================
+  window.sendMessage = async function() {
     const input = document.getElementById('chatInput');
     const message = input?.value.trim();
     if (!message) return;
@@ -771,7 +1080,28 @@
       }
     } catch (e) {}
     
-    sendToTelegram(message, userName);
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chat-message chat-message-system';
+    typingDiv.textContent = '⏳ በመላክ ላይ...';
+    typingDiv.id = 'typingIndicator';
+    messagesDiv.appendChild(typingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    const result = await sendToTelegram(message, userName);
+    
+    const typing = document.getElementById('typingIndicator');
+    if (typing) typing.remove();
+    
+    const systemDiv = document.createElement('div');
+    systemDiv.className = 'chat-message chat-message-system';
+    if (result.success) {
+      systemDiv.textContent = '✅ መልእክት ወደ ቴሌግራም ተልኳል';
+    } else {
+      systemDiv.textContent = '❌ መልእክት መላክ አልተቻለም: ' + (result.error || 'ያልታወቀ ስህተት');
+    }
+    messagesDiv.appendChild(systemDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    saveMessages();
     
     setTimeout(() => {
       const botMsg = getBotReply(message);
@@ -781,7 +1111,7 @@
       messagesDiv.appendChild(botDiv);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
       saveMessages();
-    }, 500);
+    }, 800);
   };
 
   // ============================================================
@@ -822,30 +1152,24 @@
     if(lower.includes('income') || lower.includes('payment') || lower.includes('ገቢ')) {
       return "📈 አጠቃላይ የፕሮጀክቱ ገቢ: " + fmt(totalIncome) + " ETB ነው። ዝርዝር መረጃ በIncome ታብ ውስጥ ይመልከቱ።";
     }
+    if(lower.includes('percent') || lower.includes('percentage') || lower.includes('መቶኛ')) {
+      return "📊 አጠቃላይ የፕሮጀክት ግንባታ 72.8% ተጠናቅቋል። ዝርዝር መረጃ በ% ታብ ውስጥ ይመልከቱ።";
+    }
     if(lower.includes('schedule') || lower.includes('timeline') || lower.includes('ፕሮጀክት')) {
       return "📅 ግንባታው በተዘጋጀው ፕሮግራም መሰረት እየተካሄደ ነው። ትክክለኛ ቀናት ለማወቅ የፕሮጀክት አስተዳዳሪውን ያግኙ።";
     }
     if(lower.includes('contact') || lower.includes('support') || lower.includes('አድራሻ')) {
       return "📞 ለኦፊሻል ጥያቄዎች: የፕሮጀክት ቅንጅት ቢሮ, ስልክ: +251-XX-XXX-XXXX።";
     }
-    if(lower.includes('password') || lower.includes('unlock') || lower.includes('ፓስወርድ')) {
-      return "🔒 የCost እና Chat ታቦች በፓስወርድ የተጠበቁ ናቸው። ለመክፈት 2025 ይጠቀሙ።";
+    if(lower.includes('hello') || lower.includes('hi') || lower.includes('ሰላም')) {
+      return "👋 ሰላም! እንዴት ልረዳዎ እችላለሁ? ስለ ፕሮጀክቱ ገቢ፣ ወጪ፣ መቶኛ፣ ፎቶዎች ወይም አድራሻ መረጃ መስጠት እችላለሁ።";
     }
-    return "✅ ሰላም! ስለ ፕሮጀክቱ ገቢ፣ ወጪ፣ ፎቶዎች ወይም አድራሻ መረጃ መስጠት እችላለሁ። ምን ማወቅ ይፈልጋሉ?";
+    return "✅ ሰላም! ስለ ፕሮጀክቱ ገቢ፣ ወጪ፣ መቶኛ፣ ፎቶዎች ወይም አድራሻ መረጃ መስጠት እችላለሁ። ምን ማወቅ ይፈልጋሉ?";
   }
 
   // ============================================================
-  // 📋 የIncome እና Cost ፓነሎች
+  // 📋 የIncome ፓነል
   // ============================================================
-  function renderIncomeSummary() {
-    const target = document.getElementById('incomeSummaryTarget');
-    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label">📈 Total Income (ETB)</div><div class="stat-val green">${fmt(totalIncome)} ETB</div></div>`;
-  }
-  function renderCostSummary() {
-    const target = document.getElementById('costSummaryTarget');
-    if(target) target.innerHTML = `<div class="stat-card"><div class="stat-label">📉 Total Cost (ETB)</div><div class="stat-val red">${fmt(totalCostValue)} ETB</div></div>`;
-  }
-
   function renderIncomePanel() {
     const container = document.getElementById('billsContainer');
     if(!container) return;
@@ -854,7 +1178,7 @@
       let billTotal = 0;
       bill.items.forEach(it => { if (it.inc) billTotal += it.inc; });
       const card = document.createElement('div'); card.className = 'bill-card';
-      const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-ach">${fmtA(it.ach)}</div><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
+      const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
       card.innerHTML = `<div class="bill-header" data-bill-idx="${idx}"><div class="bill-header-left"><div class="bill-icon">${bill.icon}</div><div><div class="bill-name">Bill ${bill.id} — ${bill.name}</div><div class="bill-total">${fmtM(billTotal)} ETB</div></div></div><span class="bill-chevron" id="chev-${idx}">▼</span></div><div class="bill-items" id="items-${idx}">${itemsHtml}</div>`;
       container.appendChild(card);
       const header = card.querySelector('.bill-header');
@@ -864,11 +1188,28 @@
     });
   }
 
+  // ============================================================
+  // 📋 የCost ፓነል (በፓስወርድ የተጠበቀ) - ጠቅላላ ወጭ ብቻ
+  // ============================================================
   function renderCostContent() {
     const wrapper = document.getElementById('costContentWrapper');
     if (!wrapper) return;
-    wrapper.innerHTML = `<div class="cost-wrap"><div class="sec-title">💰 Detailed Cost Breakdown (ETB)</div>
+    
+    // Add Total Cost summary card at top of cost tab
+    const totalCostHtml = `
+      <div style="padding: 10px 16px 0;">
+        <div class="stat-card" style="margin-bottom: 16px;">
+          <div class="stat-label">📉 ጠቅላላ ወጪ</div>
+          <div class="stat-val red">${fmt(totalCostValue)} ETB</div>
+        </div>
+      </div>
+    `;
+    
+    const breakdownHtml = `<div class="cost-wrap"><div class="sec-title">💰 Detailed Cost Breakdown (ETB)</div>
       ${['labour','admin','staff','material','machinery','overhead'].map(t => `<div class="clickable-card" id="${t}Card"><div class="card-header" id="${t}Header"><div class="card-title"><div class="card-icon">${t==='labour'?'👥':t==='admin'?'🏢':t==='staff'?'🆔':t==='material'?'📦':t==='machinery'?'🏗️':'📊'}</div><div class="card-text"><h3>${t.charAt(0).toUpperCase()+t.slice(1)} Cost</h3><p id="${t}Total">—</p></div></div><span class="card-chevron" id="${t}Chevron">▼</span></div><div class="breakdown-list" id="${t}Breakdown"></div></div>`).join('')}</div>`;
+    
+    wrapper.innerHTML = totalCostHtml + breakdownHtml;
+    
     const maps = { labour: labourItems, admin: adminItems, staff: staffItems, material: materialItems, machinery: machineryItems, overhead: overheadItems };
     for (let key of Object.keys(maps)) {
       const total = maps[key].reduce((s, i) => s + i.amount, 0);
@@ -893,58 +1234,68 @@
     const unlock = () => {
       if (input.value.trim() === COST_PASSWORD) {
         isCostUnlocked = true;
-        setUnlockStatus('cost', true);
+        setUnlockStatus(true);
         renderCostContent();
-      } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; input.focus(); }
+      } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; }
     };
     btn.addEventListener('click', unlock);
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
-    input.focus();
   }
-  function refreshCostPanel() { isCostUnlocked ? renderCostContent() : showCostPasswordPrompt(); }
+  function refreshCostPanel() { 
+    if (isCostUnlocked) {
+      renderCostContent();
+    } else {
+      showCostPasswordPrompt();
+    }
+  }
 
   // ============================================================
-  // 🔐 የChat ፓነል
+  // 💬 የChat ፓነል
   // ============================================================
-  function renderChatUnlocked() {
-    const wrapper = document.getElementById('chatProtectedWrapper');
+  function renderChatPanel() {
+    const wrapper = document.getElementById('chatWrapper');
     if (!wrapper) return;
     wrapper.innerHTML = `
       <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
-          <div class="chat-message chat-message-bot">🔓 Chat unlocked! 👋 Ask me about Chacha Dam (income, schedule, contacts).</div>
+          <div class="chat-message chat-message-bot">💬 Welcome! 👋 Ask me about Chacha Dam (income, cost, %, schedule, contacts).</div>
+          <div class="chat-message chat-message-system">📌 መልእክቶች ወደ ቴሌግራም ቦት ይላካሉ እና ምላሾች እዚህ ይታያሉ</div>
         </div>
         <div class="chat-input-area">
           <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
           <button class="chat-send-btn" onclick="sendMessage()">Send</button>
         </div>
-        <div class="chat-note">💬 Messages are stored locally and sent to Telegram bot.</div>
+        <div class="chat-note">💬 Messages are sent to Telegram bot and stored locally</div>
       </div>`;
     loadMessages();
+    startLongPolling();
   }
-
-  function showChatPasswordPrompt() {
-    const wrapper = document.getElementById('chatProtectedWrapper');
-    if (!wrapper) return;
-    wrapper.innerHTML = `<div class="password-overlay"><h3>🔒 የውይይት ክፍል ተቆልፏል</h3><p style="margin-bottom: 10px; font-size:14px;">Chat is locked. Enter password to unlock.</p><input type="password" id="chatPasswordInput" class="password-input" placeholder="Password" autocomplete="off"><button id="unlockChatBtn" class="password-btn">🔓 Unlock Chat</button><div id="chatPasswordError" class="password-error"></div></div>`;
-    const input = document.getElementById('chatPasswordInput');
-    const btn = document.getElementById('unlockChatBtn');
-    const errorDiv = document.getElementById('chatPasswordError');
-    const unlock = () => {
-      if (input.value.trim() === CHAT_PASSWORD) {
-        isChatUnlocked = true;
-        setUnlockStatus('chat', true);
-        renderChatUnlocked();
-      } else { errorDiv.textContent = '❌ Incorrect password.'; input.value = ''; input.focus(); }
-    };
-    btn.addEventListener('click', unlock);
-    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') unlock(); });
-    input.focus();
-  }
-  function refreshChatPanel() { isChatUnlocked ? renderChatUnlocked() : showChatPasswordPrompt(); }
 
   // ============================================================
-  // 📸 ፎቶዎች እና ስላይድሾው
+  // 🔄 Long Polling
+  // ============================================================
+  let pollingInterval = null;
+
+  function startLongPolling() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+    }
+    pollingInterval = setInterval(() => {
+      getBotUpdates();
+    }, 5000);
+    
+    setTimeout(() => getBotUpdates(), 1000);
+  }
+
+  function stopLongPolling() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+      pollingInterval = null;
+    }
+  }
+
+  // ============================================================
+  // 📸 ፎቶዎች
   // ============================================================
   const projectPhotos = [
     { url: "index.png", caption: "Main dam overview" },
@@ -1010,7 +1361,7 @@
   // 🔄 ታቦችን መቀየር
   // ============================================================
   function switchTab(tab) {
-    ['income','cost','photos','chat'].forEach(t => {
+    ['income','cost','percent','photos','chat'].forEach(t => {
       document.getElementById(`panel-${t}`)?.classList.remove('active');
       document.getElementById(`nav-${t}`)?.classList.remove('active');
     });
@@ -1018,23 +1369,27 @@
     document.getElementById(`nav-${tab}`)?.classList.add('active');
 
     if (tab === 'income') {
-      renderIncomeSummary();
       renderIncomePanel();
       stopSlideshow();
+      stopLongPolling();
     } else if (tab === 'cost') {
-      renderCostSummary();
       refreshCostPanel();
       stopSlideshow();
+      stopLongPolling();
+    } else if (tab === 'percent') {
+      stopSlideshow();
+      stopLongPolling();
     } else if (tab === 'photos') {
       renderPhotos();
+      stopLongPolling();
     } else if (tab === 'chat') {
-      refreshChatPanel();
+      renderChatPanel();
       stopSlideshow();
     }
   }
 
   // ============================================================
-  // 🚀 ስፕላሽ ስላይድሾው (2 ፎቶዎች, እያንዳንዱ 10 ሰከንድ)
+  // 🚀 ስፕላሽ ስላይድሾው
   // ============================================================
   function startSplashSlideshow() {
     const splash = document.getElementById('splashSlideshow');
@@ -1045,11 +1400,11 @@
     
     const splashPhotos = projectPhotos.slice(0, 2);
     let splashIndex = 0;
-    let secondsLeft = 10;
+    let secondsLeft = 2;
     
     splashImg.src = splashPhotos[0].url;
     splashCap.textContent = splashPhotos[0].caption;
-    splashTimer.textContent = '10s';
+    splashTimer.textContent = '2s';
     splashImg.onerror = () => { splashImg.src = 'https://placehold.co/800x600?text=Chacha+Dam'; };
 
     const timerInterval = setInterval(() => {
@@ -1068,29 +1423,28 @@
         splashImg.onerror = () => { splashImg.src = 'https://placehold.co/800x600?text=Chacha+Dam'; };
         splashImg.style.opacity = '1';
       }, 200);
-      secondsLeft = 10;
-      splashTimer.textContent = '10s';
-    }, 10000);
+      secondsLeft = 2;
+      splashTimer.textContent = '2s';
+    }, 2000);
 
     setTimeout(() => {
       clearInterval(photoInterval);
       clearInterval(timerInterval);
       splash.classList.add('hidden');
       switchTab('income');
-    }, 20000);
+    }, 4000);
   }
 
   // ============================================================
   // 📌 መጀመሪያ መጫን
   // ============================================================
-  isCostUnlocked = getUnlockStatus('cost');
-  isChatUnlocked = getUnlockStatus('chat');
+  isCostUnlocked = getUnlockStatus();
 
   startSplashSlideshow();
-  renderIncomeSummary();
   renderIncomePanel();
   renderPhotos();
   stopSlideshow();
+  updateSummaryDisplay();
 
   if(window.Telegram && Telegram.WebApp) { Telegram.WebApp.expand(); Telegram.WebApp.ready(); }
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
