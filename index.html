@@ -14,7 +14,6 @@
     }
 
     :root {
-      /* Premium dark luxury palette */
       --tg-bg: #14161c;
       --tg-secondary-bg: #1c1f28;
       --tg-section-bg: #0c0d11;
@@ -54,7 +53,7 @@
       min-height: 100vh;
     }
 
-    /* ===== Summary Card ===== */
+    /* ===== Summary Card - Only visible in Income Tab ===== */
     .summary-row {
       display: grid;
       grid-template-columns: 1fr;
@@ -154,7 +153,6 @@
       border: 1px solid var(--border-subtle);
       margin-bottom: 12px;
       overflow: hidden;
-      transition: border-color 0.2s;
     }
     .bill-header {
       padding: 16px 18px;
@@ -231,7 +229,12 @@
     .item-right {
       text-align: right;
       flex-shrink: 0;
-      min-width: 90px;
+      min-width: 110px;
+    }
+    .item-ach {
+      font-size: 11px;
+      color: var(--tg-hint);
+      font-weight: 500;
     }
     .item-inc {
       font-size: 13.5px;
@@ -366,8 +369,7 @@
       border: 1px solid var(--border-subtle);
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
-      box-shadow: var(--shadow-soft);
+      transition: transform 0.15s;
     }
     .photo-card:active { transform: scale(0.97); }
     .photo-card img {
@@ -390,7 +392,6 @@
       font-weight: 700;
       padding: 20px 20px 0;
       color: var(--gold);
-      letter-spacing: -0.1px;
     }
     .photos-subtitle {
       font-size: 11.5px;
@@ -542,7 +543,6 @@
       color: var(--tg-hint);
       text-align: center;
       margin-top: 10px;
-      letter-spacing: 0.2px;
     }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
 
@@ -580,7 +580,6 @@
       text-align: center;
       font-size: 18px;
       font-weight: 600;
-      letter-spacing: 0.3px;
       text-shadow: 0 2px 16px rgba(0,0,0,0.8);
       padding: 14px;
       background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
@@ -618,7 +617,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      letter-spacing: -0.1px;
     }
     .percent-card .value {
       font-size: 30px;
@@ -627,7 +625,6 @@
       display: block;
       margin: 8px 0;
       font-variant-numeric: tabular-nums;
-      letter-spacing: -0.5px;
     }
     .percent-card .sub {
       font-size: 12.5px;
@@ -684,7 +681,6 @@
       text-align: center;
       padding: 22px 16px 8px;
       color: var(--gold);
-      letter-spacing: -0.2px;
     }
     .percent-subtitle {
       font-size: 12.5px;
@@ -706,8 +702,8 @@
   </div>
 
 <div class="wrap">
-  <!-- Summary Row: Only Total Income -->
-  <div id="summaryRow" class="summary-row">
+  <!-- Income Summary - Only visible in Income Tab -->
+  <div id="incomeSummaryRow" class="summary-row" style="display: block;">
     <div class="stat-card" id="incomeSummaryCard">
       <div class="stat-label">📈 ጠቅላላ ገቢ</div>
       <div class="stat-val green" id="totalIncomeDisplay">0 ETB</div>
@@ -867,10 +863,10 @@
 
 <script>
   // ============================================================
-  // 🔑 ቴሌግራም ቦት ማዋቀር
+  // 🔑 ቴሌግራም ቦት ማዋቀር - አዲስ ቶከን
   // ============================================================
-  const BOT_TOKEN = "AAEJ584-SvQhaYzdrhc9rHrIg10t_qgRS_A";
-  const CHAT_ID = "8845264420";
+  const BOT_TOKEN = "8842064875:AAHbNPMeN_kVhO8YDepp72ljN2gygS3vA9k";
+  const CHAT_ID = "8842064875";
 
   // ============================================================
   // ሌሎች ማዋቀሮች
@@ -1168,7 +1164,7 @@
   }
 
   // ============================================================
-  // 📋 የIncome ፓነል
+  // 📋 የIncome ፓነል (ከAch መጠን ጋር)
   // ============================================================
   function renderIncomePanel() {
     const container = document.getElementById('billsContainer');
@@ -1178,7 +1174,7 @@
       let billTotal = 0;
       bill.items.forEach(it => { if (it.inc) billTotal += it.inc; });
       const card = document.createElement('div'); card.className = 'bill-card';
-      const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
+      const itemsHtml = bill.items.map(it => `<div class="item-row"><span class="item-pill">${it.no || '—'}</span><span class="item-desc">${it.d}</span><div class="item-right"><div class="item-ach">${fmtA(it.ach)}</div><div class="item-inc">${it.inc ? fmt(it.inc) : '—'}</div></div></div>`).join('');
       card.innerHTML = `<div class="bill-header" data-bill-idx="${idx}"><div class="bill-header-left"><div class="bill-icon">${bill.icon}</div><div><div class="bill-name">Bill ${bill.id} — ${bill.name}</div><div class="bill-total">${fmtM(billTotal)} ETB</div></div></div><span class="bill-chevron" id="chev-${idx}">▼</span></div><div class="bill-items" id="items-${idx}">${itemsHtml}</div>`;
       container.appendChild(card);
       const header = card.querySelector('.bill-header');
@@ -1189,13 +1185,12 @@
   }
 
   // ============================================================
-  // 📋 የCost ፓነል (በፓስወርድ የተጠበቀ) - ጠቅላላ ወጭ ብቻ
+  // 📋 የCost ፓነል (በፓስወርድ የተጠበቀ)
   // ============================================================
   function renderCostContent() {
     const wrapper = document.getElementById('costContentWrapper');
     if (!wrapper) return;
     
-    // Add Total Cost summary card at top of cost tab
     const totalCostHtml = `
       <div style="padding: 10px 16px 0;">
         <div class="stat-card" style="margin-bottom: 16px;">
@@ -1368,8 +1363,17 @@
     document.getElementById(`panel-${tab}`)?.classList.add('active');
     document.getElementById(`nav-${tab}`)?.classList.add('active');
 
+    // Show/hide income summary based on tab
+    const incomeSummary = document.getElementById('incomeSummaryRow');
     if (tab === 'income') {
+      incomeSummary.style.display = 'block';
       renderIncomePanel();
+      updateSummaryDisplay();
+    } else {
+      incomeSummary.style.display = 'none';
+    }
+
+    if (tab === 'income') {
       stopSlideshow();
       stopLongPolling();
     } else if (tab === 'cost') {
