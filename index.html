@@ -53,7 +53,6 @@
       min-height: 100vh;
     }
 
-    /* ===== Summary Card - Only visible in Income Tab ===== */
     .summary-row {
       display: grid;
       grid-template-columns: 1fr;
@@ -99,7 +98,6 @@
     .stat-val.green { color: var(--emerald); }
     .stat-val.red { color: var(--rose); }
 
-    /* ===== Floating Tabs ===== */
     .floating-tabs {
       position: fixed;
       bottom: 14px;
@@ -146,7 +144,6 @@
     .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
 
-    /* ===== Bill Cards (Income) ===== */
     .bill-card {
       background: var(--tg-card-bg);
       border-radius: var(--border-radius-lg);
@@ -243,7 +240,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ===== Cost Tab ===== */
     .cost-wrap { padding: 10px 16px 24px; }
     .sec-title {
       font-size: 11px;
@@ -356,7 +352,6 @@
       margin-top: 14px;
     }
 
-    /* ===== Photos ===== */
     .photos-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -460,7 +455,6 @@
       cursor: pointer;
     }
 
-    /* ===== Chat ===== */
     .chat-container {
       display: flex;
       flex-direction: column;
@@ -538,6 +532,13 @@
       cursor: pointer;
       font-size: 13.5px;
     }
+    .chat-send-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .chat-input:disabled {
+      opacity: 0.6;
+    }
     .chat-note {
       font-size: 10px;
       color: var(--tg-hint);
@@ -546,7 +547,6 @@
     }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
 
-    /* ===== Splash ===== */
     #splashSlideshow {
       position: fixed;
       top: 0;
@@ -598,7 +598,6 @@
       font-weight: 600;
     }
 
-    /* ===== Percent Tab ===== */
     .percent-container {
       padding: 16px 20px;
     }
@@ -689,6 +688,69 @@
       padding: 0 16px 18px;
     }
 
+    .commissary-container {
+      padding: 16px 20px;
+    }
+    .commissary-card {
+      background: var(--tg-card-bg);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--gold-border);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+    .commissary-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .commissary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 14px;
+    }
+    .commissary-item:last-child { border-bottom: none; }
+    .commissary-item .name { color: var(--tg-text); }
+    .commissary-item .amount { color: var(--emerald); font-weight: 600; }
+    .commissary-total {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 2px solid var(--gold-border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .commissary-total .label { color: var(--gold); }
+    .commissary-total .amount { color: var(--emerald); }
+
+    .bot-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--tg-secondary-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--tg-hint);
+    }
+    .bot-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .bot-status .dot.online { background: var(--emerald); }
+    .bot-status .dot.offline { background: var(--rose); }
+
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--gold-border); border-radius: 4px; }
   </style>
@@ -702,7 +764,7 @@
   </div>
 
 <div class="wrap">
-  <!-- Income Summary - Only visible in Income Tab -->
+  <!-- Income Summary -->
   <div id="incomeSummaryRow" class="summary-row" style="display: block;">
     <div class="stat-card" id="incomeSummaryCard">
       <div class="stat-label">📈 ጠቅላላ ገቢ</div>
@@ -720,12 +782,10 @@
     <div id="costContentWrapper"></div>
   </div>
 
-  <!-- Percent Tab -->
   <div id="panel-percent" class="tab-panel">
     <div class="percent-title">📊 የፕሮጀክት መቶኛ መረጃ</div>
     <div class="percent-subtitle">% የተለያዩ የፕሮጀክት ክፍሎች መቶኛ</div>
     <div class="percent-container">
-
       <div class="percent-card">
         <h3>📈 አጠቃላይ የግንባታ መቶኛ</h3>
         <span class="value">72.8%</span>
@@ -734,7 +794,6 @@
           <div class="percent-bar-fill" style="width: 72.8%;"></div>
         </div>
       </div>
-
       <div class="percent-grid">
         <div class="percent-mini">
           <div class="num green">85%</div>
@@ -753,80 +812,46 @@
           <div class="label">🌊 የውሃ ማፍሰሻ</div>
         </div>
       </div>
-
       <div class="percent-card">
         <h3>💰 የገቢ እና ወጪ መቶኛ</h3>
         <div style="display: flex; justify-content: space-between; margin: 8px 0;">
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">ገቢ</div>
-            <div style="font-size: 22px; font-weight: 700; color: var(--emerald);">100%</div>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">ወጪ</div>
-            <div style="font-size: 22px; font-weight: 700; color: var(--rose);">85.6%</div>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">ትርፍ</div>
-            <div style="font-size: 22px; font-weight: 700; color: var(--gold);">14.4%</div>
-          </div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">ገቢ</div><div style="font-size: 22px; font-weight: 700; color: var(--emerald);">100%</div></div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">ወጪ</div><div style="font-size: 22px; font-weight: 700; color: var(--rose);">85.6%</div></div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">ትርፍ</div><div style="font-size: 22px; font-weight: 700; color: var(--gold);">14.4%</div></div>
         </div>
         <div class="sub">ከጠቅላላው ገቢ አንጻር ያለው ወጪ እና ትርፍ</div>
       </div>
-
       <div class="percent-card">
         <h3>📋 የተለያዩ የወጪ ክፍሎች መቶኛ</h3>
         <div style="margin: 8px 0;">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
-            <span>🔧 ማሽነሪ</span>
-            <span style="font-weight: 600;">38.2%</span>
-          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;"><span>🔧 ማሽነሪ</span><span style="font-weight: 600;">38.2%</span></div>
           <div class="percent-bar"><div class="percent-bar-fill" style="width: 38.2%; background: var(--gold);"></div></div>
         </div>
         <div style="margin: 8px 0;">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
-            <span>🧱 ቁሳቁስ</span>
-            <span style="font-weight: 600;">32.5%</span>
-          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;"><span>🧱 ቁሳቁስ</span><span style="font-weight: 600;">32.5%</span></div>
           <div class="percent-bar"><div class="percent-bar-fill" style="width: 32.5%; background: #6fb3e0;"></div></div>
         </div>
         <div style="margin: 8px 0;">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
-            <span>👷 ሰራተኛ</span>
-            <span style="font-weight: 600;">18.7%</span>
-          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;"><span>👷 ሰራተኛ</span><span style="font-weight: 600;">18.7%</span></div>
           <div class="percent-bar"><div class="percent-bar-fill" style="width: 18.7%; background: var(--emerald);"></div></div>
         </div>
         <div style="margin: 8px 0;">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
-            <span>📋 አስተዳደር</span>
-            <span style="font-weight: 600;">10.6%</span>
-          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;"><span>📋 አስተዳደር</span><span style="font-weight: 600;">10.6%</span></div>
           <div class="percent-bar"><div class="percent-bar-fill" style="width: 10.6%; background: #a37fd1;"></div></div>
         </div>
       </div>
-
       <div class="percent-card">
         <h3>📅 የፕሮጀክት የጊዜ መቶኛ</h3>
         <div style="display: flex; justify-content: space-between; margin: 8px 0;">
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">የታቀደ ጊዜ</div>
-            <div style="font-size: 20px; font-weight: 700;">36 ወራት</div>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">ያለፈ ጊዜ</div>
-            <div style="font-size: 20px; font-weight: 700; color: #6fb3e0;">26 ወራት</div>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--tg-hint);">% ጊዜ</div>
-            <div style="font-size: 20px; font-weight: 700; color: var(--emerald);">72.2%</div>
-          </div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">የታቀደ ጊዜ</div><div style="font-size: 20px; font-weight: 700;">36 ወራት</div></div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">ያለፈ ጊዜ</div><div style="font-size: 20px; font-weight: 700; color: #6fb3e0;">26 ወራት</div></div>
+          <div><div style="font-size: 12px; color: var(--tg-hint);">% ጊዜ</div><div style="font-size: 20px; font-weight: 700; color: var(--emerald);">72.2%</div></div>
         </div>
         <div class="percent-bar">
           <div class="percent-bar-fill" style="width: 72.2%; background: #6fb3e0;"></div>
         </div>
         <div class="sub" style="margin-top: 8px;">ከታቀደው የጊዜ ሰሌዳ አንጻር ያለው ሂደት</div>
       </div>
-
     </div>
   </div>
 
@@ -843,6 +868,12 @@
   <div id="panel-chat" class="tab-panel">
     <div id="chatWrapper"></div>
   </div>
+
+  <div id="panel-commissary" class="tab-panel">
+    <div class="percent-title">🏪 ኮም$ (Commissary)</div>
+    <div class="percent-subtitle">የሱቅ ሽያጭ እና ክምችት መረጃ</div>
+    <div class="commissary-container" id="commissaryContainer"></div>
+  </div>
 </div>
 
 <!-- Floating Tabs -->
@@ -853,6 +884,7 @@
     <button class="tab-btn" id="nav-percent" onclick="switchTab('percent')">%</button>
     <button class="tab-btn" id="nav-photos" onclick="switchTab('photos')">📸 Photos</button>
     <button class="tab-btn" id="nav-chat" onclick="switchTab('chat')">💬 Chat</button>
+    <button class="tab-btn" id="nav-commissary" onclick="switchTab('commissary')">🏪 ኮም$</button>
   </div>
 </div>
 
@@ -863,7 +895,7 @@
 
 <script>
   // ============================================================
-  // 🔑 ቴሌግራም ቦት ማዋቀር - አዲስ ቶከን
+  // 🔑 ቴሌግራም ቦት ማዋቀር
   // ============================================================
   const BOT_TOKEN = "8842064875:AAHbNPMeN_kVhO8YDepp72ljN2gygS3vA9k";
   const CHAT_ID = "8842064875";
@@ -873,7 +905,6 @@
   // ============================================================
   const COST_PASSWORD = "2020";
   let isCostUnlocked = false;
-  let lastUpdateId = 0;
 
   function setUnlockStatus(value) {
     try { sessionStorage.setItem('chacha_cost_unlocked', value ? 'true' : 'false'); } catch(e) {}
@@ -944,6 +975,35 @@
   const overheadItems = [{ name: 'Overhead 20%', amount: 34454047.00 }];
   const totalCostValue = 404850157.00;
 
+  const commissaryData = {
+    sales: [
+      { name: 'የምግብ ሽያጭ (Food Sales)', amount: 2450000.00 },
+      { name: 'የመጠጥ ሽያጭ (Beverage Sales)', amount: 1870000.00 },
+      { name: 'የጽህፈት ዕቃ (Stationery)', amount: 950000.00 },
+      { name: 'የግል እቃዎች (Personal Items)', amount: 620000.00 },
+      { name: 'ሌሎች (Others)', amount: 310000.00 }
+    ],
+    inventory: [
+      { name: 'ምግብ እቃዎች (Food Items)', amount: 1800000.00 },
+      { name: 'መጠጥ (Beverages)', amount: 1200000.00 },
+      { name: 'የጽህፈት ዕቃ (Stationery)', amount: 650000.00 },
+      { name: 'የንፅህና እቃዎች (Hygiene)', amount: 480000.00 },
+      { name: 'ሌሎች እቃዎች (Other Items)', amount: 290000.00 }
+    ],
+    expenses: [
+      { name: 'የግዥ ወጪ (Procurement Cost)', amount: 3200000.00 },
+      { name: 'የመጓጓዣ ወጪ (Transport)', amount: 450000.00 },
+      { name: 'ደመወዝ (Salaries)', amount: 680000.00 },
+      { name: 'የጥገና ወጪ (Maintenance)', amount: 210000.00 },
+      { name: 'ሌሎች ወጪዎች (Other Expenses)', amount: 150000.00 }
+    ],
+    profit: 1050000.00
+  };
+
+  const totalSales = commissaryData.sales.reduce((sum, item) => sum + item.amount, 0);
+  const totalInventory = commissaryData.inventory.reduce((sum, item) => sum + item.amount, 0);
+  const totalExpenses = commissaryData.expenses.reduce((sum, item) => sum + item.amount, 0);
+
   function fmt(v) { return v == null ? '—' : v.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function fmtA(v) { let n = parseFloat(v); return isNaN(n) ? v : (n % 1 === 0 ? n.toString() : n.toFixed(2)); }
   function fmtM(v) { let n = parseFloat(v); if (n >= 1e6) return (n/1e6).toFixed(1) + 'M'; if (n >= 1e3) return (n/1e3).toFixed(0) + 'K'; return n.toFixed(0); }
@@ -951,16 +1011,24 @@
   let totalIncome = 0;
   bills.forEach(b => b.items.forEach(i => { if (i.inc) totalIncome += i.inc; }));
 
-  // ============================================================
-  // 📊 የገቢ ማሳያ ማዘመን
-  // ============================================================
   function updateSummaryDisplay() {
     document.getElementById('totalIncomeDisplay').textContent = fmt(totalIncome) + ' ETB';
   }
 
   // ============================================================
-  // 📤 ወደ ቴሌግራም ቦት መልእክት መላክ
+  // 📤 ወደ ቴሌግራም ቦት መልእክት መላክ - TOKEN እና CHAT_ID በመጠቀም
+  // ⚠️ ማስታወሻ: CHAT_ID ከ BOT_TOKEN ቁጥር ጋር ተመሳሳይ መሆን የለበትም
+  //    (ቦት ለራሱ መልእክት መላክ ስለማይችል)። ትክክለኛውን CHAT_ID ለማግኘት፦
+  //    1) ቦትዎን በቴሌግራም ይክፈቱ እና ማንኛውንም መልእክት ይላኩለት
+  //    2) በብራውዘር ይህን ይክፈቱ:
+  //       https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+  //    3) "chat":{"id": ...} የሚለውን ቁጥር ይውሰዱ እና ከታች ይተኩ
   // ============================================================
+  function escapeMarkdown(str) {
+    // Telegram "Markdown" (legacy) ልዩ ምልክቶችን ማምለጥ፣ መልእክት መላክ እንዳይከሽፍ
+    return String(str).replace(/([_*[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
+  }
+
   async function sendToTelegram(message, userName = 'የማይታወቅ ተጠቃሚ') {
     const currentTime = new Date().toLocaleString('en-ET', {
       timeZone: 'Africa/Addis_Ababa',
@@ -972,8 +1040,8 @@
     });
 
     const text = `📩 *አዲስ መልእክት ከቻት ታብ*\n\n` +
-                 `👤 *ከ:* ${userName}\n` +
-                 `💬 *መልእክት:*\n${message}\n\n` +
+                 `👤 *ከ:* ${escapeMarkdown(userName)}\n` +
+                 `💬 *መልእክት:*\n${escapeMarkdown(message)}\n\n` +
                  `🕐 *ሰዓት:* ${currentTime}\n` +
                  `🌐 *ከ:* Chacha Dam Website`;
 
@@ -997,6 +1065,19 @@
         return { success: true, data: result };
       } else {
         console.error('❌ ቴሌግራም ስህተት:', result.description);
+        // Specific error handling for "bot can't send messages to the bot"
+        if (result.description && result.description.includes("bot can't send messages to bots")) {
+          return {
+            success: false,
+            error: "CHAT_ID ስህተት ነው (የቦት ራሱ ID ተቀምጧል)። እባክዎ የራስዎን ትክክለኛ Chat ID ያስገቡ — ከላይ ባለው ማስታወሻ መሰረት ያግኙት።"
+          };
+        }
+        if (result.description && result.description.includes("chat not found")) {
+          return {
+            success: false,
+            error: "ቻት አልተገኘም። መጀመሪያ ቦትዎን በቴሌግራም ውስጥ /start በማድረግ መልእክት ይላኩለት፣ ከዚያ ትክክለኛውን Chat ID ያረጋግጡ።"
+          };
+        }
         return { success: false, error: result.description };
       }
     } catch (error) {
@@ -1006,59 +1087,36 @@
   }
 
   // ============================================================
-  // 📥 ከቴሌግራም ቦት መልእክቶችን መቀበል (Long Polling)
+  // 📝 sendMessage - ለChat ታብ (ወደ ቴሌግራም ብቻ ይልካል)
   // ============================================================
-  async function getBotUpdates() {
-    try {
-      const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=20`;
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      if (data.ok && data.result.length > 0) {
-        for (const update of data.result) {
-          lastUpdateId = update.update_id;
-          
-          if (update.message && update.message.text) {
-            const msgText = update.message.text;
-            const chatId = update.message.chat.id;
-            
-            if (chatId.toString() === CHAT_ID) {
-              addBotMessageToChat(msgText);
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error getting updates:', error);
-    }
-  }
+  let isSending = false;
 
-  // ============================================================
-  // 💬 የቦት መልእክት ወደ ቻት ማከል
-  // ============================================================
-  function addBotMessageToChat(text) {
-    const messagesDiv = document.getElementById('chatMessages');
-    if (!messagesDiv) return;
-    
-    const botDiv = document.createElement('div');
-    botDiv.className = 'chat-message chat-message-bot';
-    botDiv.textContent = `🤖 ${text}`;
-    messagesDiv.appendChild(botDiv);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    saveMessages();
-  }
-
-  // ============================================================
-  // 📝 sendMessage ተግባር - ለChat ታብ
-  // ============================================================
   window.sendMessage = async function() {
+    if (isSending) return; // ድርብ-መላክን መከላከል
+
     const input = document.getElementById('chatInput');
     const message = input?.value.trim();
     if (!message) return;
-    
+    if (message.length > 3500) {
+      const messagesDiv = document.getElementById('chatMessages');
+      if (messagesDiv) {
+        const warnDiv = document.createElement('div');
+        warnDiv.className = 'chat-message chat-message-system';
+        warnDiv.textContent = '❌ መልእክቱ በጣም ረጅም ነው። እባክዎ ያሳጥሩት።';
+        messagesDiv.appendChild(warnDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+      return;
+    }
+
     const messagesDiv = document.getElementById('chatMessages');
     if (!messagesDiv) return;
-    
+
+    const sendBtn = document.getElementById('chatSendBtn');
+    isSending = true;
+    if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = '...'; }
+    if (input) input.disabled = true;
+
     const userDiv = document.createElement('div');
     userDiv.className = 'chat-message chat-message-user';
     userDiv.textContent = message;
@@ -1078,7 +1136,7 @@
     
     const typingDiv = document.createElement('div');
     typingDiv.className = 'chat-message chat-message-system';
-    typingDiv.textContent = '⏳ በመላክ ላይ...';
+    typingDiv.textContent = '⏳ ወደ ቴሌግራም በመላክ ላይ...';
     typingDiv.id = 'typingIndicator';
     messagesDiv.appendChild(typingDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -1093,26 +1151,17 @@
     if (result.success) {
       systemDiv.textContent = '✅ መልእክት ወደ ቴሌግራም ተልኳል';
     } else {
-      systemDiv.textContent = '❌ መልእክት መላክ አልተቻለም: ' + (result.error || 'ያልታወቀ ስህተት');
+      systemDiv.textContent = '❌ ' + (result.error || 'መልእክት መላክ አልተቻለም');
     }
     messagesDiv.appendChild(systemDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
     saveMessages();
-    
-    setTimeout(() => {
-      const botMsg = getBotReply(message);
-      const botDiv = document.createElement('div');
-      botDiv.className = 'chat-message chat-message-bot';
-      botDiv.textContent = botMsg;
-      messagesDiv.appendChild(botDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      saveMessages();
-    }, 800);
+
+    isSending = false;
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send'; }
+    if (input) { input.disabled = false; input.focus(); }
   };
 
-  // ============================================================
-  // 💾 መልእክቶችን በLocalStorage ማስቀመጥ
-  // ============================================================
   function saveMessages() {
     const messagesDiv = document.getElementById('chatMessages');
     if (messagesDiv) {
@@ -1137,35 +1186,6 @@
     } catch(e) {}
   }
 
-  // ============================================================
-  // 🤖 የቦት ምላሽ
-  // ============================================================
-  function getBotReply(msg) {
-    const lower = msg.toLowerCase();
-    if(lower.includes('cost') || lower.includes('budget') || lower.includes('ወጪ')) {
-      return "💰 አጠቃላይ የፕሮጀክቱ ወጪ 404,850,157 ETB ነው። ዝርዝር መረጃ በCost ታብ ውስጥ ይገኛል (በፓስወርድ የተጠበቀ)።";
-    }
-    if(lower.includes('income') || lower.includes('payment') || lower.includes('ገቢ')) {
-      return "📈 አጠቃላይ የፕሮጀክቱ ገቢ: " + fmt(totalIncome) + " ETB ነው። ዝርዝር መረጃ በIncome ታብ ውስጥ ይመልከቱ።";
-    }
-    if(lower.includes('percent') || lower.includes('percentage') || lower.includes('መቶኛ')) {
-      return "📊 አጠቃላይ የፕሮጀክት ግንባታ 72.8% ተጠናቅቋል። ዝርዝር መረጃ በ% ታብ ውስጥ ይመልከቱ።";
-    }
-    if(lower.includes('schedule') || lower.includes('timeline') || lower.includes('ፕሮጀክት')) {
-      return "📅 ግንባታው በተዘጋጀው ፕሮግራም መሰረት እየተካሄደ ነው። ትክክለኛ ቀናት ለማወቅ የፕሮጀክት አስተዳዳሪውን ያግኙ።";
-    }
-    if(lower.includes('contact') || lower.includes('support') || lower.includes('አድራሻ')) {
-      return "📞 ለኦፊሻል ጥያቄዎች: የፕሮጀክት ቅንጅት ቢሮ, ስልክ: +251-XX-XXX-XXXX።";
-    }
-    if(lower.includes('hello') || lower.includes('hi') || lower.includes('ሰላም')) {
-      return "👋 ሰላም! እንዴት ልረዳዎ እችላለሁ? ስለ ፕሮጀክቱ ገቢ፣ ወጪ፣ መቶኛ፣ ፎቶዎች ወይም አድራሻ መረጃ መስጠት እችላለሁ።";
-    }
-    return "✅ ሰላም! ስለ ፕሮጀክቱ ገቢ፣ ወጪ፣ መቶኛ፣ ፎቶዎች ወይም አድራሻ መረጃ መስጠት እችላለሁ። ምን ማወቅ ይፈልጋሉ?";
-  }
-
-  // ============================================================
-  // 📋 የIncome ፓነል (ከAch መጠን ጋር)
-  // ============================================================
   function renderIncomePanel() {
     const container = document.getElementById('billsContainer');
     if(!container) return;
@@ -1184,9 +1204,6 @@
     });
   }
 
-  // ============================================================
-  // 📋 የCost ፓነል (በፓስወርድ የተጠበቀ)
-  // ============================================================
   function renderCostContent() {
     const wrapper = document.getElementById('costContentWrapper');
     if (!wrapper) return;
@@ -1244,54 +1261,92 @@
     }
   }
 
-  // ============================================================
-  // 💬 የChat ፓነል
-  // ============================================================
+  function renderCommissaryPanel() {
+    const container = document.getElementById('commissaryContainer');
+    if (!container) return;
+
+    const html = `
+      <div class="commissary-card" style="border-color: var(--gold-border);">
+        <h3>📊 አጠቃላይ መረጃ</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;">
+          <div style="background: var(--tg-secondary-bg); border-radius: 12px; padding: 14px; text-align: center;">
+            <div style="font-size: 11px; color: var(--tg-hint);">💰 ጠቅላላ ሽያጭ</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--emerald);">${fmt(totalSales)} ETB</div>
+          </div>
+          <div style="background: var(--tg-secondary-bg); border-radius: 12px; padding: 14px; text-align: center;">
+            <div style="font-size: 11px; color: var(--tg-hint);">📦 ጠቅላላ ክምችት</div>
+            <div style="font-size: 20px; font-weight: 700; color: #6fb3e0;">${fmt(totalInventory)} ETB</div>
+          </div>
+          <div style="background: var(--tg-secondary-bg); border-radius: 12px; padding: 14px; text-align: center;">
+            <div style="font-size: 11px; color: var(--tg-hint);">📉 ጠቅላላ ወጪ</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--rose);">${fmt(totalExpenses)} ETB</div>
+          </div>
+          <div style="background: var(--tg-secondary-bg); border-radius: 12px; padding: 14px; text-align: center;">
+            <div style="font-size: 11px; color: var(--tg-hint);">📈 አጠቃላይ ትርፍ</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--gold);">${fmt(commissaryData.profit)} ETB</div>
+          </div>
+        </div>
+      </div>
+      <div class="commissary-card">
+        <h3>💰 የሽያጭ ዝርዝር (Sales)</h3>
+        ${commissaryData.sales.map(item => `<div class="commissary-item"><span class="name">${item.name}</span><span class="amount">${fmt(item.amount)} ETB</span></div>`).join('')}
+        <div class="commissary-total"><span class="label">ጠቅላላ</span><span class="amount">${fmt(totalSales)} ETB</span></div>
+      </div>
+      <div class="commissary-card">
+        <h3>📦 የክምችት ዝርዝር (Inventory)</h3>
+        ${commissaryData.inventory.map(item => `<div class="commissary-item"><span class="name">${item.name}</span><span class="amount">${fmt(item.amount)} ETB</span></div>`).join('')}
+        <div class="commissary-total"><span class="label">ጠቅላላ</span><span class="amount">${fmt(totalInventory)} ETB</span></div>
+      </div>
+      <div class="commissary-card">
+        <h3>📉 የወጪ ዝርዝር (Expenses)</h3>
+        ${commissaryData.expenses.map(item => `<div class="commissary-item"><span class="name">${item.name}</span><span class="amount">${fmt(item.amount)} ETB</span></div>`).join('')}
+        <div class="commissary-total"><span class="label">ጠቅላላ</span><span class="amount">${fmt(totalExpenses)} ETB</span></div>
+      </div>
+      <div class="commissary-card" style="border-color: var(--gold-border);">
+        <h3>🏆 የትርፍ ማጠቃለያ</h3>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 15px;">
+          <span>📊 ጠቅላላ ሽያጭ</span>
+          <span style="color: var(--emerald); font-weight: 600;">${fmt(totalSales)} ETB</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 15px; border-bottom: 1px solid var(--border-subtle);">
+          <span>📉 ጠቅላላ ወጪ</span>
+          <span style="color: var(--rose); font-weight: 600;">${fmt(totalExpenses)} ETB</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0 4px; font-size: 18px; font-weight: 700;">
+          <span style="color: var(--gold);">📈 አጠቃላይ ትርፍ</span>
+          <span style="color: var(--emerald);">${fmt(commissaryData.profit)} ETB</span>
+        </div>
+        <div class="percent-bar" style="margin-top: 12px;">
+          <div class="percent-bar-fill" style="width: ${Math.min((commissaryData.profit / totalSales) * 100, 100)}%; background: linear-gradient(90deg, var(--emerald), var(--gold));"></div>
+        </div>
+        <div class="sub" style="margin-top: 6px;">የትርፍ መጠን: ${((commissaryData.profit / totalSales) * 100).toFixed(1)}% ከጠቅላላ ሽያጭ</div>
+      </div>
+    `;
+    container.innerHTML = html;
+  }
+
   function renderChatPanel() {
     const wrapper = document.getElementById('chatWrapper');
     if (!wrapper) return;
     wrapper.innerHTML = `
       <div class="chat-container">
+        <div class="bot-status">
+          <span class="dot online"></span>
+          <span>📤 መልእክቶች ወደ ቴሌግራም ቦት ይላካሉ</span>
+        </div>
         <div class="chat-messages" id="chatMessages">
-          <div class="chat-message chat-message-bot">💬 Welcome! 👋 Ask me about Chacha Dam (income, cost, %, schedule, contacts).</div>
-          <div class="chat-message chat-message-system">📌 መልእክቶች ወደ ቴሌግራም ቦት ይላካሉ እና ምላሾች እዚህ ይታያሉ</div>
+          <div class="chat-message chat-message-bot">💬 ወደ ቴሌግራም ቦት መልእክት ለመላክ እባክዎ ከታች ይጻፉ።</div>
+          <div class="chat-message chat-message-system">📌 መልእክቶች ወደ ቴሌግራም ቦት ይላካሉ</div>
         </div>
         <div class="chat-input-area">
-          <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
-          <button class="chat-send-btn" onclick="sendMessage()">Send</button>
+          <input type="text" class="chat-input" id="chatInput" placeholder="መልእክትዎን ይጻፉ..." onkeypress="if(event.key==='Enter') sendMessage()">
+          <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">Send</button>
         </div>
-        <div class="chat-note">💬 Messages are sent to Telegram bot and stored locally</div>
+        <div class="chat-note">📤 መልእክቶች ወደ ቴሌግራም ቦት ይላካሉ</div>
       </div>`;
     loadMessages();
-    startLongPolling();
   }
 
-  // ============================================================
-  // 🔄 Long Polling
-  // ============================================================
-  let pollingInterval = null;
-
-  function startLongPolling() {
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-    }
-    pollingInterval = setInterval(() => {
-      getBotUpdates();
-    }, 5000);
-    
-    setTimeout(() => getBotUpdates(), 1000);
-  }
-
-  function stopLongPolling() {
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-      pollingInterval = null;
-    }
-  }
-
-  // ============================================================
-  // 📸 ፎቶዎች
-  // ============================================================
   const projectPhotos = [
     { url: "index.png", caption: "Main dam overview" },
     { url: "index2.jpg", caption: "Spillway construction" },
@@ -1352,18 +1407,14 @@
   function openLightbox(imgUrl) { const lb = document.getElementById('lightbox'), img = document.getElementById('lightboxImg'); if(lb && img) { img.src = imgUrl; lb.classList.add('active'); } }
   function closeLightbox() { document.getElementById('lightbox')?.classList.remove('active'); }
 
-  // ============================================================
-  // 🔄 ታቦችን መቀየር
-  // ============================================================
   function switchTab(tab) {
-    ['income','cost','percent','photos','chat'].forEach(t => {
+    ['income','cost','percent','photos','chat','commissary'].forEach(t => {
       document.getElementById(`panel-${t}`)?.classList.remove('active');
       document.getElementById(`nav-${t}`)?.classList.remove('active');
     });
     document.getElementById(`panel-${tab}`)?.classList.add('active');
     document.getElementById(`nav-${tab}`)?.classList.add('active');
 
-    // Show/hide income summary based on tab
     const incomeSummary = document.getElementById('incomeSummaryRow');
     if (tab === 'income') {
       incomeSummary.style.display = 'block';
@@ -1373,28 +1424,25 @@
       incomeSummary.style.display = 'none';
     }
 
-    if (tab === 'income') {
+    if (tab !== 'photos') {
       stopSlideshow();
-      stopLongPolling();
+    }
+
+    if (tab === 'income') {
+      // Already handled
     } else if (tab === 'cost') {
       refreshCostPanel();
-      stopSlideshow();
-      stopLongPolling();
     } else if (tab === 'percent') {
-      stopSlideshow();
-      stopLongPolling();
+      // Nothing special
     } else if (tab === 'photos') {
       renderPhotos();
-      stopLongPolling();
     } else if (tab === 'chat') {
       renderChatPanel();
-      stopSlideshow();
+    } else if (tab === 'commissary') {
+      renderCommissaryPanel();
     }
   }
 
-  // ============================================================
-  // 🚀 ስፕላሽ ስላይድሾው
-  // ============================================================
   function startSplashSlideshow() {
     const splash = document.getElementById('splashSlideshow');
     const splashImg = document.getElementById('splashImg');
@@ -1447,8 +1495,10 @@
   startSplashSlideshow();
   renderIncomePanel();
   renderPhotos();
+  renderCommissaryPanel();
   stopSlideshow();
   updateSummaryDisplay();
+  renderChatPanel();
 
   if(window.Telegram && Telegram.WebApp) { Telegram.WebApp.expand(); Telegram.WebApp.ready(); }
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
